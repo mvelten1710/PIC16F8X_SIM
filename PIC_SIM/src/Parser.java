@@ -6,9 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 public class Parser {
-
+	//Test
 	
 	private List<Integer> instructionRegister;
+
 
 	
 	public Parser(){

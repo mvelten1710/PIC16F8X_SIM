@@ -3,10 +3,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Controller {
-
+	//Test
 	public static List<Integer> programMemory = new ArrayList<Integer>();
 	
 	private static int iPointer = 0;
+
 	
 	//Working Register
 	public static int W;

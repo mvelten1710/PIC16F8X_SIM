@@ -1,6 +1,7 @@
 
 
 public class Decoder {
+	//Test
 	
 	private static int byteOrientedMask = 0b11111100000000;
 	public int instruction;
