@@ -8,11 +8,12 @@ import java.util.List;
 public class Parser {
 
 	
-	private List<Integer> commandsContent;
+	private List<Integer> instructionRegister;
+
 	
 	public Parser(){
 		//Gets initialized
-		commandsContent = new ArrayList<Integer>();
+		instructionRegister = new ArrayList<Integer>();
 	}
 	
 	public List<Integer> getCommands() throws IOException {
@@ -36,13 +37,13 @@ public class Parser {
 			//Saves the command in the commands array(in Controller.java)
 				try {
 					//tries to parse the string to an integer
-					commandsContent.add(Integer.parseInt(commands, 16));
+					instructionRegister.add(Integer.parseInt(commands, 16));
 				} catch (NumberFormatException e) {
 					//Gets own output in the UI
-					System.out.println("ERROR: CANT PARSE TO INT");
+					//System.out.println("ERROR: CANT PARSE");
 				}	
 		}
-		return commandsContent;
+		return instructionRegister;
 	}
 	
 	
