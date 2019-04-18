@@ -8,6 +8,9 @@ public class Controller {
 	
 	private static int iPointer = 0;
 	
+	//Working Register
+	public static int W;
+	
 	public static void main(String[] args) throws IOException {
 		//Starts the UI and combines the Decoder(Commands)
 		//and the Parser(Reads LST Files)
