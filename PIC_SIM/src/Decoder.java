@@ -3,7 +3,17 @@
 public class Decoder {
 	//Test
 	
+	//Working Register
+	public static int W;
+	public static int f;
+	
+	//Flags
+	boolean C, DC, Z, TO, PD;
+	
+	
+	
 	private static int byteOrientedMask = 0b11111100000000;
+	private static int byteOrientedDataMask = 0b00000011111111;
 	public int instruction;
 	
 	
@@ -14,7 +24,8 @@ public class Decoder {
 	public void decode(int instruc) {
 		setInstruction(instruc);
 		//Bitmask for Byte Oriented Operations
-		int instructionID = instruction & byteOrientedMask; 
+		int instructionID = instruction & byteOrientedMask;
+		int dataID = instruction & byteOrientedDataMask;
 		
 		//Bitmask for Bit Oriented Operations
 		
@@ -25,7 +36,7 @@ public class Decoder {
 		switch (instructionID) {
 			case 0x0700:
 				System.out.println("ADDWF");
-				addwf();
+				addwf(dataID);
 				break;
 			case 0x0500:
 				System.out.println("ANDWF");
@@ -137,15 +148,54 @@ public class Decoder {
 			case 0x3A00:
 				System.out.println("XORLW");
 				break;
-
-
 			default:
 				System.out.println("NICHT VORHANDEN");
 				break;
 		}
 		
 	}
-	public void addwf() {
+	public int addwf(int data) {
+		//Adds W with f = data
+		if((data >> 7) == 0) {
+			return W += data;
+		}else {
+			//dont forget to add f shit
+			//System.out.println("f");
+			return 1;
+		}
+	}
+	public int andwf(int data) {
+		//And W with f = data
+		if((data >> 7) == 0) {
+			return W &= data;
+		}else {
+			//dont forget to add f shit
+			//System.out.println("f");
+			return 1;
+		}
+		
+	}
+	public void clrf() {
+		
+	}
+	
+	public void clrw() {
+		W = 0;
+		Z = true;
+	}
+	
+	public int comf(int data) {
+		if((data >> 7) == 0) {
+			return W = ~data;
+		}else {
+			return f = ~data;
+		}
+	}
+	public int decf(int data) {
+		data--;
+		return data;
+	}
+	public void decfsz() {
 		
 	}
 	public void movlw(int data) {
@@ -170,9 +220,6 @@ public class Decoder {
 		
 	}
 	public void subwf() {
-		
-	}
-	public void decfsz() {
 		
 	}
 	public void incfsz() {

@@ -21,7 +21,7 @@ public class Parser
 	public List<Integer> getCommands() throws IOException
 	{
 		// New File for the LST files
-		File file = new File("LST Files/TPicSim1.LST");
+		File file = new File("LST Files/TPicSim3.LST");
 		BufferedReader reader = null;
 		// Tries to create the BufferedReader for file
 		try {
