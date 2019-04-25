@@ -159,9 +159,7 @@ public class Decoder {
 		if((data >> 7) == 0) {
 			return W += data;
 		}else {
-			//dont forget to add f shit
-			//System.out.println("f");
-			return 1;
+			return f += data;
 		}
 	}
 	public int andwf(int data) {
@@ -169,9 +167,7 @@ public class Decoder {
 		if((data >> 7) == 0) {
 			return W &= data;
 		}else {
-			//dont forget to add f shit
-			//System.out.println("f");
-			return 1;
+			return f &= data;
 		}
 		
 	}
@@ -192,11 +188,33 @@ public class Decoder {
 		}
 	}
 	public int decf(int data) {
-		data--;
-		return data;
+		if((data >> 7) == 0) {
+			--data;
+			if(data == 0) {
+				Z = true;
+			}
+			return W = --data;
+		}else {
+			if(data == 0) {
+				Z = true;
+			}
+			return f = --data;
+		}
 	}
-	public void decfsz() {
-		
+	
+	public int decfsz(int data) {
+		if((data >> 7) == 0) {
+			--data;
+			if(data == 0) {
+				nop();
+			}
+			return W = --data;
+		}else {
+			if(data == 0) {
+				
+			}
+			return f = --data;
+		}
 	}
 	public void movlw(int data) {
 		
@@ -242,6 +260,9 @@ public class Decoder {
 	}
 	public void btfss() {
 		
+	}
+	public void nop() {
+		return;
 	}
 
 	private void setInstruction(int instruc) {
