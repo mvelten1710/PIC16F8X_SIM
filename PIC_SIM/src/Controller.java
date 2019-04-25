@@ -4,9 +4,10 @@ import java.util.List;
 
 public class Controller {
 	//Test
-	public static List<Integer> programMemory = new ArrayList<Integer>();
+	public static int programMemory[] = new int[1024];
+	public static int dataMemory[] = new int [128];
 	
-	private static int iPointer = 0;
+	private static int pCounter = 0;
 
 	static int W;
 	
@@ -20,19 +21,21 @@ public class Controller {
 		Parser parser = new Parser();
 		
 		//Adds all Values from Parser to the commandsList in Controller
-		programMemory.addAll(parser.getCommands());
-		
+		programMemory = parser.getCommands();
 		//New Decoder Object
 		Decoder decoder = new Decoder();
 		
-		for (; iPointer < programMemory.size(); iPointer++) {
-			decoder.decode(programMemory.get(iPointer));
-			
+		for (; pCounter < programMemory.length; pCounter++) {
+			if(programMemory[pCounter] != 0) {
+				decoder.decode(programMemory[pCounter]);
+			}
 		}
 		
 		
-		for (Integer integer : programMemory) {
-			System.out.println("\n" + integer);
+		for (int c = 0; c < programMemory.length; c++) {
+			if(programMemory[c] != 0) {
+				System.out.println("\n" + programMemory[c]);
+			}
 		}
 		
 

@@ -8,20 +8,22 @@ import java.util.List;
 
 public class Parser
 {
-	// Test
+	public String filePath;
+	private int counter;
 
-	private List<Integer> instructionRegister;
+	private int instructionRegister[];
 
 	public Parser()
 	{
 		// Gets initialized
-		instructionRegister = new ArrayList<Integer>();
+		instructionRegister = new int[1024];
+		counter = 0;
 	}
 
-	public List<Integer> getCommands() throws IOException
+	public int[] getCommands() throws IOException
 	{
 		// New File for the LST files
-		File file = new File("LST Files/TPicSim3.LST");
+		File file = new File("LST Files/TPicSim1.LST");
 		BufferedReader reader = null;
 		// Tries to create the BufferedReader for file
 		try {
@@ -41,7 +43,8 @@ public class Parser
 			// Saves the command in the commands array(in Controller.java)
 			try {
 				// tries to parse the string to an integer
-				instructionRegister.add(Integer.parseInt(commands, 16));
+				instructionRegister[counter] = Integer.parseInt(commands, 16);
+				counter++;
 			} catch (NumberFormatException e) {
 				// Gets own output in the UI
 				// System.out.println("ERROR: CANT PARSE TO INT");
