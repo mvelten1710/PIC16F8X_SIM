@@ -1,271 +1,331 @@
 
+public class Decoder
+{
+	// Test
 
-public class Decoder {
-	//Test
-	
-	//Working Register
+	// Working Register
 	public static int W;
+
 	public static int f;
-	
-	//Flags
+
+	// Flags
 	boolean C, DC, Z, TO, PD;
-	
-	
-	
+
 	private static int byteOrientedMask = 0b11111100000000;
+
 	private static int byteOrientedDataMask = 0b00000011111111;
+
 	public int instruction;
-	
-	
-	public Decoder() {
-		instruction = 0;	
+
+	public Decoder()
+	{
+		instruction = 0;
 	}
-	
-	public void decode(int instruc) {
+
+	public void decode(int instruc)
+	{
 		setInstruction(instruc);
-		//Bitmask for Byte Oriented Operations
+		// Bitmask for Byte Oriented Operations
 		int instructionID = instruction & byteOrientedMask;
 		int dataID = instruction & byteOrientedDataMask;
-		
-		//Bitmask for Bit Oriented Operations
-		
-		//Bitmask for Literal And Control Operations
-		
-		
-		//Search for Instruction
+
+		// Bitmask for Bit Oriented Operations
+
+		// Bitmask for Literal And Control Operations
+
+		// Search for Instruction
 		switch (instructionID) {
-			case 0x0700:
-				System.out.println("ADDWF");
-				addwf(dataID);
-				break;
-			case 0x0500:
-				System.out.println("ANDWF");
-				break;
-//			case 0x0100:
-//				//Destination Bit is 1
-//				System.out.println("CLRF");
-//				break;
-//			case 0x0100:
-//				//Destination Bit is 0
-//				System.out.println("CLRW");
-//				break;
-			case 0x0900:
-				System.out.println("COMF");
-				break;
-			case 0x0300:
-				System.out.println("DECF");
-				break;
-			case 0x0B00:
-				System.out.println("DECFSZ");
-				break;
-			case 0x0A00:
-				System.out.println("INCF");
-				break;
-			case 0x0F00:
-				System.out.println("INCFSZ");
-				break;
-			case 0x0400:
-				System.out.println("IORWF");
-				break;
-			case 0x0800:
-				System.out.println("MOVF");
-				break;
-			case 0x0080:
-				//Destination Bit is 1
-				System.out.println("MOVWF");
-				break;
-//			case 0x0000:
-//				//Destination Bit is 0
-//				System.out.println("NOP");
-//				break;
-//			case 0x0B00:
-//				System.out.println("RLF");
-//				break;
-			case 0x0C00:
-				System.out.println("RRF");
-				break;
-			case 0x0200:
-				System.out.println("SUBWF");
-				break;
-			case 0x0E00:
-				System.out.println("SWAPF");
-				break;
-			case 0x0600:
-				System.out.println("XORWF");
-				break;
-				
-			case 0x1000:
-				System.out.println("BCF");
-				break;
-			case 0x1400:
-				System.out.println("BSF");
-				break;
-			case 0x1800:
-				System.out.println("BTFSC");
-				break;
-			case 0x1C00:
-				System.out.println("BTFSS");
-				break;
-				
-			case 0x3E00:
-				System.out.println("ADDLW");
-				break;
-			case 0x3900:
-				System.out.println("ANDLW");
-				break;
-			case 0x2000:
-				System.out.println("CALL");
-				break;
-			case 0x0064:
-				//Other Bitmask
-				System.out.println("CLRWDT");
-				break;
-			case 0x2800:
-				System.out.println("GOTO");
-				break;
-			case 0x3800:
-				System.out.println("IORLW");
-				break;
-			case 0x3000:
-				System.out.println("MOVLW");
-				movlw(instruc);
-				break;
-			case 0x0009:
-				System.out.println("RETFIE");
-				break;
-			case 0x3400:
-				System.out.println("RETLW");
-				break;
-			case 0x0008:
-				System.out.println("RETURN");
-				break;
-			case 0x0063:
-				System.out.println("SLEEP");
-				break;
-			case 0x3C00:
-				System.out.println("SUBLW");
-				break;
-			case 0x3A00:
-				System.out.println("XORLW");
-				break;
-			default:
-				System.out.println("NICHT VORHANDEN");
-				break;
+		case 0x0700:
+			System.out.println("ADDWF");
+			addwf(dataID);
+			break;
+		case 0x0500:
+			System.out.println("ANDWF");
+			break;
+		// case 0x0100:
+		// //Destination Bit is 1
+		// System.out.println("CLRF");
+		// break;
+		// case 0x0100:
+		// //Destination Bit is 0
+		// System.out.println("CLRW");
+		// break;
+		case 0x0900:
+			System.out.println("COMF");
+			break;
+		case 0x0300:
+			System.out.println("DECF");
+			break;
+		case 0x0B00:
+			System.out.println("DECFSZ");
+			break;
+		case 0x0A00:
+			System.out.println("INCF");
+			break;
+		case 0x0F00:
+			System.out.println("INCFSZ");
+			break;
+		case 0x0400:
+			System.out.println("IORWF");
+			break;
+		case 0x0800:
+			System.out.println("MOVF");
+			break;
+		case 0x0080:
+			// Destination Bit is 1
+			System.out.println("MOVWF");
+			break;
+		// case 0x0000:
+		// //Destination Bit is 0
+		// System.out.println("NOP");
+		// break;
+		// case 0x0B00:
+		// System.out.println("RLF");
+		// break;
+		case 0x0C00:
+			System.out.println("RRF");
+			break;
+		case 0x0200:
+			System.out.println("SUBWF");
+			break;
+		case 0x0E00:
+			System.out.println("SWAPF");
+			break;
+		case 0x0600:
+			System.out.println("XORWF");
+			break;
+
+		case 0x1000:
+			System.out.println("BCF");
+			break;
+		case 0x1400:
+			System.out.println("BSF");
+			break;
+		case 0x1800:
+			System.out.println("BTFSC");
+			break;
+		case 0x1C00:
+			System.out.println("BTFSS");
+			break;
+
+		case 0x3E00:
+			System.out.println("ADDLW");
+			break;
+		case 0x3900:
+			System.out.println("ANDLW");
+			break;
+		case 0x2000:
+			System.out.println("CALL");
+			break;
+		case 0x0064:
+			// Other Bitmask
+			System.out.println("CLRWDT");
+			break;
+		case 0x2800:
+			System.out.println("GOTO");
+			break;
+		case 0x3800:
+			System.out.println("IORLW");
+			break;
+		case 0x3000:
+			System.out.println("MOVLW");
+			movlw(instruc);
+			break;
+		case 0x0009:
+			System.out.println("RETFIE");
+			break;
+		case 0x3400:
+			System.out.println("RETLW");
+			break;
+		case 0x0008:
+			System.out.println("RETURN");
+			break;
+		case 0x0063:
+			System.out.println("SLEEP");
+			break;
+		case 0x3C00:
+			System.out.println("SUBLW");
+			break;
+		case 0x3A00:
+			System.out.println("XORLW");
+			break;
+		default:
+			System.out.println("NICHT VORHANDEN");
+			break;
 		}
-		
+
 	}
-	public int addwf(int data) {
-		//Adds W with f = data
-		if((data >> 7) == 0) {
+
+	public int addwf(int data)
+	{
+		// Adds W with f = data
+		if ((data >> 7) == 0) {
 			return W += data;
-		}else {
+		} else {
 			return f += data;
 		}
 	}
-	public int andwf(int data) {
-		//And W with f = data
-		if((data >> 7) == 0) {
+
+	public int andwf(int data)
+	{
+		// And W with f = data
+		if ((data >> 7) == 0) {
 			return W &= data;
-		}else {
+		} else {
 			return f &= data;
 		}
-		
+
 	}
-	public void clrf() {
-		
+
+	public void clrf()
+	{
+
 	}
-	
-	public void clrw() {
+
+	public void clrw()
+	{
 		W = 0;
 		Z = true;
 	}
-	
-	public int comf(int data) {
-		if((data >> 7) == 0) {
+
+	public int comf(int data)
+	{
+		if ((data >> 7) == 0) {
 			return W = ~data;
-		}else {
+		} else {
 			return f = ~data;
 		}
 	}
-	public int decf(int data) {
-		if((data >> 7) == 0) {
+
+	public int decf(int data)
+	{
+		if ((data >> 7) == 0) {
 			--data;
-			if(data == 0) {
+			if (data == 0) {
 				Z = true;
 			}
 			return W = --data;
-		}else {
-			if(data == 0) {
+		} else {
+			if (data == 0) {
 				Z = true;
 			}
 			return f = --data;
 		}
 	}
-	
-	public int decfsz(int data) {
-		if((data >> 7) == 0) {
+
+	public int decfsz(int data)
+	{
+		if ((data >> 7) == 0) {
 			--data;
-			if(data == 0) {
+			if (data == 0) {
 				nop();
 			}
 			return W = --data;
-		}else {
-			if(data == 0) {
-				
+		} else {
+			if (data == 0) {
+
 			}
 			return f = --data;
 		}
 	}
-	public void movlw(int data) {
-		
+
+	public void incf(int data)
+	{
+		if ((data >> 7) == 0) {
+			W = ++data;
+			if (data == 0) {
+				Z = true;
+			}
+		} else {
+			f = ++data;
+			if (data == 0) {
+				Z = true;
+			}
+		}
 	}
-	public void addlw() {
-		
+
+	public void movlw(int data)
+	{
+
 	}
-	public void sublw() {
-		
+
+	public void addlw()
+	{
+
 	}
-	public void call() {
-		
+
+	public void sublw()
+	{
+
 	}
-	public void _goto() {
-		
+
+	public void call()
+	{
+
 	}
-	public void movwf() {
-		
+
+	public void _goto()
+	{
+
 	}
-	public void movf() {
-		
+
+	public void movwf()
+	{
+
 	}
-	public void subwf() {
-		
+
+	public void movf()
+	{
+
 	}
-	public void incfsz() {
-		
+
+	public void subwf()
+	{
+
 	}
-	public void rlf() {
-		
+
+	public void incfsz()
+	{
+
 	}
-	public void rrf() {
-		
+
+	public void rlf()
+	{
+
 	}
-	public void bsf() {
-		
+
+	public void rrf()
+	{
+
 	}
-	public void bcf() {
-		
+
+	public void bsf()
+	{
+
 	}
-	public void btfsc() {
-		
+
+	public void bcf()
+	{
+
 	}
-	public void btfss() {
-		
+
+	public void btfsc()
+	{
+
 	}
-	public void nop() {
+
+	public void btfss()
+	{
+
+	}
+
+	public void nop()
+	{
 		return;
 	}
 
-	private void setInstruction(int instruc) {
+	private void setInstruction(int instruc)
+	{
 		this.instruction = instruc;
 	}
 }

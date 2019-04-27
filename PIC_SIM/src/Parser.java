@@ -3,15 +3,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Parser
 {
 	public String filePath;
+
 	private int counter;
 
 	private int instructionRegister[];
+
+	private BufferedReader reader;
 
 	public Parser()
 	{
@@ -23,8 +24,8 @@ public class Parser
 	public int[] getCommands() throws IOException
 	{
 		// New File for the LST files
-		File file = new File("LST Files/TPicSim1.LST");
-		BufferedReader reader = null;
+		File file = new File(filePath);
+		reader = null;
 		// Tries to create the BufferedReader for file
 		try {
 			reader = new BufferedReader(new FileReader(file));
@@ -52,6 +53,11 @@ public class Parser
 
 		}
 		return instructionRegister;
+	}
+
+	public void setFilePath(String path)
+	{
+		this.filePath = path;
 	}
 
 }
