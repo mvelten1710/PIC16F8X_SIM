@@ -52,27 +52,16 @@ public class FileSelector extends Simulator_UI
 		selectorWindow.getContentPane().add(fileChooser, BorderLayout.CENTER);
 		if (rueckgabewert == JFileChooser.APPROVE_OPTION) {
 			filePath = fileChooser.getSelectedFile().getAbsolutePath();
-			setFilePath();
 			try {
-				executeFile();
-			} catch (IOException e) {
+				// Parses the selected LST File
+				parser.getCommands(filePath);
+				setTextArea();
+			} catch (IOException e1) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				e1.printStackTrace();
 			}
-			setTextArea();
 
 		}
 
 	}
-
-	public void setFilePath()
-	{
-		parser.setFilePath(filePath);
-	}
-
-	public String getFilePath()
-	{
-		return filePath;
-	}
-
 }

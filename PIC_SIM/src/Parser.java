@@ -6,7 +6,6 @@ import java.io.IOException;
 
 public class Parser
 {
-	public String filePath;
 
 	private int counter;
 
@@ -19,13 +18,13 @@ public class Parser
 		// Gets initialized
 		instructionRegister = new int[1024];
 		counter = 0;
+		reader = null;
 	}
 
-	public int[] getCommands() throws IOException
+	public int[] getCommands(String path) throws IOException
 	{
 		// New File for the LST files
-		File file = new File(filePath);
-		reader = null;
+		File file = new File(path);
 		// Tries to create the BufferedReader for file
 		try {
 			reader = new BufferedReader(new FileReader(file));
@@ -53,11 +52,6 @@ public class Parser
 
 		}
 		return instructionRegister;
-	}
-
-	public void setFilePath(String path)
-	{
-		this.filePath = path;
 	}
 
 }

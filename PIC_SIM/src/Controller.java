@@ -38,12 +38,6 @@ public class Controller
 
 	}
 
-	public void executeParse() throws IOException
-	{
-		// Adds all values from Parser to the programmMemory in Controller
-		programMemory = parser.getCommands();
-	}
-
 	public void executeFile() throws IOException
 	{
 		for (; pCounter < programMemory.length; pCounter++) {
