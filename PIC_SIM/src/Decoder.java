@@ -9,7 +9,7 @@ public class Decoder
 	public static int f;
 
 	// Flags
-	boolean C, DC, Z, TO, PD;
+	int C, DC, Z, TO, PD;
 
 	private static int byteOrientedMask = 0b11111100000000;
 
@@ -185,7 +185,7 @@ public class Decoder
 	public void clrw()
 	{
 		W = 0;
-		Z = true;
+		Z = 1;
 	}
 
 	public int comf(int data)
@@ -202,45 +202,132 @@ public class Decoder
 		if ((data >> 7) == 0) {
 			--data;
 			if (data == 0) {
-				Z = true;
+				Z = 1;
 			}
 			return W = --data;
 		} else {
 			if (data == 0) {
-				Z = true;
+				Z = 1;
 			}
 			return f = --data;
 		}
 	}
 
+	// TODO Dont forget to improve this (skip etc.)
 	public int decfsz(int data)
 	{
 		if ((data >> 7) == 0) {
 			--data;
 			if (data == 0) {
 				nop();
+				return -1;
 			}
-			return W = --data;
+			return W = data;
 		} else {
 			if (data == 0) {
-
+				return -1;
 			}
-			return f = --data;
+			return f = data;
 		}
 	}
 
-	public void incf(int data)
+	public int incf(int data)
 	{
 		if ((data >> 7) == 0) {
-			W = ++data;
+			++data;
 			if (data == 0) {
-				Z = true;
+				Z = 1;
+			} else {
+				Z = 0;
 			}
+			return W = data;
 		} else {
-			f = ++data;
+			++data;
 			if (data == 0) {
-				Z = true;
+				Z = 1;
+			} else {
+				Z = 0;
 			}
+			return f = data;
+		}
+	}
+
+	// TODO Dont forget to improve this (skip etc.)
+	public int incfsz(int data)
+	{
+		if ((data >> 7) == 0) {
+			++data;
+			if (data == 0) {
+				nop();
+				// -1 indicator for skiping
+				return -1;
+			}
+			return W = data;
+		} else {
+			if (data == 0) {
+				// -1 indicator for skiping
+				return -1;
+			}
+			return f = data;
+		}
+	}
+
+	public int iorwf(int data)
+	{
+		if ((data >> 7) == 0) {
+			data = data | W;
+			if (data == 0) {
+				Z = 1;
+			} else {
+				Z = 0;
+			}
+			return W = data;
+		} else {
+			data = data | W;
+			if (data == 0) {
+				Z = 1;
+			} else {
+				Z = 0;
+			}
+			return f = data;
+		}
+	}
+
+	public int movf(int data)
+	{
+		if ((data >> 7) == 0) {
+			if (data == 0) {
+				Z = 1;
+			} else {
+				Z = 0;
+			}
+			return W = data;
+		} else {
+			if (data == 0) {
+				Z = 1;
+			} else {
+				Z = 0;
+			}
+			return f = data;
+		}
+	}
+
+	public int movwf(int data)
+	{
+		return f = W;
+	}
+
+	public int rlf(int data)
+	{
+		if (data < 128) {
+			C = 0;
+		} else {
+			C = 1;
+		}
+		if ((data >> 7) == 0) {
+			return W = data << 1;
+		} else {
+			return f = data << 1;
 		}
 	}
 
@@ -269,11 +356,6 @@ public class Decoder
 
 	}
 
-	public void movwf()
-	{
-
-	}
-
 	public void movf()
 	{
 
@@ -285,11 +367,6 @@ public class Decoder
 	}
 
 	public void incfsz()
-	{
-
-	}
-
-	public void rlf()
 	{
 
 	}

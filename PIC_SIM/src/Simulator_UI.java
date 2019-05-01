@@ -59,7 +59,7 @@ public class Simulator_UI extends Controller
 			{
 				// Opens the new Window to import the LST file
 				selector = new FileSelector();
-				selector.start();
+
 			}
 		});
 		btnNewButton.setBounds(408, 260, 89, 23);
