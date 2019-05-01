@@ -331,6 +331,53 @@ public class Decoder
 		}
 	}
 
+	public int rrf(int data)
+	{
+		if (data < 128) {
+			C = 0;
+		} else {
+			C = 1;
+		}
+		if ((data >> 7) == 0) {
+			return W = data >> 1;
+		} else {
+			return f = data >> 1;
+		}
+	}
+
+	/*
+	 * public int subwf(int data) {
+	 * 
+	 * }
+	 */
+
+	public int swapf(int data)
+	{
+		int upperNibble = data >> 4;
+		int lowerNibble = data << 4;
+		lowerNibble = lowerNibble >> 4;
+
+		if ((data >> 7) == 0) {
+			data = lowerNibble + upperNibble;
+			return W = data;
+		} else {
+			data = lowerNibble + upperNibble;
+			return f = data;
+		}
+	}
+
+	// TODO Finish Up
+	public int xorwf(int data)
+	{
+		if ((data >> 7) == 0) {
+
+			return W = data;
+		} else {
+
+			return f = data;
+		}
+	}
+
 	public void movlw(int data)
 	{
 
@@ -357,11 +404,6 @@ public class Decoder
 	}
 
 	public void movf()
-	{
-
-	}
-
-	public void subwf()
 	{
 
 	}
