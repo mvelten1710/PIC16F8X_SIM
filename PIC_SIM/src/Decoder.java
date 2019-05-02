@@ -219,7 +219,6 @@ public class Decoder
 		}
 	}
 
-	// TODO Dont forget to improve this (skip etc.)
 	public void decfsz(int adress, int desti)
 	{
 		if (desti == 0) {
@@ -251,7 +250,6 @@ public class Decoder
 		}
 	}
 
-	// TODO Dont forget to improve this (skip etc.)
 	public void incfsz(int adress, int desti)
 	{
 		if (desti == 0) {
@@ -306,65 +304,73 @@ public class Decoder
 		f[adress] = W;
 	}
 
-	public int rlf(int adress, int desti)
+	public void rlf(int adress, int desti)
 	{
-		if (data < 128) {
-			C = 0;
-		} else {
-			C = 1;
+		//helper gets the first bit that goes later to C
+		int helper = f[adress] >> 7;
+		if(desti == 0) {
+			W = (f[adress] << 1) | C;
+		}else {
+			f[adress] = (f[adress] << 1) | C;
 		}
-		if ((data >> 7) == 0) {
-			return W = data << 1;
+		C = helper;
+	}
+
+	public void rrf(int adress, int desti)
+	{
+		int helper = f[adress] << 7;
+		helper = helper >> 7;
+		if(desti == 0) {
+			W = (f[adress] >> 1) | C;
+		}else {
+			f[adress] = (f[adress] >> 1) | C;
+		}
+		C = helper;
+	}
+
+	
+	 public void subwf(int adress, int desti) {
+		 if(desti == 0){
+			 W = f[adress] + _2complement();
+		 }else {
+			 f[adress] = f[adress] + _2complement();
+		 }
+	 }
+	 
+	 
+	 
+
+	public void swapf(int adress, int desti)
+	{
+		int upperNibble = f[adress] >> 4;
+		int lowerNibble = f[adress] << 4;
+		int total = lowerNibble | upperNibble;
+		if (desti == 0) {
+			W = total;
 		} else {
-			return f = data << 1;
+			f[adress] = total;
 		}
 	}
 
-	public int rrf(int adress, int desti)
+	public void xorwf(int adress, int desti)
 	{
-		if (data < 128) {
-			C = 0;
+		if (desti == 0) {
+			W = W ^ f[adress];
+			if (f[adress] == 0) {
+				Z = 1;
+			} else {
+				Z = 0;
+			}
 		} else {
-			C = 1;
-		}
-		if ((data >> 7) == 0) {
-			return W = data >> 1;
-		} else {
-			return f = data >> 1;
+			f[adress] = W ^ f[adress];
+			if (f[adress] == 0) {
+				Z = 1;
+			} else {
+				Z = 0;
+			}
 		}
 	}
-
-	/*
-	 * public int subwf(int data) {
-	 * 
-	 * }
-	 */
-
-	public int swapf(int adress, int desti)
-	{
-		int upperNibble = data >> 4;
-		int lowerNibble = data << 4;
-
-		if ((data >> 7) == 0) {
-			data = lowerNibble | upperNibble;
-			return W = data;
-		} else {
-			data = lowerNibble | upperNibble;
-			return f = data;
-		}
-	}
-
-	// TODO Finish Up
-	public int xorwf(int adress, int desti)
-	{
-		if ((data >> 7) == 0) {
-
-			return W = data;
-		} else {
-
-			return f = data;
-		}
-	}
+	
 
 	public void movlw(int data)
 	{
@@ -435,4 +441,10 @@ public class Decoder
 	{
 		this.instruction = instruc;
 	}
+	
+	private int _2complement() {
+		 W = ~W;
+		 W++;
+		 return W;
+	 }
 }

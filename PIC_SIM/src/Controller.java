@@ -45,10 +45,9 @@ public class Controller
 		}
 	}
 	
-	public void readFile()
+	public void readFile(String filePath) throws IOException
 	{
-		for(; pCounter < programMemory.length; pCounter++) {
-			if()
-		}
+		programMemory = parser.getCommands(filePath);
+		
 	}
 }

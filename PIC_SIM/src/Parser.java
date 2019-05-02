@@ -12,6 +12,8 @@ public class Parser
 	private int instructionRegister[];
 
 	private BufferedReader reader;
+	
+	private String content;
 
 	public Parser()
 	{
@@ -19,6 +21,7 @@ public class Parser
 		instructionRegister = new int[1024];
 		counter = 0;
 		reader = null;
+		content = "";
 	}
 
 	public int[] getCommands(String path) throws IOException
@@ -32,13 +35,15 @@ public class Parser
 			e.printStackTrace();
 		}
 
-		String content;
+		String lineContent = "";
 		String commands = "";
-
-		while ((content = reader.readLine()) != null) {
+		
+		while ((lineContent = reader.readLine()) != null) {
+			setContent(reader.readLine());
+			
 			// Takes the 6 until 9 char and saves them in
 			// the commands String
-			commands = content.substring(5, 9);
+			commands = lineContent.substring(5, 9);
 
 			// Saves the command in the commands array(in Controller.java)
 			try {
@@ -52,6 +57,14 @@ public class Parser
 
 		}
 		return instructionRegister;
+	}
+	
+	public String getContent() {
+		return content;
+	}
+	
+	private void setContent(String newLine) {
+		content = content + "\n" + newLine;
 	}
 
 }

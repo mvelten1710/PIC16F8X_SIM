@@ -6,6 +6,7 @@ import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class Simulator_UI extends Controller
@@ -66,15 +67,13 @@ public class Simulator_UI extends Controller
 				if (rueckgabewert == JFileChooser.APPROVE_OPTION) {
 					String filePath = fileChooser.getSelectedFile().getAbsolutePath();
 					try {
-						// Parses the selected LST File
-						parser.getCommands(filePath);
-						setTextArea();
-					} catch (IOException e1) {
+						readFile(filePath);
+					} catch (IOException e) {
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						e.printStackTrace();
 					}
-
-		}
+					setTextArea(parser.getContent());
+				}
 
 			}
 		});
@@ -92,15 +91,20 @@ public class Simulator_UI extends Controller
 		JButton btnStop = new JButton("Stop");
 		btnStop.setBounds(705, 260, 89, 23);
 		frmPicSimulator.getContentPane().add(btnStop);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(408, 287, 494, 236);
+		frmPicSimulator.getContentPane().add(scrollPane);
 
 		textArea = new JTextArea();
-		textArea.setBounds(408, 295, 494, 228);
-		frmPicSimulator.getContentPane().add(textArea);
+		textArea.setBounds(0, 0, 200, 200);
+		//frmPicSimulator.getContentPane().add(textArea);
+		scrollPane.setViewportView(textArea);
 
 	}
 
-	public void setTextArea()
+	public void setTextArea(String content)
 	{
-		textArea.append("LOL");
+		textArea.setText(content);
 	}
 }
