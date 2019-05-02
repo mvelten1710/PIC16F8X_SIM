@@ -6,7 +6,7 @@ public class Decoder
 	// Working Register
 	public static int W;
 
-	public static int f;
+	public static int f[] = new int[128];
 
 	// Flags
 	int C, DC, Z, TO, PD;
@@ -28,6 +28,8 @@ public class Decoder
 		// Bitmask for Byte Oriented Operations
 		int instructionID = instruction & byteOrientedMask;
 		int dataID = instruction & byteOrientedDataMask;
+		int adressID = dataID >> 1;
+		int destinationID = dataID >> 7;
 
 		// Bitmask for Bit Oriented Operations
 
@@ -37,7 +39,7 @@ public class Decoder
 		switch (instructionID) {
 		case 0x0700:
 			System.out.println("ADDWF");
-			addwf(dataID);
+			addwf(adressID, destinationID);
 			break;
 		case 0x0500:
 			System.out.println("ANDWF");
@@ -156,30 +158,31 @@ public class Decoder
 
 	}
 
-	public int addwf(int data)
+	public void addwf(int adress, int desti)
 	{
 		// Adds W with f = data
-		if ((data >> 7) == 0) {
-			return W += data;
+		if (desti == 0) {
+			W = W + f[adress];
 		} else {
-			return f += data;
+			f[adress] = W +f[adress];
 		}
 	}
 
-	public int andwf(int data)
+	public void andwf(int adress, int desti)
 	{
 		// And W with f = data
-		if ((data >> 7) == 0) {
-			return W &= data;
+		if (desti == 0) {
+			W = W & f[adress];
 		} else {
-			return f &= data;
+			f[adress] = W & f[adress];
 		}
 
 	}
 
-	public void clrf()
+	public void clrf(int adress)
 	{
-
+		f[adress] = 0;
+		Z = 1;
 	}
 
 	public void clrw()
@@ -188,136 +191,122 @@ public class Decoder
 		Z = 1;
 	}
 
-	public int comf(int data)
+	public void comf(int adress, int desti)
 	{
-		if ((data >> 7) == 0) {
-			return W = ~data;
+		if (desti == 0) {
+			W = ~f[adress];
 		} else {
-			return f = ~data;
+			f[adress] = ~f[adress];
 		}
 	}
 
-	public int decf(int data)
+	public void decf(int adress, int desti)
 	{
-		if ((data >> 7) == 0) {
-			--data;
-			if (data == 0) {
+		if (desti == 0) {
+			W = --f[adress];
+			if (f[adress] == 0) {
 				Z = 1;
+			}else {
+				Z = 0;
 			}
-			return W = --data;
 		} else {
-			if (data == 0) {
+			--f[adress];
+			if (f[adress] == 0) {
 				Z = 1;
+			}else {
+				Z = 0;
 			}
-			return f = --data;
 		}
 	}
 
 	// TODO Dont forget to improve this (skip etc.)
-	public int decfsz(int data)
+	public void decfsz(int adress, int desti)
 	{
-		if ((data >> 7) == 0) {
-			--data;
-			if (data == 0) {
-				nop();
-				return -1;
-			}
-			return W = data;
-		} else {
-			if (data == 0) {
-				return -1;
-			}
-			return f = data;
+		if (desti == 0) {
+			W = --f[adress];
+		}else {
+			--f[adress];
+		}
+		if (f[adress] == 0) {
+			nop();
 		}
 	}
 
-	public int incf(int data)
+	public void incf(int adress, int desti)
 	{
-		if ((data >> 7) == 0) {
-			++data;
-			if (data == 0) {
+		if (desti == 0) {
+			W = ++f[adress];
+			if (f[adress] == 0) {
 				Z = 1;
 			} else {
 				Z = 0;
-			}
-			return W = data;
+			}	
 		} else {
-			++data;
-			if (data == 0) {
+			++f[adress];
+			if (f[adress] == 0) {
 				Z = 1;
 			} else {
 				Z = 0;
 			}
-			return f = data;
 		}
 	}
 
 	// TODO Dont forget to improve this (skip etc.)
-	public int incfsz(int data)
+	public void incfsz(int adress, int desti)
 	{
-		if ((data >> 7) == 0) {
-			++data;
-			if (data == 0) {
-				nop();
-				// -1 indicator for skiping
-				return -1;
-			}
-			return W = data;
-		} else {
-			if (data == 0) {
-				// -1 indicator for skiping
-				return -1;
-			}
-			return f = data;
+		if (desti == 0) {
+			W = ++f[adress];
+		}else {
+			++f[adress];
+		}
+		if (f[adress] == 0) {
+			nop();
 		}
 	}
 
-	public int iorwf(int data)
+	public void iorwf(int adress, int desti)
 	{
-		if ((data >> 7) == 0) {
-			data = data | W;
-			if (data == 0) {
+		if (desti == 0) {
+			W = W | f[adress];
+			if (f[adress] == 0) {
 				Z = 1;
 			} else {
 				Z = 0;
 			}
-			return W = data;
 		} else {
-			data = data | W;
-			if (data == 0) {
+			f[adress] = W | f[adress];
+			if (f[adress] == 0) {
 				Z = 1;
 			} else {
 				Z = 0;
 			}
-			return f = data;
 		}
 	}
 
-	public int movf(int data)
+	public void movf(int adress, int desti)
 	{
-		if ((data >> 7) == 0) {
-			if (data == 0) {
+		if (desti == 0) {
+			W = f[adress];
+			if (f[adress] == 0) {
 				Z = 1;
 			} else {
 				Z = 0;
 			}
-			return W = data;
 		} else {
-			if (data == 0) {
+			if (f[adress] == 0) {
 				Z = 1;
 			} else {
 				Z = 0;
 			}
-			return f = data;
 		}
 	}
 
-	public int movwf(int data)
+	public void movwf(int adress)
 	{
-		return f = W;
+		f[adress] = W;
 	}
 
-	public int rlf(int data)
+	public int rlf(int adress, int desti)
 	{
 		if (data < 128) {
 			C = 0;
@@ -331,7 +320,7 @@ public class Decoder
 		}
 	}
 
-	public int rrf(int data)
+	public int rrf(int adress, int desti)
 	{
 		if (data < 128) {
 			C = 0;
@@ -351,23 +340,22 @@ public class Decoder
 	 * }
 	 */
 
-	public int swapf(int data)
+	public int swapf(int adress, int desti)
 	{
 		int upperNibble = data >> 4;
 		int lowerNibble = data << 4;
-		lowerNibble = lowerNibble >> 4;
 
 		if ((data >> 7) == 0) {
-			data = lowerNibble + upperNibble;
+			data = lowerNibble | upperNibble;
 			return W = data;
 		} else {
-			data = lowerNibble + upperNibble;
+			data = lowerNibble | upperNibble;
 			return f = data;
 		}
 	}
 
 	// TODO Finish Up
-	public int xorwf(int data)
+	public int xorwf(int adress, int desti)
 	{
 		if ((data >> 7) == 0) {
 

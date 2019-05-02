@@ -6,12 +6,10 @@ public class Controller
 	public static int programMemory[] = new int[1024];
 
 	public static int dataMemory[] = new int[128];
+	
+	
 
 	private static int pCounter = 0;
-
-	static int W;
-
-	static int f;
 
 	public static Parser parser;
 
@@ -44,6 +42,13 @@ public class Controller
 			if (programMemory[pCounter] != 0) {
 				decoder.decode(programMemory[pCounter]);
 			}
+		}
+	}
+	
+	public void readFile()
+	{
+		for(; pCounter < programMemory.length; pCounter++) {
+			if()
 		}
 	}
 }

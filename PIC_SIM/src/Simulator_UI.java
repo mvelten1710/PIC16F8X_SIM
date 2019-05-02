@@ -1,13 +1,16 @@
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
 public class Simulator_UI extends Controller
 {
+	
 
 	private JFrame frmPicSimulator;
 
@@ -41,7 +44,6 @@ public class Simulator_UI extends Controller
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	FileSelector selector;
 
 	JTextArea textArea;
 
@@ -58,7 +60,21 @@ public class Simulator_UI extends Controller
 			public void actionPerformed(ActionEvent arg0)
 			{
 				// Opens the new Window to import the LST file
-				selector = new FileSelector();
+		        JFileChooser fileChooser = new JFileChooser();
+		        fileChooser.showOpenDialog(null);
+		        int rueckgabewert = fileChooser.showOpenDialog(null);
+				if (rueckgabewert == JFileChooser.APPROVE_OPTION) {
+					String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+					try {
+						// Parses the selected LST File
+						parser.getCommands(filePath);
+						setTextArea();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
+		}
 
 			}
 		});
