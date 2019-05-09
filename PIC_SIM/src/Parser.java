@@ -13,7 +13,9 @@ public class Parser
 
 	private BufferedReader reader;
 
-	private static String content;
+	private static String content[];
+
+	private int contentIndex = 0;
 
 	public Parser()
 	{
@@ -21,7 +23,7 @@ public class Parser
 		instructionRegister = new int[1024];
 		counter = 0;
 		reader = null;
-		content = "";
+		content = new String[1000];
 	}
 
 	public int[] getCommands(String path) throws IOException
@@ -59,15 +61,15 @@ public class Parser
 		return instructionRegister;
 	}
 
-	public String getContent()
+	public String[] getContent()
 	{
-
 		return content;
 	}
 
 	private void setContent(String newLine)
 	{
-		content = content + "\n" + newLine;
+		content[contentIndex] = newLine;
+		contentIndex++;
 	}
 
 }

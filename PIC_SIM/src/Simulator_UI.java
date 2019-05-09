@@ -9,6 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.table.DefaultTableModel;
 
 public class Simulator_UI extends Controller
 {
@@ -46,9 +48,11 @@ public class Simulator_UI extends Controller
 	 * Initialize the contents of the frame.
 	 */
 
-	JTextArea textArea;
+	private JTextArea textArea;
 
 	private JTable table;
+
+	private DefaultTableModel model = new DefaultTableModel();
 
 	private void initialize()
 	{
@@ -74,8 +78,14 @@ public class Simulator_UI extends Controller
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
+					if (model.getRowCount() != 0) {
+						// removeContent();
+						setContent();
+					} else {
+						setContent();
+					}
+					// textArea.setText(parser.getContent());
 
-					textArea.setText(parser.getContent());
 				}
 
 			}
@@ -98,16 +108,39 @@ public class Simulator_UI extends Controller
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(383, 284, 519, 239);
 		frmPicSimulator.getContentPane().add(scrollPane);
+		scrollPane.setHorizontalScrollBarPolicy(
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 
 		textArea = new JTextArea();
 		textArea.setBounds(0, 0, 200, 200);
 		// frmPicSimulator.getContentPane().add(textArea);
-		scrollPane.setViewportView(table);
 
 		// TODO DONT FORGET
-		table = new JTable();
+		table = new JTable(model);
 		table.setBounds(10, 515, 323, -230);
 		frmPicSimulator.getContentPane().add(table);
+		scrollPane.setViewportView(table);
+		model.addColumn("LST FILE");
 
 	}
+
+	private void setContent()
+	{
+		for (int i = 0; i < parser.getContent().length; i++) {
+			if (parser.getContent()[i] != null) {
+				model.insertRow(i, new Object[] { parser.getContent()[i] });
+			}
+		}
+	}
+
+	// private void removeContent()
+	// {
+	// int index = 0;
+	// if (model.getRowCount() != 0) {
+	// while (model.getRowCount() > 0) {
+	// model.removeRow(index);
+	// index++;
+	// }
+	// }
+	// }
 }
