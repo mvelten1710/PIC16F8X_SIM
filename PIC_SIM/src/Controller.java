@@ -6,8 +6,6 @@ public class Controller
 	public static int programMemory[] = new int[1024];
 
 	public static int dataMemory[] = new int[128];
-	
-	
 
 	private static int pCounter = 0;
 
@@ -44,10 +42,10 @@ public class Controller
 			}
 		}
 	}
-	
+
 	public void readFile(String filePath) throws IOException
 	{
 		programMemory = parser.getCommands(filePath);
-		
+
 	}
 }

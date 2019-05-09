@@ -11,7 +11,6 @@ import javax.swing.JTextArea;
 
 public class Simulator_UI extends Controller
 {
-	
 
 	private JFrame frmPicSimulator;
 
@@ -61,18 +60,19 @@ public class Simulator_UI extends Controller
 			public void actionPerformed(ActionEvent arg0)
 			{
 				// Opens the new Window to import the LST file
-		        JFileChooser fileChooser = new JFileChooser();
-		        fileChooser.showOpenDialog(null);
-		        int rueckgabewert = fileChooser.showOpenDialog(null);
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.showOpenDialog(null);
+				int rueckgabewert = fileChooser.showOpenDialog(null);
 				if (rueckgabewert == JFileChooser.APPROVE_OPTION) {
-					String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+					String filePath = fileChooser.getSelectedFile()
+							.getAbsolutePath();
 					try {
 						readFile(filePath);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					setTextArea(parser.getContent());
+
+					textArea.setText(parser.getContent());
 				}
 
 			}
@@ -91,20 +91,15 @@ public class Simulator_UI extends Controller
 		JButton btnStop = new JButton("Stop");
 		btnStop.setBounds(705, 260, 89, 23);
 		frmPicSimulator.getContentPane().add(btnStop);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(408, 287, 494, 236);
 		frmPicSimulator.getContentPane().add(scrollPane);
 
 		textArea = new JTextArea();
 		textArea.setBounds(0, 0, 200, 200);
-		//frmPicSimulator.getContentPane().add(textArea);
+		// frmPicSimulator.getContentPane().add(textArea);
 		scrollPane.setViewportView(textArea);
 
-	}
-
-	public void setTextArea(String content)
-	{
-		textArea.setText(content);
 	}
 }

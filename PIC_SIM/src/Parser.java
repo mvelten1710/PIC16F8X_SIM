@@ -12,8 +12,8 @@ public class Parser
 	private int instructionRegister[];
 
 	private BufferedReader reader;
-	
-	private String content;
+
+	private static String content;
 
 	public Parser()
 	{
@@ -37,10 +37,10 @@ public class Parser
 
 		String lineContent = "";
 		String commands = "";
-		
+
 		while ((lineContent = reader.readLine()) != null) {
-			setContent(reader.readLine());
-			
+			setContent(lineContent);
+
 			// Takes the 6 until 9 char and saves them in
 			// the commands String
 			commands = lineContent.substring(5, 9);
@@ -58,12 +58,15 @@ public class Parser
 		}
 		return instructionRegister;
 	}
-	
-	public String getContent() {
+
+	public String getContent()
+	{
+
 		return content;
 	}
-	
-	private void setContent(String newLine) {
+
+	private void setContent(String newLine)
+	{
 		content = content + "\n" + newLine;
 	}
 
