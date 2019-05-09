@@ -561,19 +561,20 @@ public class Decoder
 
 	public void call(int data)
 	{
-		// TODO FINISH
+		// TODO FINISH WITH GOTO
+
 	}
 
 	public void clrwdt()
 	{
-		// TODO FINISH
+		// TODO FINISH WATCHDOG FOR THIS OPERATION
 		TO = 0;
 		PD = 0;
 	}
 
 	public void _goto(int data)
 	{
-		// TODO FINISH
+		// TODO FINISH WITH CALL
 	}
 
 	public void iorlw(int data)
@@ -609,7 +610,7 @@ public class Decoder
 
 	public void sleep()
 	{
-		// TODO FINISH
+		// TODO FINISH MAYBE?
 		PD = 1;
 		TO = 0;
 	}

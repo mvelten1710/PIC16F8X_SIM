@@ -7,6 +7,10 @@ public class Controller
 
 	public static int dataMemory[] = new int[128];
 
+	public static int stack[] = new int[8];
+
+	private static int sCounter = 0;
+
 	private static int pCounter = 0;
 
 	public static Parser parser;
@@ -34,6 +38,7 @@ public class Controller
 
 	}
 
+	// Later with a clock that calls one operation at a time
 	public void executeFile() throws IOException
 	{
 		for (; pCounter < programMemory.length; pCounter++) {

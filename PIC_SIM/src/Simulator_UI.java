@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 
 public class Simulator_UI extends Controller
@@ -47,6 +48,8 @@ public class Simulator_UI extends Controller
 
 	JTextArea textArea;
 
+	private JTable table;
+
 	private void initialize()
 	{
 		frmPicSimulator = new JFrame();
@@ -77,29 +80,34 @@ public class Simulator_UI extends Controller
 
 			}
 		});
-		btnNewButton.setBounds(408, 260, 89, 23);
+		btnNewButton.setBounds(383, 250, 89, 23);
 		frmPicSimulator.getContentPane().add(btnNewButton);
 
 		JButton btnStart = new JButton("Start");
-		btnStart.setBounds(507, 260, 89, 23);
+		btnStart.setBounds(482, 250, 89, 23);
 		frmPicSimulator.getContentPane().add(btnStart);
 
 		JButton btnStep = new JButton("Step");
-		btnStep.setBounds(606, 260, 89, 23);
+		btnStep.setBounds(579, 250, 89, 23);
 		frmPicSimulator.getContentPane().add(btnStep);
 
 		JButton btnStop = new JButton("Stop");
-		btnStop.setBounds(705, 260, 89, 23);
+		btnStop.setBounds(678, 250, 89, 23);
 		frmPicSimulator.getContentPane().add(btnStop);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(408, 287, 494, 236);
+		scrollPane.setBounds(383, 284, 519, 239);
 		frmPicSimulator.getContentPane().add(scrollPane);
 
 		textArea = new JTextArea();
 		textArea.setBounds(0, 0, 200, 200);
 		// frmPicSimulator.getContentPane().add(textArea);
-		scrollPane.setViewportView(textArea);
+		scrollPane.setViewportView(table);
+
+		// TODO DONT FORGET
+		table = new JTable();
+		table.setBounds(10, 515, 323, -230);
+		frmPicSimulator.getContentPane().add(table);
 
 	}
 }
