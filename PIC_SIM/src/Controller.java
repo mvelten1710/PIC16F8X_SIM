@@ -1,56 +1,52 @@
 import java.io.IOException;
 
-public class Controller
+public class Controller extends Thread
 {
-	// Test
+	// Memory
 	public static int programMemory[] = new int[1024];
 
-	public static int dataMemory[] = new int[128];
+	// DataMemory are the banks -> (bank1(128) & bank2(128))
+	public static int dataMemory[] = new int[256];
 
 	public static int stack[] = new int[8];
 
+	// Stack counter
 	private static int sCounter = 0;
 
-	private static int pCounter = 0;
+	// ProgramMemory Counter
+	public static int pCounter = 0;
 
 	public static Parser parser;
 
 	public static Decoder decoder;
 
+	public static File file;
+
+	public static CPUClock clock;
+
+	public static boolean clockRunning;
+
 	public static void main(String[] args) throws IOException
 	{
-		// Starts the UI and combines the Decoder(Commands)
-		// and the Parser(Reads LST Files)
-		Simulator_UI newWindow = new Simulator_UI();
-		newWindow.startWindow();
 
+		clockRunning = false;
 		// New Parser Object
 		parser = new Parser();
 
 		// New Decoder Object
 		decoder = new Decoder();
 
-		for (int c = 0; c < programMemory.length; c++) {
-			if (programMemory[c] != 0) {
-				System.out.println("\n" + programMemory[c]);
-			}
-		}
+		// New File Object
+		file = new File();
+
+		// New Clock Object
+		clock = new CPUClock();
+
+		// Starts the UI and combines the Decoder(Commands)
+		// and the Parser(Reads LST Files)
+		Simulator_UI newWindow = new Simulator_UI();
+		newWindow.startWindow();
 
 	}
 
-	// Later with a clock that calls one operation at a time
-	public void executeFile() throws IOException
-	{
-		for (; pCounter < programMemory.length; pCounter++) {
-			if (programMemory[pCounter] != 0) {
-				decoder.decode(programMemory[pCounter]);
-			}
-		}
-	}
-
-	public void readFile(String filePath) throws IOException
-	{
-		programMemory = parser.getCommands(filePath);
-
-	}
 }

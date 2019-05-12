@@ -8,7 +8,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.table.DefaultTableModel;
 
@@ -48,11 +47,9 @@ public class Simulator_UI extends Controller
 	 * Initialize the contents of the frame.
 	 */
 
-	private JTextArea textArea;
-
 	private JTable table;
 
-	private DefaultTableModel model = new DefaultTableModel();
+	private DefaultTableModel model;
 
 	private void initialize()
 	{
@@ -62,28 +59,48 @@ public class Simulator_UI extends Controller
 		frmPicSimulator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmPicSimulator.getContentPane().setLayout(null);
 
-		JButton btnNewButton = new JButton("Open File");
+		JButton btnStart = new JButton("RUN");
+		btnStart.setEnabled(false);
+		btnStart.setBounds(482, 250, 89, 23);
+		frmPicSimulator.getContentPane().add(btnStart);
+		btnStart.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				clockRunning = true;
+				System.out.println(clockRunning);
+			}
+		});
+
+		JButton btnStep = new JButton("STEP");
+		btnStep.setBounds(579, 250, 89, 23);
+		frmPicSimulator.getContentPane().add(btnStep);
+
+		JButton btnStop = new JButton("RESET");
+		btnStop.setBounds(678, 250, 89, 23);
+		frmPicSimulator.getContentPane().add(btnStop);
+
+		JButton btnNewButton = new JButton("LOAD");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0)
 			{
 				// Opens the new Window to import the LST file
 				JFileChooser fileChooser = new JFileChooser();
-				fileChooser.showOpenDialog(null);
 				int rueckgabewert = fileChooser.showOpenDialog(null);
 				if (rueckgabewert == JFileChooser.APPROVE_OPTION) {
-					String filePath = fileChooser.getSelectedFile()
-							.getAbsolutePath();
 					try {
-						readFile(filePath);
+						file.readFile(
+								fileChooser.getSelectedFile().getAbsolutePath());
+						if (model.getRowCount() > 0) {
+							removeContent();
+						}
+						setContent();
+						btnStart.setEnabled(true);
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-					if (model.getRowCount() != 0) {
-						// removeContent();
-						setContent();
-					} else {
-						setContent();
-					}
+
 					// textArea.setText(parser.getContent());
 
 				}
@@ -93,34 +110,18 @@ public class Simulator_UI extends Controller
 		btnNewButton.setBounds(383, 250, 89, 23);
 		frmPicSimulator.getContentPane().add(btnNewButton);
 
-		JButton btnStart = new JButton("Start");
-		btnStart.setBounds(482, 250, 89, 23);
-		frmPicSimulator.getContentPane().add(btnStart);
-
-		JButton btnStep = new JButton("Step");
-		btnStep.setBounds(579, 250, 89, 23);
-		frmPicSimulator.getContentPane().add(btnStep);
-
-		JButton btnStop = new JButton("Stop");
-		btnStop.setBounds(678, 250, 89, 23);
-		frmPicSimulator.getContentPane().add(btnStop);
-
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(383, 284, 519, 239);
 		frmPicSimulator.getContentPane().add(scrollPane);
 		scrollPane.setHorizontalScrollBarPolicy(
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 
-		textArea = new JTextArea();
-		textArea.setBounds(0, 0, 200, 200);
-		// frmPicSimulator.getContentPane().add(textArea);
-
-		// TODO DONT FORGET
-		table = new JTable(model);
+		table = new JTable();
+		model = (DefaultTableModel) table.getModel();
 		table.setBounds(10, 515, 323, -230);
 		frmPicSimulator.getContentPane().add(table);
-		scrollPane.setViewportView(table);
 		model.addColumn("LST FILE");
+		scrollPane.setViewportView(table);
 
 	}
 
@@ -133,14 +134,8 @@ public class Simulator_UI extends Controller
 		}
 	}
 
-	// private void removeContent()
-	// {
-	// int index = 0;
-	// if (model.getRowCount() != 0) {
-	// while (model.getRowCount() > 0) {
-	// model.removeRow(index);
-	// index++;
-	// }
-	// }
-	// }
+	private void removeContent()
+	{
+		// TODO Code for the removal of the rows
+	}
 }

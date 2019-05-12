@@ -35,7 +35,10 @@ public class Decoder
 		int destinationBit = 0;
 		int bitPos = 0;
 
-		switch (instruction & 0b11000000000000) {
+		System.out.println("INSTRUCTION: " + Integer.toBinaryString(instruction));
+
+		instruc = instruc >> 12;
+		switch (instruc & 0b11000000000000) {
 		case 0:
 			// Special Cases for some L&C Operations
 			switch (instruction) {
@@ -80,8 +83,8 @@ public class Decoder
 			// If it is true then its a l & c oriented operations
 			instructionPart = instruction & 0b11100000000000;
 			dataPart = instruction & 0b00011111111111;
-
 			break;
+
 		case 3:
 			// If it is true then its a l & c oriented operations
 			// Has the same masks like the byte operations
@@ -90,14 +93,9 @@ public class Decoder
 			break;
 		}
 
-		// Bitmask for Bit Oriented Operations
-
-		// Bitmask for Literal And Control Operations
-
 		// Search for Instruction
-		switch (instructionPart)
+		switch (instructionPart) {
 
-		{
 		case 0x0700:
 			System.out.println("ADDWF");
 			addwf(adressPart, destinationBit);
@@ -547,6 +545,7 @@ public class Decoder
 		} else {
 			DC = 0;
 		}
+		System.out.println("W Register: " + W);
 	}
 
 	public void andlw(int data)
@@ -557,6 +556,7 @@ public class Decoder
 		} else {
 			Z = 0;
 		}
+		System.out.println("W Register: " + W);
 	}
 
 	public void call(int data)
@@ -585,11 +585,13 @@ public class Decoder
 		} else {
 			Z = 0;
 		}
+		System.out.println("W Register: " + W);
 	}
 
 	public void movlw(int data)
 	{
 		W = data;
+		System.out.println("W Register: " + W);
 	}
 
 	public void retfie()
@@ -632,6 +634,7 @@ public class Decoder
 		} else {
 			DC = 0;
 		}
+		System.out.println("W Register: " + W);
 	}
 
 	public void xorlw(int data)
@@ -642,6 +645,7 @@ public class Decoder
 		} else {
 			Z = 0;
 		}
+		System.out.println("W Register: " + W);
 	}
 
 	public void nop()
