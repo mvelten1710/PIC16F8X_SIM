@@ -575,6 +575,7 @@ public class Decoder
 	public void _goto(int data)
 	{
 		// TODO FINISH WITH CALL
+
 	}
 
 	public void iorlw(int data)

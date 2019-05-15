@@ -11,10 +11,18 @@ public class Controller extends Thread
 	public static int stack[] = new int[8];
 
 	// Stack counter
-	private static int sCounter = 0;
+	private static int sIndex = 0;
 
 	// ProgramMemory Counter
-	public static int pCounter = 0;
+	public static int pIndex = 0;
+
+	public static int operationCounter = 0;
+
+	public static boolean clockRunning;
+
+	public static boolean stepping;
+
+	public static boolean allCleared;
 
 	public static Parser parser;
 
@@ -24,12 +32,13 @@ public class Controller extends Thread
 
 	public static CPUClock clock;
 
-	public static boolean clockRunning;
-
 	public static void main(String[] args) throws IOException
 	{
 
 		clockRunning = false;
+		allCleared = true;
+		stepping = false;
+
 		// New Parser Object
 		parser = new Parser();
 

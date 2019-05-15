@@ -10,9 +10,9 @@ public class File extends Controller
 	// Later with a clock that calls one operation at a time
 	public void saveOperationsIntoMemory() throws IOException
 	{
-		for (; pCounter < programMemory.length; pCounter++) {
-			if (programMemory[pCounter] != 0) {
-				decoder.decode(programMemory[pCounter]);
+		for (; pIndex < programMemory.length; pIndex++) {
+			if (programMemory[pIndex] != 0) {
+				decoder.decode(programMemory[pIndex]);
 			}
 		}
 	}
@@ -33,9 +33,10 @@ public class File extends Controller
 		// Dont forget step execution and continues execution
 
 		// Test run
-		if (programMemory[pCounter] != 0) {
-			decoder.decode(programMemory[pCounter]);
-			pCounter++;
+		if (operationCounter != 0) {
+			decoder.decode(programMemory[pIndex]);
+			pIndex++;
+			operationCounter--;
 		} else {
 			clockRunning = false;
 		}

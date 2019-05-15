@@ -72,4 +72,18 @@ public class Parser
 		contentIndex++;
 	}
 
+	public void clearContent()
+	{
+		for (int i = 0; i < content.length; i++) {
+			if (content[i] != null)
+				content[i] = null;
+		}
+		contentIndex = 0;
+	}
+
+	public int setOperationCounter()
+	{
+		return counter;
+	}
+
 }

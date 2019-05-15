@@ -3,7 +3,7 @@ public class CPUClock extends Controller
 	public void run()
 	{
 
-		System.out.println("Thread " + getName() + " started...");
+		System.out.println("Operation Thread started...");
 		// Things to run
 		while (true) {
 			try {
@@ -14,7 +14,9 @@ public class CPUClock extends Controller
 			// Runs only if the User presses the button RUN
 			if (clockRunning) {
 				file.executeOperation();
-				System.out.println("Operation executed...");
+				if (stepping) {
+					clockRunning = false;
+				}
 
 			}
 		}
