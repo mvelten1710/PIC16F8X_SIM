@@ -29,13 +29,13 @@ public class File extends Controller
 
 	public void executeOperation()
 	{
-		// TODO Build here the execution process of the operations
-		// Dont forget step execution and continues execution
-
 		// Test run
 		if (operationCounter != 0) {
 			decoder.decode(programMemory[pIndex]);
-			pIndex++;
+			if(!decoder.ispIndexModified()) {
+				pIndex++;
+				//TODO pIndexModified look after!
+			}
 			operationCounter--;
 		} else {
 			clockRunning = false;

@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import java.awt.Font;
 
 public class Simulator_UI extends Controller
 {
@@ -144,6 +145,7 @@ public class Simulator_UI extends Controller
 				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
 		table = new JTable(model);
+		table.setFont(new Font("Monospaced", Font.PLAIN, 11));
 		scrollPane.setViewportView(table);
 
 		model.addColumn("LST FILE");
@@ -157,7 +159,7 @@ public class Simulator_UI extends Controller
 				model.insertRow(i, new Object[] { parser.getContent()[i] });
 			}
 		}
-		operationCounter = parser.setOperationCounter();
+		operationCounter = parser.getOperationCounter();
 		allCleared = false;
 	}
 

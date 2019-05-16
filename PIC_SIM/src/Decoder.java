@@ -4,26 +4,29 @@ public class Decoder
 	// Test
 
 	// Working Register
-	public static int W;
+	private static int W;
 
-	public static int f[] = new int[128];
-
+	private static int f[] = new int[128];
+	
 	// Flags
 	int C, DC, Z, TO, PD;
 
-	private static int byteOrientedMask = 0b11111100000000;
+	private int byteOrientedMask = 0b11111100000000;
 
-	private static int adressMask = 0b00000011111111;
+	private int adressMask = 0b00000011111111;
 
-	private static int bitMask = 0b00001110000000;
+	private int bitMask = 0b00001110000000;
 
-	private static int bitOrientedMask = 0b11110000000000;
+	private int bitOrientedMask = 0b11110000000000;
 
 	public int instruction;
+	
+	public boolean pIndexModified;
 
 	public Decoder()
 	{
 		instruction = 0;
+		pIndexModified = false;
 	}
 
 	public void decode(int instruc)
@@ -35,10 +38,9 @@ public class Decoder
 		int destinationBit = 0;
 		int bitPos = 0;
 
-		System.out.println("INSTRUCTION: " + Integer.toBinaryString(instruction));
+		//System.out.println("INSTRUCTION: " + Integer.toBinaryString(instruction));
 
-		instruc = instruc >> 12;
-		switch (instruc & 0b11000000000000) {
+		switch ((instruc >> 12) & 0b11) {
 		case 0:
 			// Special Cases for some L&C Operations
 			switch (instruction) {
@@ -68,6 +70,7 @@ public class Decoder
 				dataPart = instruction & adressMask;
 				adressPart = dataPart >> 1;
 				destinationBit = dataPart >> 7;
+				System.out.println("DestinationBit: " + destinationBit);
 			}
 			break;
 
@@ -95,7 +98,6 @@ public class Decoder
 
 		// Search for Instruction
 		switch (instructionPart) {
-
 		case 0x0700:
 			System.out.println("ADDWF");
 			addwf(adressPart, destinationBit);
@@ -104,15 +106,14 @@ public class Decoder
 			System.out.println("ANDWF");
 			andwf(adressPart, destinationBit);
 			break;
-		case 0x0180:
-			// Destination Bit is 1
-			System.out.println("CLRF");
-			clrf(adressPart);
-			break;
+//		case 0x0180:
+//			// Destination Bit is 1
+//			System.out.println("CLRF");
+//			clrf(adressPart);
+//			break;
 		case 0x0100:
 			// Destination Bit is 0
-			System.out.println("CLRW");
-			clrw();
+			decideCLR(adressPart ,destinationBit);
 			break;
 		case 0x0900:
 			System.out.println("COMF");
@@ -177,7 +178,31 @@ public class Decoder
 			System.out.println("BCF");
 			bcf(adressPart, bitPos);
 			break;
+		case 0x1100:
+			System.out.println("BCF");
+			bcf(adressPart, bitPos);
+			break;
+		case 0x1200:
+			System.out.println("BCF");
+			bcf(adressPart, bitPos);
+			break;
+		case 0x1300:
+			System.out.println("BCF");
+			bcf(adressPart, bitPos);
+			break;
 		case 0x1400:
+			System.out.println("BSF");
+			bsf(adressPart, bitPos);
+			break;
+		case 0x1500:
+			System.out.println("BSF");
+			bsf(adressPart, bitPos);
+			break;
+		case 0x1600:
+			System.out.println("BSF");
+			bsf(adressPart, bitPos);
+			break;
+		case 0x1700:
 			System.out.println("BSF");
 			bsf(adressPart, bitPos);
 			break;
@@ -185,7 +210,31 @@ public class Decoder
 			System.out.println("BTFSC");
 			btfsc(adressPart, bitPos);
 			break;
+		case 0x1900:
+			System.out.println("BTFSC");
+			btfsc(adressPart, bitPos);
+			break;
+		case 0x1A00:
+			System.out.println("BTFSC");
+			btfsc(adressPart, bitPos);
+			break;
+		case 0x1B00:
+			System.out.println("BTFSC");
+			btfsc(adressPart, bitPos);
+			break;
 		case 0x1C00:
+			System.out.println("BTFSS");
+			btfss(adressPart, bitPos);
+			break;
+		case 0x1D00:
+			System.out.println("BTFSS");
+			btfss(adressPart, bitPos);
+			break;
+		case 0x1E00:
+			System.out.println("BTFSS");
+			btfss(adressPart, bitPos);
+			break;
+		case 0x1F00:
 			System.out.println("BTFSS");
 			btfss(adressPart, bitPos);
 			break;
@@ -247,7 +296,6 @@ public class Decoder
 			System.out.println("NICHT VORHANDEN");
 			break;
 		}
-
 	}
 
 	public void addwf(int adress, int desti)
@@ -300,12 +348,14 @@ public class Decoder
 
 	public void clrf(int adress)
 	{
+		System.out.println("CLRF");
 		f[adress] = 0;
 		Z = 1;
 	}
 
 	public void clrw()
 	{
+		System.out.println("CLRW");
 		W = 0;
 		Z = 1;
 	}
@@ -562,7 +612,9 @@ public class Decoder
 	public void call(int data)
 	{
 		// TODO FINISH WITH GOTO
-
+		Controller.pushStack(Controller.pIndex++);
+		Controller.pIndex = data;
+		pIndexModified = true;
 	}
 
 	public void clrwdt()
@@ -574,8 +626,9 @@ public class Decoder
 
 	public void _goto(int data)
 	{
-		// TODO FINISH WITH CALL
-
+		System.out.println(data);
+		Controller.pIndex = data;
+		pIndexModified = true;
 	}
 
 	public void iorlw(int data)
@@ -664,5 +717,17 @@ public class Decoder
 		W = ~W;
 		W++;
 		return W;
+	}
+	
+	private void decideCLR(int adress, int desti) {
+		if(desti == 0) {
+			clrw();
+		}else {
+			clrf(adress);
+		}
+	}
+	
+	public boolean ispIndexModified() {
+		return pIndexModified;
 	}
 }

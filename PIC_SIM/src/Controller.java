@@ -5,7 +5,7 @@ public class Controller extends Thread
 	// Memory
 	public static int programMemory[] = new int[1024];
 
-	// DataMemory are the banks -> (bank1(128) & bank2(128))
+	// DataMemory are the banks -> (bank0(128) & bank1(128))
 	public static int dataMemory[] = new int[256];
 
 	public static int stack[] = new int[8];
@@ -56,6 +56,15 @@ public class Controller extends Thread
 		Simulator_UI newWindow = new Simulator_UI();
 		newWindow.startWindow();
 
+	}
+	
+	public static void pushStack(int data) {
+		stack[sIndex] = data;
+		sIndex++;
+	}
+	
+	public static void popStack() {
+		
 	}
 
 }
