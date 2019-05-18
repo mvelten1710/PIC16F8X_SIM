@@ -1,4 +1,5 @@
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -9,7 +10,6 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import java.awt.Font;
 
 public class Simulator_UI extends Controller
 {
@@ -86,8 +86,6 @@ public class Simulator_UI extends Controller
 				if (!stepping) {
 					stepping = true;
 				}
-				System.out
-						.println("Clock: " + clockRunning + " Stepping: " + stepping);
 			}
 		});
 
@@ -159,7 +157,6 @@ public class Simulator_UI extends Controller
 				model.insertRow(i, new Object[] { parser.getContent()[i] });
 			}
 		}
-		operationCounter = parser.getOperationCounter();
 		allCleared = false;
 	}
 
@@ -169,7 +166,6 @@ public class Simulator_UI extends Controller
 		clockRunning = false;
 		stepping = false;
 		pIndex = 0;
-		operationCounter = 0;
 		btnStart.setEnabled(false);
 		btnStep.setEnabled(false);
 		btnReset.setEnabled(false);

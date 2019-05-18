@@ -8,6 +8,7 @@ public class Controller extends Thread
 	// DataMemory are the banks -> (bank0(128) & bank1(128))
 	public static int dataMemory[] = new int[256];
 
+	// Stack
 	public static int stack[] = new int[8];
 
 	// Stack counter
@@ -15,8 +16,6 @@ public class Controller extends Thread
 
 	// ProgramMemory Counter
 	public static int pIndex = 0;
-
-	public static int operationCounter = 0;
 
 	public static boolean clockRunning;
 
@@ -57,14 +56,22 @@ public class Controller extends Thread
 		newWindow.startWindow();
 
 	}
-	
-	public static void pushStack(int data) {
+
+	public static void pushStack(int data)
+	{
 		stack[sIndex] = data;
 		sIndex++;
+		if (sIndex == 7) {
+			sIndex = 0;
+		}
 	}
-	
-	public static void popStack() {
-		
+
+	public static int popStack()
+	{
+		sIndex--;
+		System.out.println(stack[sIndex] + " wurde gepoppt");
+		return stack[sIndex];
+
 	}
 
 }

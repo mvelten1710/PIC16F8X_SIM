@@ -81,10 +81,4 @@ public class Parser
 		contentIndex = 0;
 		counter = 0;
 	}
-
-	public int getOperationCounter()
-	{
-		return counter;
-	}
-
 }

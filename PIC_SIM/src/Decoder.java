@@ -1,4 +1,3 @@
-
 public class Decoder
 {
 	// Test
@@ -7,7 +6,7 @@ public class Decoder
 	private static int W;
 
 	private static int f[] = new int[128];
-	
+
 	// Flags
 	int C, DC, Z, TO, PD;
 
@@ -20,13 +19,10 @@ public class Decoder
 	private int bitOrientedMask = 0b11110000000000;
 
 	public int instruction;
-	
-	public boolean pIndexModified;
 
 	public Decoder()
 	{
 		instruction = 0;
-		pIndexModified = false;
 	}
 
 	public void decode(int instruc)
@@ -38,7 +34,8 @@ public class Decoder
 		int destinationBit = 0;
 		int bitPos = 0;
 
-		//System.out.println("INSTRUCTION: " + Integer.toBinaryString(instruction));
+		// System.out.println("INSTRUCTION: " +
+		// Integer.toBinaryString(instruction));
 
 		switch ((instruc >> 12) & 0b11) {
 		case 0:
@@ -64,13 +61,17 @@ public class Decoder
 				instructionPart = 0b1100011;
 				break;
 			}
+
 			if (instructionPart == 0) {
 				// If it is true then its a byte oriented operations
 				instructionPart = instruction & byteOrientedMask;
 				dataPart = instruction & adressMask;
 				adressPart = dataPart >> 1;
 				destinationBit = dataPart >> 7;
-				System.out.println("DestinationBit: " + destinationBit);
+				if (destinationBit == 1 && instructionPart == 0) {
+					// MOVWF
+					instructionPart = 0b10000000;
+				}
 			}
 			break;
 
@@ -106,14 +107,14 @@ public class Decoder
 			System.out.println("ANDWF");
 			andwf(adressPart, destinationBit);
 			break;
-//		case 0x0180:
-//			// Destination Bit is 1
-//			System.out.println("CLRF");
-//			clrf(adressPart);
-//			break;
+		// case 0x0180:
+		// // Destination Bit is 1
+		// System.out.println("CLRF");
+		// clrf(adressPart);
+		// break;
 		case 0x0100:
 			// Destination Bit is 0
-			decideCLR(adressPart ,destinationBit);
+			decideCLR(adressPart, destinationBit);
 			break;
 		case 0x0900:
 			System.out.println("COMF");
@@ -333,6 +334,7 @@ public class Decoder
 				DC = 0;
 			}
 		}
+		incrementpIndex();
 	}
 
 	public void andwf(int adress, int desti)
@@ -343,7 +345,7 @@ public class Decoder
 		} else {
 			f[adress] = W & f[adress];
 		}
-
+		incrementpIndex();
 	}
 
 	public void clrf(int adress)
@@ -351,6 +353,7 @@ public class Decoder
 		System.out.println("CLRF");
 		f[adress] = 0;
 		Z = 1;
+		incrementpIndex();
 	}
 
 	public void clrw()
@@ -358,6 +361,7 @@ public class Decoder
 		System.out.println("CLRW");
 		W = 0;
 		Z = 1;
+		incrementpIndex();
 	}
 
 	public void comf(int adress, int desti)
@@ -367,6 +371,7 @@ public class Decoder
 		} else {
 			f[adress] = ~f[adress];
 		}
+		incrementpIndex();
 	}
 
 	public void decf(int adress, int desti)
@@ -386,6 +391,7 @@ public class Decoder
 				Z = 0;
 			}
 		}
+		incrementpIndex();
 	}
 
 	public void decfsz(int adress, int desti)
@@ -398,6 +404,7 @@ public class Decoder
 		if (f[adress] == 0) {
 			nop();
 		}
+		incrementpIndex();
 	}
 
 	public void incf(int adress, int desti)
@@ -417,6 +424,7 @@ public class Decoder
 				Z = 0;
 			}
 		}
+		incrementpIndex();
 	}
 
 	public void incfsz(int adress, int desti)
@@ -429,6 +437,7 @@ public class Decoder
 		if (f[adress] == 0) {
 			nop();
 		}
+		incrementpIndex();
 	}
 
 	public void iorwf(int adress, int desti)
@@ -448,6 +457,7 @@ public class Decoder
 				Z = 0;
 			}
 		}
+		incrementpIndex();
 	}
 
 	public void movf(int adress, int desti)
@@ -466,11 +476,13 @@ public class Decoder
 				Z = 0;
 			}
 		}
+		incrementpIndex();
 	}
 
 	public void movwf(int adress)
 	{
 		f[adress] = W;
+		incrementpIndex();
 	}
 
 	public void rlf(int adress, int desti)
@@ -483,6 +495,7 @@ public class Decoder
 			f[adress] = (f[adress] << 1) | C;
 		}
 		C = helper;
+		incrementpIndex();
 	}
 
 	public void rrf(int adress, int desti)
@@ -495,6 +508,7 @@ public class Decoder
 			f[adress] = (f[adress] >> 1) | C;
 		}
 		C = helper;
+		incrementpIndex();
 	}
 
 	public void subwf(int adress, int desti)
@@ -525,6 +539,7 @@ public class Decoder
 				DC = 0;
 			}
 		}
+		incrementpIndex();
 	}
 
 	public void swapf(int adress, int desti)
@@ -537,6 +552,7 @@ public class Decoder
 		} else {
 			f[adress] = total;
 		}
+		incrementpIndex();
 	}
 
 	public void xorwf(int adress, int desti)
@@ -556,16 +572,19 @@ public class Decoder
 				Z = 0;
 			}
 		}
+		incrementpIndex();
 	}
 
 	public void bcf(int adress, int b)
 	{
 		f[adress] = f[adress] & ~(1 << b);
+		incrementpIndex();
 	}
 
 	public void bsf(int adress, int b)
 	{
 		f[adress] = f[adress] | ~(1 << b);
+		incrementpIndex();
 	}
 
 	public void btfsc(int adress, int b)
@@ -573,6 +592,7 @@ public class Decoder
 		if ((f[adress] & (1 << b)) == 0) {
 			nop();
 		}
+		incrementpIndex();
 	}
 
 	public void btfss(int adress, int b)
@@ -580,6 +600,7 @@ public class Decoder
 		if ((f[adress] & (1 << b)) == 1) {
 			nop();
 		}
+		incrementpIndex();
 	}
 
 	public void addlw(int data)
@@ -596,6 +617,7 @@ public class Decoder
 			DC = 0;
 		}
 		System.out.println("W Register: " + W);
+		incrementpIndex();
 	}
 
 	public void andlw(int data)
@@ -607,14 +629,15 @@ public class Decoder
 			Z = 0;
 		}
 		System.out.println("W Register: " + W);
+		incrementpIndex();
 	}
 
 	public void call(int data)
 	{
-		// TODO FINISH WITH GOTO
-		Controller.pushStack(Controller.pIndex++);
+		Controller.pushStack(++Controller.pIndex);
+		System.out
+				.println("In Stack wurde: " + Controller.pIndex + " geschrieben!");
 		Controller.pIndex = data;
-		pIndexModified = true;
 	}
 
 	public void clrwdt()
@@ -628,7 +651,6 @@ public class Decoder
 	{
 		System.out.println(data);
 		Controller.pIndex = data;
-		pIndexModified = true;
 	}
 
 	public void iorlw(int data)
@@ -640,28 +662,33 @@ public class Decoder
 			Z = 0;
 		}
 		System.out.println("W Register: " + W);
+		incrementpIndex();
 	}
 
 	public void movlw(int data)
 	{
 		W = data;
 		System.out.println("W Register: " + W);
+		incrementpIndex();
 	}
 
 	public void retfie()
 	{
 		// TODO FINISH
+
 	}
 
 	public void retlw(int data)
 	{
 		// TODO FINISH
 		W = data;
+		Controller.pIndex = Controller.popStack();
+		incrementpIndex();
 	}
 
 	public void _return()
 	{
-		// TODO FINISH
+		Controller.pIndex = Controller.popStack();
 	}
 
 	public void sleep()
@@ -669,6 +696,7 @@ public class Decoder
 		// TODO FINISH MAYBE?
 		PD = 1;
 		TO = 0;
+		incrementpIndex();
 	}
 
 	public void sublw(int data)
@@ -689,6 +717,7 @@ public class Decoder
 			DC = 0;
 		}
 		System.out.println("W Register: " + W);
+		incrementpIndex();
 	}
 
 	public void xorlw(int data)
@@ -700,10 +729,12 @@ public class Decoder
 			Z = 0;
 		}
 		System.out.println("W Register: " + W);
+		incrementpIndex();
 	}
 
 	public void nop()
 	{
+		incrementpIndex();
 		return;
 	}
 
@@ -718,16 +749,19 @@ public class Decoder
 		W++;
 		return W;
 	}
-	
-	private void decideCLR(int adress, int desti) {
-		if(desti == 0) {
+
+	private void decideCLR(int adress, int desti)
+	{
+		if (desti == 0) {
 			clrw();
-		}else {
+		} else {
 			clrf(adress);
 		}
 	}
-	
-	public boolean ispIndexModified() {
-		return pIndexModified;
+
+	private void incrementpIndex()
+	{
+		Controller.pIndex++;
 	}
+
 }

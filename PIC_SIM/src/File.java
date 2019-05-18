@@ -30,13 +30,8 @@ public class File extends Controller
 	public void executeOperation()
 	{
 		// Test run
-		if (operationCounter != 0) {
+		if (pIndex < programMemory.length) {
 			decoder.decode(programMemory[pIndex]);
-			if(!decoder.ispIndexModified()) {
-				pIndex++;
-				//TODO pIndexModified look after!
-			}
-			operationCounter--;
 		} else {
 			clockRunning = false;
 		}
