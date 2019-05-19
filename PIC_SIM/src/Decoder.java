@@ -1,6 +1,7 @@
 public class Decoder
 {
-	// Test
+	// TODO CLEAR ALL SYSTEM.OUT.PRINTLN!
+	private int absoluteAdress;
 
 	// Working Register
 	private static int W;
@@ -8,7 +9,7 @@ public class Decoder
 	private static int f[] = new int[128];
 
 	// Flags
-	int C, DC, Z, TO, PD;
+	private int C, DC, Z, TO, PD;
 
 	private int byteOrientedMask = 0b11111100000000;
 
@@ -100,11 +101,11 @@ public class Decoder
 		// Search for Instruction
 		switch (instructionPart) {
 		case 0x0700:
-			System.out.println("ADDWF");
+			System.out.println("###ADDWF###");
 			addwf(adressPart, destinationBit);
 			break;
 		case 0x0500:
-			System.out.println("ANDWF");
+			System.out.println("###ANDWF###");
 			andwf(adressPart, destinationBit);
 			break;
 		// case 0x0180:
@@ -117,223 +118,212 @@ public class Decoder
 			decideCLR(adressPart, destinationBit);
 			break;
 		case 0x0900:
-			System.out.println("COMF");
+			System.out.println("###COMF###");
 			comf(adressPart, destinationBit);
 			break;
 		case 0x0300:
-			System.out.println("DECF");
+			System.out.println("###DECF###");
 			decf(adressPart, destinationBit);
 			break;
 		case 0x0B00:
-			System.out.println("DECFSZ");
+			System.out.println("###DECFSZ###");
 			decfsz(adressPart, destinationBit);
 			break;
 		case 0x0A00:
-			System.out.println("INCF");
+			System.out.println("###INCF###");
 			incf(adressPart, destinationBit);
 			break;
 		case 0x0F00:
-			System.out.println("INCFSZ");
+			System.out.println("###INCFSZ###");
 			incfsz(adressPart, destinationBit);
 			break;
 		case 0x0400:
-			System.out.println("IORWF");
+			System.out.println("###IORWF###");
 			iorwf(adressPart, destinationBit);
 			break;
 		case 0x0800:
-			System.out.println("MOVF");
+			System.out.println("###MOVF###");
 			movf(adressPart, destinationBit);
 			break;
 		case 0x0080:
 			// Destination Bit is 1
-			System.out.println("MOVWF");
-			movf(adressPart, destinationBit);
+			System.out.println("###MOVWF###");
+			movwf(adressPart);
 			break;
 		case 0x0000:
 			// Destination Bit is 0
-			System.out.println("NOP");
+			System.out.println("###NOP###");
 			nop();
 			break;
 		case 0x0D00:
-			System.out.println("RLF");
+			System.out.println("###RLF###");
 			rlf(adressPart, destinationBit);
 			break;
 		case 0x0C00:
-			System.out.println("RRF");
+			System.out.println("###RRF###");
 			rrf(adressPart, destinationBit);
 			break;
 		case 0x0200:
-			System.out.println("SUBWF");
+			System.out.println("###SUBWF###");
 			subwf(adressPart, destinationBit);
 			break;
 		case 0x0E00:
-			System.out.println("SWAPF");
+			System.out.println("###SWAPF###");
 			swapf(adressPart, destinationBit);
 			break;
 		case 0x0600:
-			System.out.println("XORWF");
+			System.out.println("###XORWF###");
 			xorwf(adressPart, destinationBit);
 			break;
 
 		case 0x1000:
-			System.out.println("BCF");
+			System.out.println("###BCF###");
 			bcf(adressPart, bitPos);
 			break;
 		case 0x1100:
-			System.out.println("BCF");
+			System.out.println("###BCF###");
 			bcf(adressPart, bitPos);
 			break;
 		case 0x1200:
-			System.out.println("BCF");
+			System.out.println("###BCF###");
 			bcf(adressPart, bitPos);
 			break;
 		case 0x1300:
-			System.out.println("BCF");
+			System.out.println("###BCF###");
 			bcf(adressPart, bitPos);
 			break;
 		case 0x1400:
-			System.out.println("BSF");
+			System.out.println("###BSF###");
 			bsf(adressPart, bitPos);
 			break;
 		case 0x1500:
-			System.out.println("BSF");
+			System.out.println("###BSF###");
 			bsf(adressPart, bitPos);
 			break;
 		case 0x1600:
-			System.out.println("BSF");
+			System.out.println("###BSF###");
 			bsf(adressPart, bitPos);
 			break;
 		case 0x1700:
-			System.out.println("BSF");
+			System.out.println("###BSF###");
 			bsf(adressPart, bitPos);
 			break;
 		case 0x1800:
-			System.out.println("BTFSC");
+			System.out.println("###BTFSC###");
 			btfsc(adressPart, bitPos);
 			break;
 		case 0x1900:
-			System.out.println("BTFSC");
+			System.out.println("###BTFSC###");
 			btfsc(adressPart, bitPos);
 			break;
 		case 0x1A00:
-			System.out.println("BTFSC");
+			System.out.println("###BTFSC###");
 			btfsc(adressPart, bitPos);
 			break;
 		case 0x1B00:
-			System.out.println("BTFSC");
+			System.out.println("###BTFSC###");
 			btfsc(adressPart, bitPos);
 			break;
 		case 0x1C00:
-			System.out.println("BTFSS");
+			System.out.println("###BTFSS###");
 			btfss(adressPart, bitPos);
 			break;
 		case 0x1D00:
-			System.out.println("BTFSS");
+			System.out.println("###BTFSS###");
 			btfss(adressPart, bitPos);
 			break;
 		case 0x1E00:
-			System.out.println("BTFSS");
+			System.out.println("###BTFSS###");
 			btfss(adressPart, bitPos);
 			break;
 		case 0x1F00:
-			System.out.println("BTFSS");
+			System.out.println("###BTFSS###");
 			btfss(adressPart, bitPos);
 			break;
 
 		case 0x3E00:
-			System.out.println("ADDLW");
+			System.out.println("###ADDLW###");
 			addlw(dataPart);
 			break;
 		case 0x3900:
-			System.out.println("ANDLW");
+			System.out.println("###ANDLW###");
 			andlw(dataPart);
 			break;
 		case 0x2000:
-			System.out.println("CALL");
+			System.out.println("###CALL###");
 			call(dataPart);
 			break;
 		case 0x0064:
 			// Other Bitmask
-			System.out.println("CLRWDT");
+			System.out.println("###CLRWDT###");
 			clrwdt();
 			break;
 		case 0x2800:
-			System.out.println("GOTO");
+			System.out.println("###GOTO###");
 			_goto(dataPart);
 			break;
 		case 0x3800:
-			System.out.println("IORLW");
+			System.out.println("###IORLW###");
 			iorlw(dataPart);
 			break;
 		case 0x3000:
-			System.out.println("MOVLW");
+			System.out.println("###MOVLW###");
 			movlw(dataPart);
 			break;
 		case 0x0009:
-			System.out.println("RETFIE");
+			System.out.println("###RETFIE###");
 			retfie();
 			break;
 		case 0x3400:
-			System.out.println("RETLW");
+			System.out.println("###RETLW###");
 			retlw(dataPart);
 			break;
 		case 0x0008:
-			System.out.println("RETURN");
+			System.out.println("###RETURN###");
 			_return();
 			break;
 		case 0x0063:
-			System.out.println("SLEEP");
+			System.out.println("###SLEEP###");
 			sleep();
 			break;
 		case 0x3C00:
-			System.out.println("SUBLW");
+			System.out.println("###SUBLW###");
 			sublw(dataPart);
 			break;
 		case 0x3A00:
-			System.out.println("XORLW");
+			System.out.println("###XORLW###");
 			xorlw(dataPart);
 			break;
 		default:
-			System.out.println("NICHT VORHANDEN");
+			System.out.println("###NOT AN OPERATION###");
 			break;
 		}
+		printOutput(absoluteAdress);
 	}
+
+	/* ####################START-OF-OPERATIONS#################### */
 
 	public void addwf(int adress, int desti)
 	{
-		boolean helper;
 		// Adds W with f = data
 		if (desti == 0) {
-			helper = ((W & (1 << 4)) == 0);
 			W = W + f[adress];
-			if (W == 0) {
-				C = 1;
-				Z = 1;
-			} else {
-				C = 0;
-				Z = 0;
-			}
-			if ((W & (1 << 4)) == 1 && helper) {
-				DC = 1;
-			} else {
-				DC = 0;
-			}
+			// Set C-Flag
+			setFlags(0, W);
+			// Set DC-Flag
+			setFlags(1, W);
+			// Set Z-Flag
+			setFlags(2, W);
 		} else {
-			helper = ((f[adress] & (1 << 4)) == 0);
 			f[adress] = W + f[adress];
-			if (f[adress] == 0) {
-				C = 1;
-				Z = 1;
-			} else {
-				C = 0;
-				Z = 0;
-			}
-			if ((f[adress] & (1 << 4)) == 1 && helper) {
-				DC = 1;
-			} else {
-				DC = 0;
-			}
+			// Set C-Flag
+			setFlags(0, f[adress]);
+			// Set DC-Flag
+			setFlags(1, f[adress]);
+			// Set Z-Flag
+			setFlags(2, f[adress]);
 		}
+
 		incrementpIndex();
 	}
 
@@ -342,9 +332,14 @@ public class Decoder
 		// And W with f = data
 		if (desti == 0) {
 			W = W & f[adress];
+			// Set Z-Flag
+			setFlags(2, W);
 		} else {
 			f[adress] = W & f[adress];
+			// Set Z-Flag
+			setFlags(2, f[adress]);
 		}
+
 		incrementpIndex();
 	}
 
@@ -352,7 +347,9 @@ public class Decoder
 	{
 		System.out.println("CLRF");
 		f[adress] = 0;
-		Z = 1;
+		// Set Z-Flag
+		setFlags(2, f[adress]);
+
 		incrementpIndex();
 	}
 
@@ -360,7 +357,9 @@ public class Decoder
 	{
 		System.out.println("CLRW");
 		W = 0;
-		Z = 1;
+		// Set Z-Flag
+		setFlags(2, W);
+
 		incrementpIndex();
 	}
 
@@ -368,9 +367,14 @@ public class Decoder
 	{
 		if (desti == 0) {
 			W = ~f[adress];
+			// Set Z-Flag
+			setFlags(2, W);
 		} else {
 			f[adress] = ~f[adress];
+			// Set Z-Flag
+			setFlags(2, f[adress]);
 		}
+
 		incrementpIndex();
 	}
 
@@ -378,19 +382,14 @@ public class Decoder
 	{
 		if (desti == 0) {
 			W = --f[adress];
-			if (f[adress] == 0) {
-				Z = 1;
-			} else {
-				Z = 0;
-			}
+			// Set Z-Flag
+			setFlags(2, W);
 		} else {
 			--f[adress];
-			if (f[adress] == 0) {
-				Z = 1;
-			} else {
-				Z = 0;
-			}
+			// Set Z-Flag
+			setFlags(2, f[adress]);
 		}
+
 		incrementpIndex();
 	}
 
@@ -404,6 +403,7 @@ public class Decoder
 		if (f[adress] == 0) {
 			nop();
 		}
+
 		incrementpIndex();
 	}
 
@@ -411,19 +411,14 @@ public class Decoder
 	{
 		if (desti == 0) {
 			W = ++f[adress];
-			if (f[adress] == 0) {
-				Z = 1;
-			} else {
-				Z = 0;
-			}
+			// Set Z-Flag
+			setFlags(2, W);
 		} else {
 			++f[adress];
-			if (f[adress] == 0) {
-				Z = 1;
-			} else {
-				Z = 0;
-			}
+			// Set Z-Flag
+			setFlags(2, f[adress]);
 		}
+
 		incrementpIndex();
 	}
 
@@ -437,6 +432,7 @@ public class Decoder
 		if (f[adress] == 0) {
 			nop();
 		}
+
 		incrementpIndex();
 	}
 
@@ -444,19 +440,14 @@ public class Decoder
 	{
 		if (desti == 0) {
 			W = W | f[adress];
-			if (f[adress] == 0) {
-				Z = 1;
-			} else {
-				Z = 0;
-			}
+			// Set Z-Flag
+			setFlags(2, W);
 		} else {
 			f[adress] = W | f[adress];
-			if (f[adress] == 0) {
-				Z = 1;
-			} else {
-				Z = 0;
-			}
+			// Set Z-Flag
+			setFlags(2, f[adress]);
 		}
+
 		incrementpIndex();
 	}
 
@@ -464,27 +455,25 @@ public class Decoder
 	{
 		if (desti == 0) {
 			W = f[adress];
-			if (f[adress] == 0) {
-				Z = 1;
-			} else {
-				Z = 0;
-			}
+			// Set Z-Flag
+			setFlags(2, W);
 		} else {
-			if (f[adress] == 0) {
-				Z = 1;
-			} else {
-				Z = 0;
-			}
+			// Set Z-Flag
+			setFlags(2, f[adress]);
 		}
+
 		incrementpIndex();
 	}
 
 	public void movwf(int adress)
 	{
 		f[adress] = W;
+		System.out.println("f-Register: " + f[adress] + " W-register: " + W);
+
 		incrementpIndex();
 	}
 
+	// TODO Renew this operation. Its not working as desired!
 	public void rlf(int adress, int desti)
 	{
 		// helper gets the first bit that goes later to C
@@ -495,9 +484,11 @@ public class Decoder
 			f[adress] = (f[adress] << 1) | C;
 		}
 		C = helper;
+
 		incrementpIndex();
 	}
 
+	// TODO Renew this operation. Its not working as desired!
 	public void rrf(int adress, int desti)
 	{
 		int helper = f[adress] << 7;
@@ -508,37 +499,30 @@ public class Decoder
 			f[adress] = (f[adress] >> 1) | C;
 		}
 		C = helper;
+
 		incrementpIndex();
 	}
 
 	public void subwf(int adress, int desti)
 	{
-		boolean helper;
 		if (desti == 0) {
-			helper = ((W & (1 << 4)) == 0);
 			W = f[adress] + _2complement();
-			if (W == 0) {
-				C = 1;
-				Z = 1;
-			}
-			if ((W & (1 << 4)) == 1 && helper) {
-				DC = 1;
-			} else {
-				DC = 0;
-			}
+			// Set C-Flag
+			setFlags(0, W);
+			// Set DC-Flag
+			setFlags(1, W);
+			// Set Z-Flag
+			setFlags(2, W);
 		} else {
-			helper = ((f[adress] & (1 << 4)) == 0);
 			f[adress] = f[adress] + _2complement();
-			if (f[adress] == 0) {
-				C = 1;
-				Z = 1;
-			}
-			if ((f[adress] & (1 << 4)) == 1 && helper) {
-				DC = 1;
-			} else {
-				DC = 0;
-			}
+			// Set C-Flag
+			setFlags(0, f[adress]);
+			// Set DC-Flag
+			setFlags(1, f[adress]);
+			// Set Z-Flag
+			setFlags(2, f[adress]);
 		}
+
 		incrementpIndex();
 	}
 
@@ -552,6 +536,7 @@ public class Decoder
 		} else {
 			f[adress] = total;
 		}
+
 		incrementpIndex();
 	}
 
@@ -559,31 +544,28 @@ public class Decoder
 	{
 		if (desti == 0) {
 			W = W ^ f[adress];
-			if (f[adress] == 0) {
-				Z = 1;
-			} else {
-				Z = 0;
-			}
+			// Set Z-Flag
+			setFlags(2, W);
 		} else {
 			f[adress] = W ^ f[adress];
-			if (f[adress] == 0) {
-				Z = 1;
-			} else {
-				Z = 0;
-			}
+			// Set Z-Flag
+			setFlags(2, f[adress]);
 		}
+
 		incrementpIndex();
 	}
 
 	public void bcf(int adress, int b)
 	{
 		f[adress] = f[adress] & ~(1 << b);
+
 		incrementpIndex();
 	}
 
 	public void bsf(int adress, int b)
 	{
 		f[adress] = f[adress] | ~(1 << b);
+
 		incrementpIndex();
 	}
 
@@ -592,6 +574,7 @@ public class Decoder
 		if ((f[adress] & (1 << b)) == 0) {
 			nop();
 		}
+
 		incrementpIndex();
 	}
 
@@ -600,35 +583,29 @@ public class Decoder
 		if ((f[adress] & (1 << b)) == 1) {
 			nop();
 		}
+
 		incrementpIndex();
 	}
 
 	public void addlw(int data)
 	{
-		boolean helper = ((W & (1 << 4)) == 0);
 		W = W + data;
-		if (W == 0) {
-			C = 1;
-			Z = 1;
-		}
-		if ((W & (1 << 4)) == 1 && helper) {
-			DC = 1;
-		} else {
-			DC = 0;
-		}
-		System.out.println("W Register: " + W);
+		// Set C-Flag
+		setFlags(0, W);
+		// Set DC-Flag
+		setFlags(1, W);
+		// Set Z-Flag
+		setFlags(2, W);
+
 		incrementpIndex();
 	}
 
 	public void andlw(int data)
 	{
 		W = W & data;
-		if (W == 0) {
-			Z = 1;
-		} else {
-			Z = 0;
-		}
-		System.out.println("W Register: " + W);
+		// Set Z-Flag
+		setFlags(2, W);
+
 		incrementpIndex();
 	}
 
@@ -645,6 +622,7 @@ public class Decoder
 		// TODO FINISH WATCHDOG FOR THIS OPERATION
 		TO = 0;
 		PD = 0;
+
 	}
 
 	public void _goto(int data)
@@ -656,19 +634,16 @@ public class Decoder
 	public void iorlw(int data)
 	{
 		W = W | data;
-		if (W == 0) {
-			Z = 1;
-		} else {
-			Z = 0;
-		}
-		System.out.println("W Register: " + W);
+		// Set Z-Flag
+		setFlags(2, W);
+
 		incrementpIndex();
 	}
 
 	public void movlw(int data)
 	{
 		W = data;
-		System.out.println("W Register: " + W);
+
 		incrementpIndex();
 	}
 
@@ -680,7 +655,6 @@ public class Decoder
 
 	public void retlw(int data)
 	{
-		// TODO FINISH
 		W = data;
 		Controller.pIndex = Controller.popStack();
 		incrementpIndex();
@@ -701,34 +675,21 @@ public class Decoder
 
 	public void sublw(int data)
 	{
-		boolean helper;
-		helper = ((W & (1 << 4)) == 0);
 		W = data + _2complement();
-		if (W == 0) {
-			C = 1;
-			Z = 1;
-		} else {
-			C = 0;
-			Z = 0;
-		}
-		if ((W & (1 << 4)) == 1 && helper) {
-			DC = 1;
-		} else {
-			DC = 0;
-		}
-		System.out.println("W Register: " + W);
+		// Set C-Flag
+		setFlags(0, W);
+		// Set DC-Flag
+		setFlags(1, W);
+		// Set Z-Flag
+		setFlags(2, W);
 		incrementpIndex();
 	}
 
 	public void xorlw(int data)
 	{
 		W = W ^ data;
-		if (W == 0) {
-			Z = 1;
-		} else {
-			Z = 0;
-		}
-		System.out.println("W Register: " + W);
+		// Set Z-Flag
+		setFlags(2, W);
 		incrementpIndex();
 	}
 
@@ -737,6 +698,10 @@ public class Decoder
 		incrementpIndex();
 		return;
 	}
+
+	/* ####################END-OF-OPERATIONS#################### */
+
+	/* ####################START-OF-FUNCTIONS#################### */
 
 	private void setInstruction(int instruc)
 	{
@@ -764,4 +729,47 @@ public class Decoder
 		Controller.pIndex++;
 	}
 
+	private void setFlags(int flagSec, int selector)
+	{
+		switch (flagSec) {
+		// C-Flag
+		case 0:
+			if (selector == 0) {
+				C = 1;
+			} else {
+				C = 0;
+			}
+			break;
+
+		// DC-Flag
+		case 1:
+			boolean helper = ((W & (1 << 4)) == 0);
+			if ((selector & (1 << 4)) == 1 && helper) {
+				DC = 1;
+			} else {
+				DC = 0;
+			}
+			break;
+
+		// Z-Flag
+		case 2:
+			if (selector == 0) {
+				Z = 1;
+			} else {
+				Z = 0;
+			}
+			break;
+		}
+	}
+
+	private void printOutput(int adress)
+	{
+		absoluteAdress = adress;
+		System.out.println("#####OUTPUT#####" + "\nW-Register: "
+				+ Integer.toHexString(W) + "h " + W + "\nf-Register: "
+				+ Integer.toHexString(f[adress]) + "h " + f[adress] + "\nC-Flag: "
+				+ C + "\nDC-Flag: " + DC + "\nZ-Flag: " + Z + "\nTO-Flag: " + TO
+				+ "\nPD-Flag: " + PD + "\n################");
+	}
+	/* ####################END-OF-FUNCTIONS#################### */
 }

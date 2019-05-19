@@ -20,11 +20,6 @@ public class File extends Controller
 	public void readFile(String filePath) throws IOException
 	{
 		programMemory = parser.getCommands(filePath);
-		for (int i : programMemory) {
-			if (i != 0) {
-				System.out.println(i);
-			}
-		}
 	}
 
 	public void executeOperation()

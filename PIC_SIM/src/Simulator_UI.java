@@ -183,6 +183,7 @@ public class Simulator_UI extends Controller
 		model.setRowCount(0);
 
 		allCleared = true;
+		System.out.println("\n######ALL-CLEARED######\n");
 	}
 
 }
