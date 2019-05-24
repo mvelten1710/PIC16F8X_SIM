@@ -1,3 +1,4 @@
+package PicController;
 public class CPUClock extends Controller
 {
 	public void run()

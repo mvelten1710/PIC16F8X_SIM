@@ -1,3 +1,5 @@
+package PicController;
+import java.awt.Checkbox;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -10,9 +12,11 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 public class Simulator_UI extends Controller
 {
+	// TODO Delete all println after work is finished
 
 	private JFrame frmPicSimulator;
 
@@ -135,7 +139,7 @@ public class Simulator_UI extends Controller
 		frmPicSimulator.getContentPane().add(btnNewButton);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(383, 281, 519, 242);
+		scrollPane.setBounds(383, 281, 515, 242);
 		frmPicSimulator.getContentPane().add(scrollPane);
 		scrollPane.setHorizontalScrollBarPolicy(
 				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -143,20 +147,29 @@ public class Simulator_UI extends Controller
 				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
 		table = new JTable(model);
+		table.setRowSelectionAllowed(false);
 		table.setFont(new Font("Monospaced", Font.PLAIN, 11));
 		scrollPane.setViewportView(table);
-
+		TableColumnModel columnModel = table.getColumnModel();
+		model.addColumn("BP");
 		model.addColumn("LST FILE");
-
+		// TODO Maybe do it dynamically later?
+		columnModel.getColumn(0).setPreferredWidth(45);
+		columnModel.getColumn(1).setPreferredWidth(470);
 	}
 
 	private void setContent()
 	{
 		for (int i = 0; i < parser.getContent().length; i++) {
 			if (parser.getContent()[i] != null) {
-				model.insertRow(i, new Object[] { parser.getContent()[i] });
+				// model.insertRow(i, new Object[] { parser.getContent()[i] });
+				model.setRowCount(i + 1);
+				model.setValueAt(parser.getContent()[i], i, 1);
+				// TODO Add Checkboxes
+				model.setValueAt(new Checkbox(), i, 0);
 			}
 		}
+		model.fireTableDataChanged();
 		allCleared = false;
 	}
 

@@ -1,15 +1,26 @@
+package PicController;
+
+import static PicController.Controller.CFLAG;
+import static PicController.Controller.DCFLAG;
+import static PicController.Controller.PDFLAG;
+import static PicController.Controller.STATUS;
+import static PicController.Controller.TOFLAG;
+import static PicController.Controller.ZFLAG;
+import static PicController.Controller.dataMemory;
+import static PicController.Controller.getFlag;
+import static PicController.Controller.pIndex;
+import static PicController.Controller.popStack;
+import static PicController.Controller.pushStack;
+
 public class Decoder
 {
 	// TODO CLEAR ALL SYSTEM.OUT.PRINTLN!
-	private int absoluteAdress;
+	private static int absoluteAdress;
 
 	// Working Register
 	private static int W;
 
 	private static int f[] = new int[128];
-
-	// Flags
-	private int C, DC, Z, TO, PD;
 
 	private int byteOrientedMask = 0b11111100000000;
 
@@ -309,7 +320,7 @@ public class Decoder
 		if (desti == 0) {
 			W = W + f[adress];
 			// Set C-Flag
-			setFlags(0, W);
+			setFlags(CFLAG, W);
 			// Set DC-Flag
 			setFlags(1, W);
 			// Set Z-Flag
@@ -317,7 +328,7 @@ public class Decoder
 		} else {
 			f[adress] = W + f[adress];
 			// Set C-Flag
-			setFlags(0, f[adress]);
+			setFlags(CFLAG, f[adress]);
 			// Set DC-Flag
 			setFlags(1, f[adress]);
 			// Set Z-Flag
@@ -468,8 +479,6 @@ public class Decoder
 	public void movwf(int adress)
 	{
 		f[adress] = W;
-		System.out.println("f-Register: " + f[adress] + " W-register: " + W);
-
 		incrementpIndex();
 	}
 
@@ -479,12 +488,11 @@ public class Decoder
 		// helper gets the first bit that goes later to C
 		int helper = f[adress] >> 7;
 		if (desti == 0) {
-			W = (f[adress] << 1) | C;
+			W = (f[adress] << 1);
 		} else {
-			f[adress] = (f[adress] << 1) | C;
+			f[adress] = (f[adress] << 1);
 		}
-		C = helper;
-
+		setFlags(CFLAG, helper);
 		incrementpIndex();
 	}
 
@@ -494,12 +502,11 @@ public class Decoder
 		int helper = f[adress] << 7;
 		helper = helper >> 7;
 		if (desti == 0) {
-			W = (f[adress] >> 1) | C;
+			W = (f[adress] >> 1);
 		} else {
-			f[adress] = (f[adress] >> 1) | C;
+			f[adress] = (f[adress] >> 1);
 		}
-		C = helper;
-
+		setFlags(CFLAG, helper);
 		incrementpIndex();
 	}
 
@@ -508,7 +515,7 @@ public class Decoder
 		if (desti == 0) {
 			W = f[adress] + _2complement();
 			// Set C-Flag
-			setFlags(0, W);
+			setFlags(CFLAG, W);
 			// Set DC-Flag
 			setFlags(1, W);
 			// Set Z-Flag
@@ -516,13 +523,12 @@ public class Decoder
 		} else {
 			f[adress] = f[adress] + _2complement();
 			// Set C-Flag
-			setFlags(0, f[adress]);
+			setFlags(CFLAG, f[adress]);
 			// Set DC-Flag
 			setFlags(1, f[adress]);
 			// Set Z-Flag
 			setFlags(2, f[adress]);
 		}
-
 		incrementpIndex();
 	}
 
@@ -591,7 +597,7 @@ public class Decoder
 	{
 		W = W + data;
 		// Set C-Flag
-		setFlags(0, W);
+		setFlags(CFLAG, W);
 		// Set DC-Flag
 		setFlags(1, W);
 		// Set Z-Flag
@@ -611,24 +617,23 @@ public class Decoder
 
 	public void call(int data)
 	{
-		Controller.pushStack(++Controller.pIndex);
-		System.out
-				.println("In Stack wurde: " + Controller.pIndex + " geschrieben!");
-		Controller.pIndex = data;
+		pushStack(++pIndex);
+		System.out.println("In Stack wurde: " + pIndex + " geschrieben!");
+		pIndex = data;
 	}
 
 	public void clrwdt()
 	{
 		// TODO FINISH WATCHDOG FOR THIS OPERATION
-		TO = 0;
-		PD = 0;
+		// TO = 0;
+		// PD = 0;
 
 	}
 
 	public void _goto(int data)
 	{
 		System.out.println(data);
-		Controller.pIndex = data;
+		pIndex = data;
 	}
 
 	public void iorlw(int data)
@@ -656,20 +661,20 @@ public class Decoder
 	public void retlw(int data)
 	{
 		W = data;
-		Controller.pIndex = Controller.popStack();
+		pIndex = popStack();
 		incrementpIndex();
 	}
 
 	public void _return()
 	{
-		Controller.pIndex = Controller.popStack();
+		pIndex = popStack();
 	}
 
 	public void sleep()
 	{
 		// TODO FINISH MAYBE?
-		PD = 1;
-		TO = 0;
+		// PD = 1;
+		// TO = 0;
 		incrementpIndex();
 	}
 
@@ -677,7 +682,7 @@ public class Decoder
 	{
 		W = data + _2complement();
 		// Set C-Flag
-		setFlags(0, W);
+		setFlags(CFLAG, W);
 		// Set DC-Flag
 		setFlags(1, W);
 		// Set Z-Flag
@@ -726,40 +731,42 @@ public class Decoder
 
 	private void incrementpIndex()
 	{
-		Controller.pIndex++;
+		pIndex++;
 	}
 
 	private void setFlags(int flagSec, int selector)
 	{
+
 		switch (flagSec) {
 		// C-Flag
 		case 0:
-			if (selector == 0) {
-				C = 1;
+			if ((selector & (1 << 8)) != 0) {
+				dataMemory[STATUS] |= 0b00000001;
 			} else {
-				C = 0;
+				dataMemory[STATUS] &= ~0b00000001;
 			}
 			break;
 
 		// DC-Flag
+		// TODO Finish
 		case 1:
-			boolean helper = ((W & (1 << 4)) == 0);
-			if ((selector & (1 << 4)) == 1 && helper) {
-				DC = 1;
+			if ((selector & (1 << flagSec)) != 0) {
+				dataMemory[STATUS] |= 0b00000010;
 			} else {
-				DC = 0;
+				dataMemory[STATUS] &= ~0b00000010;
 			}
 			break;
 
 		// Z-Flag
 		case 2:
 			if (selector == 0) {
-				Z = 1;
+				dataMemory[STATUS] |= 0b00000100;
 			} else {
-				Z = 0;
+				dataMemory[STATUS] &= ~0b00000100;
 			}
 			break;
 		}
+
 	}
 
 	private void printOutput(int adress)
@@ -767,9 +774,10 @@ public class Decoder
 		absoluteAdress = adress;
 		System.out.println("#####OUTPUT#####" + "\nW-Register: "
 				+ Integer.toHexString(W) + "h " + W + "\nf-Register: "
-				+ Integer.toHexString(f[adress]) + "h " + f[adress] + "\nC-Flag: "
-				+ C + "\nDC-Flag: " + DC + "\nZ-Flag: " + Z + "\nTO-Flag: " + TO
-				+ "\nPD-Flag: " + PD + "\n################");
+				+ Integer.toHexString(f[absoluteAdress]) + "h " + f[absoluteAdress]
+				+ "\nC-Flag: " + getFlag(CFLAG) + "\nDC-Flag: " + getFlag(DCFLAG)
+				+ "\nZ-Flag: " + getFlag(ZFLAG) + "\nTO-Flag: " + getFlag(TOFLAG)
+				+ "\nPD-Flag: " + getFlag(PDFLAG) + "\n################");
 	}
 	/* ####################END-OF-FUNCTIONS#################### */
 }
