@@ -1,5 +1,10 @@
 package PicController;
-public class CPUClock extends Controller
+
+import static PicController.Controller.clockRunning;
+import static PicController.Controller.file;
+import static PicController.Controller.stepping;
+
+public class CPUClock extends Thread
 {
 	public void run()
 	{

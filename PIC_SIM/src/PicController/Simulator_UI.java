@@ -1,4 +1,13 @@
 package PicController;
+
+import static PicController.Controller.allCleared;
+import static PicController.Controller.clockRunning;
+import static PicController.Controller.file;
+import static PicController.Controller.pIndex;
+import static PicController.Controller.parser;
+import static PicController.Controller.programMemory;
+import static PicController.Controller.stepping;
+
 import java.awt.Checkbox;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -14,7 +23,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
-public class Simulator_UI extends Controller
+public class Simulator_UI
 {
 	// TODO Delete all println after work is finished
 
@@ -111,7 +120,9 @@ public class Simulator_UI extends Controller
 			public void actionPerformed(ActionEvent arg0)
 			{
 				// Opens the new Window to import the LST file
-				JFileChooser fileChooser = new JFileChooser();
+				// TODO Delete Path afterwards
+				JFileChooser fileChooser = new JFileChooser(
+						"F:\\Workspace\\Simulator\\PIC16F8X_SIM\\PIC_SIM\\LST Files");
 				int rueckgabewert = fileChooser.showOpenDialog(null);
 				if (rueckgabewert == JFileChooser.APPROVE_OPTION) {
 					if (!allCleared) {

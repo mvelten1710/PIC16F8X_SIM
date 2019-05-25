@@ -5,8 +5,10 @@ import static PicController.Controller.DCFLAG;
 import static PicController.Controller.PDFLAG;
 import static PicController.Controller.STATUS;
 import static PicController.Controller.TOFLAG;
+import static PicController.Controller.W;
 import static PicController.Controller.ZFLAG;
 import static PicController.Controller.dataMemory;
+import static PicController.Controller.f;
 import static PicController.Controller.getFlag;
 import static PicController.Controller.pIndex;
 import static PicController.Controller.popStack;
@@ -17,11 +19,6 @@ public class Decoder
 	// TODO CLEAR ALL SYSTEM.OUT.PRINTLN!
 	private static int absoluteAdress;
 
-	// Working Register
-	private static int W;
-
-	private static int f[] = new int[128];
-
 	private int byteOrientedMask = 0b11111100000000;
 
 	private int adressMask = 0b00000011111111;
@@ -30,7 +27,7 @@ public class Decoder
 
 	private int bitOrientedMask = 0b11110000000000;
 
-	public int instruction;
+	private int instruction;
 
 	public Decoder()
 	{
@@ -52,7 +49,7 @@ public class Decoder
 		switch ((instruc >> 12) & 0b11) {
 		case 0:
 			// Special Cases for some L&C Operations
-			switch (instruction) {
+			switch (instruc) {
 			case 0b00000001100100:
 				// CLRWDT
 				instructionPart = 0b1100100;
@@ -78,7 +75,7 @@ public class Decoder
 				// If it is true then its a byte oriented operations
 				instructionPart = instruction & byteOrientedMask;
 				dataPart = instruction & adressMask;
-				adressPart = dataPart >> 1;
+				adressPart = dataPart & 0b00000001111111;
 				destinationBit = dataPart >> 7;
 				if (destinationBit == 1 && instructionPart == 0) {
 					// MOVWF
@@ -91,7 +88,7 @@ public class Decoder
 			// If it is true then its a bit oriented operations
 			instructionPart = instruction & bitOrientedMask;
 			dataPart = instruction & adressMask;
-			adressPart = dataPart >> 1;
+			adressPart = dataPart & 0b00000001111111;
 			bitPos = (instruction & bitMask) >> 7;
 			break;
 
@@ -309,7 +306,10 @@ public class Decoder
 			System.out.println("###NOT AN OPERATION###");
 			break;
 		}
-		printOutput(absoluteAdress);
+		// TODO Search for alternativ int is longer than short we need only
+		// 2 Bytes not 8 Bytes
+		cutWandF(adressPart, destinationBit);
+		printOutput(adressPart, destinationBit);
 	}
 
 	/* ####################START-OF-OPERATIONS#################### */
@@ -318,19 +318,25 @@ public class Decoder
 	{
 		// Adds W with f = data
 		if (desti == 0) {
+			int helper = W >> 4;
 			W = W + f[adress];
 			// Set C-Flag
 			setFlags(CFLAG, W);
-			// Set DC-Flag
-			setFlags(1, W);
+			if (helper == 0 && (W >> 4) != 0) {
+				// Set DC-Flag
+				setFlags(1, W);
+			}
 			// Set Z-Flag
 			setFlags(2, W);
 		} else {
+			int helper = f[adress] >> 4;
 			f[adress] = W + f[adress];
 			// Set C-Flag
 			setFlags(CFLAG, f[adress]);
-			// Set DC-Flag
-			setFlags(1, f[adress]);
+			if (helper == 0 && (f[adress] >> 4) != 0) {
+				// Set DC-Flag
+				setFlags(1, f[adress]);
+			}
 			// Set Z-Flag
 			setFlags(2, f[adress]);
 		}
@@ -378,10 +384,14 @@ public class Decoder
 	{
 		if (desti == 0) {
 			W = ~f[adress];
+			// TODO Alternativ
+			W = W & 0xFF;
 			// Set Z-Flag
 			setFlags(2, W);
 		} else {
 			f[adress] = ~f[adress];
+			// TODO Alternativ
+			f[adress] = f[adress] & 0xFF;
 			// Set Z-Flag
 			setFlags(2, f[adress]);
 		}
@@ -486,10 +496,12 @@ public class Decoder
 	public void rlf(int adress, int desti)
 	{
 		// helper gets the first bit that goes later to C
-		int helper = f[adress] >> 7;
+		int helper = 0;
 		if (desti == 0) {
+			helper = W;
 			W = (f[adress] << 1);
 		} else {
+			helper = f[adress];
 			f[adress] = (f[adress] << 1);
 		}
 		setFlags(CFLAG, helper);
@@ -499,33 +511,41 @@ public class Decoder
 	// TODO Renew this operation. Its not working as desired!
 	public void rrf(int adress, int desti)
 	{
-		int helper = f[adress] << 7;
+		int helper = 0;
 		helper = helper >> 7;
 		if (desti == 0) {
+			helper = W;
 			W = (f[adress] >> 1);
 		} else {
+			helper = f[adress];
 			f[adress] = (f[adress] >> 1);
 		}
-		setFlags(CFLAG, helper);
+		setFlags(-2, helper);
 		incrementpIndex();
 	}
 
 	public void subwf(int adress, int desti)
 	{
 		if (desti == 0) {
+			int helper = W >> 4;
 			W = f[adress] + _2complement();
 			// Set C-Flag
 			setFlags(CFLAG, W);
-			// Set DC-Flag
-			setFlags(1, W);
+			if (helper == 0 && (W >> 4) != 0) {
+				// Set DC-Flag
+				setFlags(1, W);
+			}
 			// Set Z-Flag
 			setFlags(2, W);
 		} else {
+			int helper = f[adress] >> 4;
 			f[adress] = f[adress] + _2complement();
 			// Set C-Flag
 			setFlags(CFLAG, f[adress]);
-			// Set DC-Flag
-			setFlags(1, f[adress]);
+			if (helper == 0 && (f[adress] >> 4) != 0) {
+				// Set DC-Flag
+				setFlags(1, f[adress]);
+			}
 			// Set Z-Flag
 			setFlags(2, f[adress]);
 		}
@@ -595,11 +615,14 @@ public class Decoder
 
 	public void addlw(int data)
 	{
+		int helper = W >> 4;
 		W = W + data;
 		// Set C-Flag
 		setFlags(CFLAG, W);
 		// Set DC-Flag
-		setFlags(1, W);
+		if (helper == 0 && (W >> 4) != 0) {
+			setFlags(1, W);
+		}
 		// Set Z-Flag
 		setFlags(2, W);
 
@@ -618,7 +641,6 @@ public class Decoder
 	public void call(int data)
 	{
 		pushStack(++pIndex);
-		System.out.println("In Stack wurde: " + pIndex + " geschrieben!");
 		pIndex = data;
 	}
 
@@ -632,7 +654,6 @@ public class Decoder
 
 	public void _goto(int data)
 	{
-		System.out.println(data);
 		pIndex = data;
 	}
 
@@ -662,7 +683,6 @@ public class Decoder
 	{
 		W = data;
 		pIndex = popStack();
-		incrementpIndex();
 	}
 
 	public void _return()
@@ -680,11 +700,10 @@ public class Decoder
 
 	public void sublw(int data)
 	{
+		System.out.println(Integer.toBinaryString(data));
 		W = data + _2complement();
 		// Set C-Flag
-		setFlags(CFLAG, W);
-		// Set DC-Flag
-		setFlags(1, W);
+		setFlags(-1, W);
 		// Set Z-Flag
 		setFlags(2, W);
 		incrementpIndex();
@@ -738,6 +757,24 @@ public class Decoder
 	{
 
 		switch (flagSec) {
+		// C-Flag (RRF)
+		case -2:
+			if ((selector & 1) != 0) {
+				dataMemory[STATUS] |= 0b00000001;
+			} else {
+				dataMemory[STATUS] &= ~0b00000001;
+			}
+			break;
+		// C & DC -Flag (SUBLW)
+		case -1:
+			if (selector >= 0) {
+				dataMemory[STATUS] |= 0b00000001; // C-Flag
+				dataMemory[STATUS] |= 0b00000010; // DC-Flag
+			} else {
+				dataMemory[STATUS] &= ~0b00000001; // C-Flag
+				dataMemory[STATUS] &= ~0b00000010; // DC-Flag
+			}
+			break;
 		// C-Flag
 		case 0:
 			if ((selector & (1 << 8)) != 0) {
@@ -748,9 +785,9 @@ public class Decoder
 			break;
 
 		// DC-Flag
-		// TODO Finish
 		case 1:
-			if ((selector & (1 << flagSec)) != 0) {
+			System.out.println(Integer.toBinaryString(selector));
+			if ((selector & (1 << 4)) != 0) {
 				dataMemory[STATUS] |= 0b00000010;
 			} else {
 				dataMemory[STATUS] &= ~0b00000010;
@@ -769,15 +806,28 @@ public class Decoder
 
 	}
 
-	private void printOutput(int adress)
+	private void cutWandF(int adress, int desti)
 	{
-		absoluteAdress = adress;
+		if (desti == 0) {
+			W &= 0xFF;
+		} else {
+			f[adress] &= 0xFF;
+		}
+
+	}
+
+	private void printOutput(int adress, int desti)
+	{
+		if (adress != 0 && desti == 1) {
+			absoluteAdress = adress;
+			System.out.println("CHANGED");
+		}
 		System.out.println("#####OUTPUT#####" + "\nW-Register: "
-				+ Integer.toHexString(W) + "h " + W + "\nf-Register: "
-				+ Integer.toHexString(f[absoluteAdress]) + "h " + f[absoluteAdress]
-				+ "\nC-Flag: " + getFlag(CFLAG) + "\nDC-Flag: " + getFlag(DCFLAG)
-				+ "\nZ-Flag: " + getFlag(ZFLAG) + "\nTO-Flag: " + getFlag(TOFLAG)
-				+ "\nPD-Flag: " + getFlag(PDFLAG) + "\n################");
+				+ Integer.toHexString(W) + "h " + "\nf-Register: "
+				+ Integer.toHexString(f[absoluteAdress]) + "h " + "\nC-Flag: "
+				+ getFlag(CFLAG) + "\nDC-Flag: " + getFlag(DCFLAG) + "\nZ-Flag: "
+				+ getFlag(ZFLAG) + "\nTO-Flag: " + getFlag(TOFLAG) + "\nPD-Flag: "
+				+ getFlag(PDFLAG) + "\n################");
 	}
 	/* ####################END-OF-FUNCTIONS#################### */
 }

@@ -2,8 +2,9 @@ package PicController;
 
 import java.io.IOException;
 
-public class Controller extends Thread
+public class Controller
 {
+	/* #################PIC-REGISTER################# */
 	// Memory
 	public static int programMemory[] = new int[1024];
 
@@ -13,11 +14,19 @@ public class Controller extends Thread
 	// Stack
 	public static int stack[] = new int[8];
 
+	// Working Register
+	public static int W;
+
+	// f Register
+	public static int f[] = new int[128];
+
 	// Stack counter
 	private static int sIndex = 0;
 
 	// ProgramMemory Counter
 	public static int pIndex = 0;
+
+	/* ############################################## */
 
 	/* #################STATUS-FLAGS################# */
 	public static final int STATUS = 3;

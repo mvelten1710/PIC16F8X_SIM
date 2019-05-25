@@ -1,7 +1,14 @@
 package PicController;
+
+import static PicController.Controller.clockRunning;
+import static PicController.Controller.decoder;
+import static PicController.Controller.pIndex;
+import static PicController.Controller.parser;
+import static PicController.Controller.programMemory;
+
 import java.io.IOException;
 
-public class File extends Controller
+public class File
 {
 
 	public File()
