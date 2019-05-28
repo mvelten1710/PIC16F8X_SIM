@@ -32,7 +32,6 @@ public class File
 
 	public void executeOperation()
 	{
-		// Test run
 		if (pIndex < programMemory.length) {
 			decoder.decode(programMemory[pIndex]);
 		} else {

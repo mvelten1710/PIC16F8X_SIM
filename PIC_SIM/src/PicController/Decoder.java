@@ -306,9 +306,6 @@ public class Decoder
 			System.out.println("###NOT AN OPERATION###");
 			break;
 		}
-		// TODO Search for alternativ int is longer than short we need only
-		// 2 Bytes not 8 Bytes
-		cutWandF(adressPart, destinationBit);
 		printOutput(adressPart, destinationBit);
 	}
 
@@ -320,6 +317,7 @@ public class Decoder
 		if (desti == 0) {
 			int helper = W >> 4;
 			W = W + f[adress];
+			cutWandF(adress, desti);
 			// Set C-Flag
 			setFlags(CFLAG, W);
 			if (helper == 0 && (W >> 4) != 0) {
@@ -331,6 +329,7 @@ public class Decoder
 		} else {
 			int helper = f[adress] >> 4;
 			f[adress] = W + f[adress];
+			cutWandF(adress, desti);
 			// Set C-Flag
 			setFlags(CFLAG, f[adress]);
 			if (helper == 0 && (f[adress] >> 4) != 0) {
@@ -349,10 +348,12 @@ public class Decoder
 		// And W with f = data
 		if (desti == 0) {
 			W = W & f[adress];
+			cutWandF(adress, desti);
 			// Set Z-Flag
 			setFlags(2, W);
 		} else {
 			f[adress] = W & f[adress];
+			cutWandF(adress, desti);
 			// Set Z-Flag
 			setFlags(2, f[adress]);
 		}
@@ -384,14 +385,12 @@ public class Decoder
 	{
 		if (desti == 0) {
 			W = ~f[adress];
-			// TODO Alternativ
-			W = W & 0xFF;
+			cutWandF(adress, desti);
 			// Set Z-Flag
 			setFlags(2, W);
 		} else {
 			f[adress] = ~f[adress];
-			// TODO Alternativ
-			f[adress] = f[adress] & 0xFF;
+			cutWandF(adress, desti);
 			// Set Z-Flag
 			setFlags(2, f[adress]);
 		}
@@ -403,10 +402,12 @@ public class Decoder
 	{
 		if (desti == 0) {
 			W = --f[adress];
+			cutWandF(adress, desti);
 			// Set Z-Flag
 			setFlags(2, W);
 		} else {
 			--f[adress];
+			cutWandF(adress, desti);
 			// Set Z-Flag
 			setFlags(2, f[adress]);
 		}
@@ -418,8 +419,10 @@ public class Decoder
 	{
 		if (desti == 0) {
 			W = --f[adress];
+			cutWandF(adress, desti);
 		} else {
 			--f[adress];
+			cutWandF(adress, desti);
 		}
 		if (f[adress] == 0) {
 			nop();
@@ -432,10 +435,12 @@ public class Decoder
 	{
 		if (desti == 0) {
 			W = ++f[adress];
+			cutWandF(adress, desti);
 			// Set Z-Flag
 			setFlags(2, W);
 		} else {
 			++f[adress];
+			cutWandF(adress, desti);
 			// Set Z-Flag
 			setFlags(2, f[adress]);
 		}
@@ -447,8 +452,10 @@ public class Decoder
 	{
 		if (desti == 0) {
 			W = ++f[adress];
+			cutWandF(adress, desti);
 		} else {
 			++f[adress];
+			cutWandF(adress, desti);
 		}
 		if (f[adress] == 0) {
 			nop();
@@ -461,10 +468,12 @@ public class Decoder
 	{
 		if (desti == 0) {
 			W = W | f[adress];
+			cutWandF(adress, desti);
 			// Set Z-Flag
 			setFlags(2, W);
 		} else {
 			f[adress] = W | f[adress];
+			cutWandF(adress, desti);
 			// Set Z-Flag
 			setFlags(2, f[adress]);
 		}
@@ -476,6 +485,7 @@ public class Decoder
 	{
 		if (desti == 0) {
 			W = f[adress];
+			cutWandF(adress, desti);
 			// Set Z-Flag
 			setFlags(2, W);
 		} else {
@@ -489,6 +499,7 @@ public class Decoder
 	public void movwf(int adress)
 	{
 		f[adress] = W;
+		cutWandF(adress, 1);
 		incrementpIndex();
 	}
 
@@ -500,9 +511,11 @@ public class Decoder
 		if (desti == 0) {
 			helper = W;
 			W = (f[adress] << 1);
+			cutWandF(adress, desti);
 		} else {
 			helper = f[adress];
 			f[adress] = (f[adress] << 1);
+			cutWandF(adress, desti);
 		}
 		setFlags(CFLAG, helper);
 		incrementpIndex();
@@ -516,9 +529,11 @@ public class Decoder
 		if (desti == 0) {
 			helper = W;
 			W = (f[adress] >> 1);
+			cutWandF(adress, desti);
 		} else {
 			helper = f[adress];
 			f[adress] = (f[adress] >> 1);
+			cutWandF(adress, desti);
 		}
 		setFlags(-2, helper);
 		incrementpIndex();
@@ -529,6 +544,7 @@ public class Decoder
 		if (desti == 0) {
 			int helper = W >> 4;
 			W = f[adress] + _2complement();
+			cutWandF(adress, desti);
 			// Set C-Flag
 			setFlags(CFLAG, W);
 			if (helper == 0 && (W >> 4) != 0) {
@@ -540,6 +556,7 @@ public class Decoder
 		} else {
 			int helper = f[adress] >> 4;
 			f[adress] = f[adress] + _2complement();
+			cutWandF(adress, desti);
 			// Set C-Flag
 			setFlags(CFLAG, f[adress]);
 			if (helper == 0 && (f[adress] >> 4) != 0) {
@@ -559,8 +576,10 @@ public class Decoder
 		int total = lowerNibble | upperNibble;
 		if (desti == 0) {
 			W = total;
+			cutWandF(adress, desti);
 		} else {
 			f[adress] = total;
+			cutWandF(adress, desti);
 		}
 
 		incrementpIndex();
@@ -570,10 +589,12 @@ public class Decoder
 	{
 		if (desti == 0) {
 			W = W ^ f[adress];
+			cutWandF(adress, desti);
 			// Set Z-Flag
 			setFlags(2, W);
 		} else {
 			f[adress] = W ^ f[adress];
+			cutWandF(adress, desti);
 			// Set Z-Flag
 			setFlags(2, f[adress]);
 		}
@@ -584,6 +605,7 @@ public class Decoder
 	public void bcf(int adress, int b)
 	{
 		f[adress] = f[adress] & ~(1 << b);
+		cutWandF(adress, 1);
 
 		incrementpIndex();
 	}
@@ -591,6 +613,7 @@ public class Decoder
 	public void bsf(int adress, int b)
 	{
 		f[adress] = f[adress] | ~(1 << b);
+		cutWandF(adress, 1);
 
 		incrementpIndex();
 	}
@@ -617,6 +640,7 @@ public class Decoder
 	{
 		int helper = W >> 4;
 		W = W + data;
+		cutWandF(0, 0);
 		// Set C-Flag
 		setFlags(CFLAG, W);
 		// Set DC-Flag
@@ -632,6 +656,7 @@ public class Decoder
 	public void andlw(int data)
 	{
 		W = W & data;
+		cutWandF(0, 0);
 		// Set Z-Flag
 		setFlags(2, W);
 
@@ -660,6 +685,7 @@ public class Decoder
 	public void iorlw(int data)
 	{
 		W = W | data;
+		cutWandF(0, 0);
 		// Set Z-Flag
 		setFlags(2, W);
 
@@ -702,6 +728,7 @@ public class Decoder
 	{
 		System.out.println(Integer.toBinaryString(data));
 		W = data + _2complement();
+		cutWandF(0, 0);
 		// Set C-Flag
 		setFlags(-1, W);
 		// Set Z-Flag
@@ -712,6 +739,7 @@ public class Decoder
 	public void xorlw(int data)
 	{
 		W = W ^ data;
+		cutWandF(0, 0);
 		// Set Z-Flag
 		setFlags(2, W);
 		incrementpIndex();

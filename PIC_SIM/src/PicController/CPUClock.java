@@ -6,6 +6,9 @@ import static PicController.Controller.stepping;
 
 public class CPUClock extends Thread
 {
+
+	private long threadSpeed;
+
 	public void run()
 	{
 
@@ -13,13 +16,14 @@ public class CPUClock extends Thread
 		// Things to run
 		while (true) {
 			try {
-				Thread.sleep(500);
+				Thread.sleep(threadSpeed);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			// Runs only if the User presses the button RUN
 			if (clockRunning) {
 				file.executeOperation();
+				Simulator_UI.updateUI();
 				if (stepping) {
 					clockRunning = false;
 				}
@@ -30,6 +34,13 @@ public class CPUClock extends Thread
 
 	public CPUClock()
 	{
+		threadSpeed = 1000;
 		start();
+	}
+
+	// Can only be set when no LST File is selected
+	public void setThreadSpeed(long speed)
+	{
+		this.threadSpeed = speed;
 	}
 }

@@ -1,11 +1,15 @@
 package PicController;
 
+import static PicController.Controller.W;
 import static PicController.Controller.allCleared;
 import static PicController.Controller.clockRunning;
+import static PicController.Controller.dataMemory;
+import static PicController.Controller.f;
 import static PicController.Controller.file;
 import static PicController.Controller.pIndex;
 import static PicController.Controller.parser;
 import static PicController.Controller.programMemory;
+import static PicController.Controller.stack;
 import static PicController.Controller.stepping;
 
 import java.awt.Checkbox;
@@ -18,8 +22,10 @@ import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
@@ -56,15 +62,21 @@ public class Simulator_UI
 
 	}
 
-	private DefaultTableModel model = new DefaultTableModel();
+	private DefaultTableModel parserModel = new DefaultTableModel();
 
-	private JTable table;
+	private static DefaultTableModel fRegisterModel = new DefaultTableModel();
+
+	private JTable parserTable, fRegisterTable;
 
 	private JButton btnStart, btnStep, btnReset;
+
+	private static JLabel wRegister;
 
 	private void initialize()
 	{
 		frmPicSimulator = new JFrame();
+		frmPicSimulator.getContentPane()
+				.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		frmPicSimulator.setTitle("PIC Simulator");
 		frmPicSimulator.setBounds(100, 100, 928, 573);
 		frmPicSimulator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -149,39 +161,111 @@ public class Simulator_UI
 		btnNewButton.setBounds(383, 250, 89, 23);
 		frmPicSimulator.getContentPane().add(btnNewButton);
 
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(383, 281, 515, 242);
-		frmPicSimulator.getContentPane().add(scrollPane);
-		scrollPane.setHorizontalScrollBarPolicy(
+		JScrollPane parserScroll = new JScrollPane();
+		parserScroll.setBounds(383, 281, 515, 242);
+		frmPicSimulator.getContentPane().add(parserScroll);
+		parserScroll.setHorizontalScrollBarPolicy(
 				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		parserScroll
+				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+		parserTable = new JTable(parserModel);
+		parserTable.setFillsViewportHeight(true);
+		parserTable.setRowSelectionAllowed(false);
+		parserTable.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		parserScroll.setViewportView(parserTable);
+		TableColumnModel parserColumnModel = parserTable.getColumnModel();
+		parserModel.addColumn("BP");
+		parserModel.addColumn("LST FILE");
+
+		parserColumnModel.getColumn(0).setPreferredWidth(45);
+		parserColumnModel.getColumn(1).setPreferredWidth(470);
+
+		JLabel lblFregister = new JLabel("F-Register");
+		lblFregister.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblFregister.setHorizontalAlignment(SwingConstants.LEFT);
+		lblFregister.setBounds(10, 11, 208, 23);
+		frmPicSimulator.getContentPane().add(lblFregister);
+
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 36, 208, 215);
+		frmPicSimulator.getContentPane().add(scrollPane);
 		scrollPane
 				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-		table = new JTable(model);
-		table.setRowSelectionAllowed(false);
-		table.setFont(new Font("Monospaced", Font.PLAIN, 11));
-		scrollPane.setViewportView(table);
-		TableColumnModel columnModel = table.getColumnModel();
-		model.addColumn("BP");
-		model.addColumn("LST FILE");
-		// TODO Maybe do it dynamically later?
-		columnModel.getColumn(0).setPreferredWidth(45);
-		columnModel.getColumn(1).setPreferredWidth(470);
+		fRegisterTable = new JTable(fRegisterModel);
+		fRegisterTable.setFillsViewportHeight(true);
+		fRegisterTable.setRowSelectionAllowed(false);
+		fRegisterTable.setFont(new Font("Monospaced", Font.PLAIN, 13));
+		scrollPane.setViewportView(fRegisterTable);
+		TableColumnModel fRegisterColumnModel = fRegisterTable.getColumnModel();
+		fRegisterModel.addColumn("-");
+		fRegisterModel.addColumn("-");
+		fRegisterModel.addColumn("-");
+		// TODO Fix: Twice as much columns as needed!
+		fRegisterColumnModel.getColumn(0).setPreferredWidth(50);
+		fRegisterColumnModel.getColumn(1).setPreferredWidth(50);
+		fRegisterColumnModel.getColumn(2).setPreferredWidth(50);
+
+		JLabel lblWregister = new JLabel("W-Register");
+		lblWregister.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblWregister.setBounds(10, 262, 74, 23);
+		frmPicSimulator.getContentPane().add(lblWregister);
+
+		wRegister = new JLabel("-");
+		wRegister.setBounds(94, 263, 50, 23);
+		frmPicSimulator.getContentPane().add(wRegister);
+
 	}
+
+	/* ####################START-OF-FUNCTIONS#################### */
 
 	private void setContent()
 	{
 		for (int i = 0; i < parser.getContent().length; i++) {
 			if (parser.getContent()[i] != null) {
 				// model.insertRow(i, new Object[] { parser.getContent()[i] });
-				model.setRowCount(i + 1);
-				model.setValueAt(parser.getContent()[i], i, 1);
+				parserModel.setRowCount(i + 1);
+				parserModel.setValueAt(parser.getContent()[i], i, 1);
 				// TODO Add Checkboxes
-				model.setValueAt(new Checkbox(), i, 0);
+				parserModel.setValueAt(new Checkbox(), i, 0);
 			}
 		}
-		model.fireTableDataChanged();
+		updateFRegister();
+		fRegisterModel.fireTableDataChanged();
+		parserModel.fireTableDataChanged();
 		allCleared = false;
+	}
+
+	private static void updateFRegister()
+	{
+		/* ###############F-REGISTER############### */
+		int row = 0;
+		int column = 0;
+		for (int i = 0; i < f.length; i++) {
+			fRegisterModel.setRowCount(row + 1);
+			fRegisterModel.setValueAt(f[i], row, column);
+			if (column == 2) {
+				row++;
+				column = 0;
+			} else {
+				column++;
+			}
+		}
+		row = 0;
+		column = 0;
+		/* ######################################## */
+	}
+
+	private static void updateWRegister()
+	{
+		wRegister.setText(Integer.toHexString(W) + "h");
+	}
+
+	public static void updateUI()
+	{
+		updateFRegister();
+		updateWRegister();
 	}
 
 	private void cleanUp()
@@ -194,20 +278,30 @@ public class Simulator_UI
 		btnStep.setEnabled(false);
 		btnReset.setEnabled(false);
 
-		// TODO Clear DataMemory and Stack later
+		for (int i = 0; i < dataMemory.length; i++) {
+			if (dataMemory[i] != 0) {
+				dataMemory[i] = 0;
+			}
+		}
+		for (int i = 0; i < stack.length; i++) {
+			if (stack[i] != 0) {
+				stack[i] = 0;
+			}
+		}
 		parser.clearContent();
-		// TODO Maybe auslagern?
 		for (int i = 0; i < programMemory.length; i++) {
 			if (programMemory[i] != 0) {
 				programMemory[i] = 0;
 			}
 		}
 
-		// JTable cleanup
-		model.setRowCount(0);
+		// Parser Table cleanup
+		parserModel.setRowCount(0);
+
+		// F-Register Table cleanup
+		fRegisterModel.setRowCount(0);
 
 		allCleared = true;
 		System.out.println("\n######ALL-CLEARED######\n");
 	}
-
 }
