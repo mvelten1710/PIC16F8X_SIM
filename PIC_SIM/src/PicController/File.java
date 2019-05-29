@@ -15,15 +15,15 @@ public class File
 	{
 	}
 
-	// Later with a clock that calls one operation at a time
-	public void saveOperationsIntoMemory() throws IOException
-	{
-		for (; pIndex < programMemory.length; pIndex++) {
-			if (programMemory[pIndex] != 0) {
-				decoder.decode(programMemory[pIndex]);
-			}
-		}
-	}
+//	// Later with a clock that calls one operation at a time
+//	public void saveOperationsIntoMemory() throws IOException
+//	{
+//		for (; pIndex < programMemory.length; pIndex++) {
+//			if (programMemory[pIndex] != 0) {
+//				decoder.decode(programMemory[pIndex]);
+//			}
+//		}
+//	}
 
 	public void readFile(String filePath) throws IOException
 	{

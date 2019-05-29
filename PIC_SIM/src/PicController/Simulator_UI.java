@@ -1,16 +1,6 @@
 package PicController;
 
-import static PicController.Controller.W;
-import static PicController.Controller.allCleared;
-import static PicController.Controller.clockRunning;
-import static PicController.Controller.dataMemory;
-import static PicController.Controller.f;
-import static PicController.Controller.file;
-import static PicController.Controller.pIndex;
-import static PicController.Controller.parser;
-import static PicController.Controller.programMemory;
-import static PicController.Controller.stack;
-import static PicController.Controller.stepping;
+import static PicController.Controller.*;
 
 import java.awt.Checkbox;
 import java.awt.EventQueue;
@@ -27,6 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
 public class Simulator_UI
@@ -62,15 +53,17 @@ public class Simulator_UI
 
 	}
 
-	private DefaultTableModel parserModel = new DefaultTableModel();
+	private static DefaultTableModel parserModel;
 
-	private static DefaultTableModel fRegisterModel = new DefaultTableModel();
+	private static DefaultTableModel fRegisterModel;
 
-	private JTable parserTable, fRegisterTable;
+	private static JTable parserTable, fRegisterTable;
 
 	private JButton btnStart, btnStep, btnReset;
 
-	private static JLabel wRegister;
+	private static JLabel wRegister, cFlag, dcFlag, zFlag, toFlag, pdFlag;
+	
+	private static OwnCellRenderer parserCellRenderer;
 
 	private void initialize()
 	{
@@ -133,8 +126,7 @@ public class Simulator_UI
 			{
 				// Opens the new Window to import the LST file
 				// TODO Delete Path afterwards
-				JFileChooser fileChooser = new JFileChooser(
-						"F:\\Workspace\\Simulator\\PIC16F8X_SIM\\PIC_SIM\\LST Files");
+				JFileChooser fileChooser = new JFileChooser("C:\\Users\\gudda\\OneDrive - stud.hs-offenburg.de\\Hochschule\\SS2019\\Rechnerarchitekturen\\PIC16F8X_SIM\\PIC_SIM\\LST Files");
 				int rueckgabewert = fileChooser.showOpenDialog(null);
 				if (rueckgabewert == JFileChooser.APPROVE_OPTION) {
 					if (!allCleared) {
@@ -160,6 +152,8 @@ public class Simulator_UI
 		});
 		btnNewButton.setBounds(383, 250, 89, 23);
 		frmPicSimulator.getContentPane().add(btnNewButton);
+		
+		/* ####################START-OF-PARSER_TABLE#################### */
 
 		JScrollPane parserScroll = new JScrollPane();
 		parserScroll.setBounds(383, 281, 515, 242);
@@ -169,43 +163,47 @@ public class Simulator_UI
 		parserScroll
 				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-		parserTable = new JTable(parserModel);
+		parserTable = new JTable(parserModel = new DefaultTableModel());
+		
 		parserTable.setFillsViewportHeight(true);
 		parserTable.setRowSelectionAllowed(false);
 		parserTable.setFont(new Font("Monospaced", Font.PLAIN, 12));
 		parserScroll.setViewportView(parserTable);
 		TableColumnModel parserColumnModel = parserTable.getColumnModel();
+
 		parserModel.addColumn("BP");
 		parserModel.addColumn("LST FILE");
 
 		parserColumnModel.getColumn(0).setPreferredWidth(45);
 		parserColumnModel.getColumn(1).setPreferredWidth(470);
+		
+		/* ####################END-OF-PARSER_TABLE#################### */
 
+		/* ####################START-OF-F_REGISTER#################### */
+		
 		JLabel lblFregister = new JLabel("F-Register");
 		lblFregister.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblFregister.setHorizontalAlignment(SwingConstants.LEFT);
 		lblFregister.setBounds(10, 11, 208, 23);
 		frmPicSimulator.getContentPane().add(lblFregister);
-
+		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 36, 208, 215);
+		scrollPane.setBounds(10, 36, 240, 215);
 		frmPicSimulator.getContentPane().add(scrollPane);
 		scrollPane
 				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-		fRegisterTable = new JTable(fRegisterModel);
+		fRegisterTable = new JTable(fRegisterModel = new DefaultTableModel());
 		fRegisterTable.setFillsViewportHeight(true);
 		fRegisterTable.setRowSelectionAllowed(false);
 		fRegisterTable.setFont(new Font("Monospaced", Font.PLAIN, 13));
 		scrollPane.setViewportView(fRegisterTable);
 		TableColumnModel fRegisterColumnModel = fRegisterTable.getColumnModel();
-		fRegisterModel.addColumn("-");
-		fRegisterModel.addColumn("-");
-		fRegisterModel.addColumn("-");
-		// TODO Fix: Twice as much columns as needed!
-		fRegisterColumnModel.getColumn(0).setPreferredWidth(50);
-		fRegisterColumnModel.getColumn(1).setPreferredWidth(50);
-		fRegisterColumnModel.getColumn(2).setPreferredWidth(50);
+		for (int i = 0; i < 6; i++) {
+			fRegisterModel.addColumn("-");
+		}
+		/* ####################END-OF-F_REGISTER#################### */
+
 
 		JLabel lblWregister = new JLabel("W-Register");
 		lblWregister.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -215,6 +213,56 @@ public class Simulator_UI
 		wRegister = new JLabel("-");
 		wRegister.setBounds(94, 263, 50, 23);
 		frmPicSimulator.getContentPane().add(wRegister);
+		
+		JLabel lblFlags = new JLabel("Flags");
+		lblFlags.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblFlags.setBounds(10, 302, 74, 23);
+		frmPicSimulator.getContentPane().add(lblFlags);
+		
+		JLabel lblZflag = new JLabel("Z-Flag");
+		lblZflag.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblZflag.setBounds(10, 408, 48, 23);
+		frmPicSimulator.getContentPane().add(lblZflag);
+		
+		JLabel lblCflag = new JLabel("C-Flag");
+		lblCflag.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblCflag.setBounds(10, 336, 48, 26);
+		frmPicSimulator.getContentPane().add(lblCflag);
+		
+		JLabel lblDcflag = new JLabel("DC-Flag");
+		lblDcflag.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblDcflag.setBounds(10, 373, 48, 24);
+		frmPicSimulator.getContentPane().add(lblDcflag);
+		
+		JLabel lblToflag = new JLabel("TO-Flag");
+		lblToflag.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblToflag.setBounds(10, 442, 48, 26);
+		frmPicSimulator.getContentPane().add(lblToflag);
+		
+		JLabel lblPdflag = new JLabel("PD-Flag");
+		lblPdflag.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblPdflag.setBounds(10, 479, 48, 23);
+		frmPicSimulator.getContentPane().add(lblPdflag);
+		
+		cFlag = new JLabel("-");
+		cFlag.setBounds(78, 343, 48, 14);
+		frmPicSimulator.getContentPane().add(cFlag);
+		
+		dcFlag = new JLabel("-");
+		dcFlag.setBounds(78, 379, 48, 14);
+		frmPicSimulator.getContentPane().add(dcFlag);
+		
+		zFlag = new JLabel("-");
+		zFlag.setBounds(78, 413, 48, 14);
+		frmPicSimulator.getContentPane().add(zFlag);
+		
+		toFlag = new JLabel("-");
+		toFlag.setBounds(78, 449, 48, 14);
+		frmPicSimulator.getContentPane().add(toFlag);
+		
+		pdFlag = new JLabel("-");
+		pdFlag.setBounds(78, 484, 48, 14);
+		frmPicSimulator.getContentPane().add(pdFlag);
 
 	}
 
@@ -231,9 +279,12 @@ public class Simulator_UI
 				parserModel.setValueAt(new Checkbox(), i, 0);
 			}
 		}
+		
 		updateFRegister();
 		fRegisterModel.fireTableDataChanged();
 		parserModel.fireTableDataChanged();
+		parserTable.getColumnModel().getColumn(1).setCellRenderer(parserCellRenderer = new OwnCellRenderer());
+		parserCellRenderer.getTableCellRendererComponent(parserTable, 20, true, false, 17, 1);
 		allCleared = false;
 	}
 
@@ -244,8 +295,8 @@ public class Simulator_UI
 		int column = 0;
 		for (int i = 0; i < f.length; i++) {
 			fRegisterModel.setRowCount(row + 1);
-			fRegisterModel.setValueAt(f[i], row, column);
-			if (column == 2) {
+			fRegisterModel.setValueAt(Integer.toHexString(f[i])+"h", row, column);
+			if (column == 5) {
 				row++;
 				column = 0;
 			} else {
@@ -256,16 +307,44 @@ public class Simulator_UI
 		column = 0;
 		/* ######################################## */
 	}
-
-	private static void updateWRegister()
+	
+	private static void updateFlagLabels()
 	{
-		wRegister.setText(Integer.toHexString(W) + "h");
+		cFlag.setText(Integer.toString(getFlag(CFLAG)));
+		dcFlag.setText(Integer.toString(getFlag(DCFLAG)));
+		zFlag.setText(Integer.toString(getFlag(ZFLAG)));
+		toFlag.setText(Integer.toString(getFlag(TOFLAG)));
+		pdFlag.setText(Integer.toString(getFlag(PDFLAG)));
+	}
+	
+	//TODO Update Parser selected row of operation and change name of method
+	private static void rofl()
+	{
+		
 	}
 
 	public static void updateUI()
 	{
+		//All Updates to the UI should be placed here!
 		updateFRegister();
-		updateWRegister();
+		wRegister.setText(Integer.toHexString(W) + "h");
+		updateFlagLabels();
+		rofl();
+		
+	}
+	
+	private static void clearUI()
+	{
+		// Parser Table cleanup
+		parserModel.setRowCount(0);
+		// F-Register Table cleanup
+		fRegisterModel.setRowCount(0);
+		wRegister.setText("-");
+		cFlag.setText("-");
+		dcFlag.setText("-");
+		zFlag.setText("-");
+		toFlag.setText("-");
+		pdFlag.setText("-");
 	}
 
 	private void cleanUp()
@@ -288,20 +367,25 @@ public class Simulator_UI
 				stack[i] = 0;
 			}
 		}
-		parser.clearContent();
+		
 		for (int i = 0; i < programMemory.length; i++) {
 			if (programMemory[i] != 0) {
 				programMemory[i] = 0;
 			}
 		}
 
-		// Parser Table cleanup
-		parserModel.setRowCount(0);
+		for (int i = 0; i < f.length; i++) {
+			if (f[i] != 0) {
+				f[i] = 0;
+			}
+		}
+		
+		W = 0;
+		
 
-		// F-Register Table cleanup
-		fRegisterModel.setRowCount(0);
+		parser.clearContent();
 
+		clearUI();
 		allCleared = true;
-		System.out.println("\n######ALL-CLEARED######\n");
 	}
 }

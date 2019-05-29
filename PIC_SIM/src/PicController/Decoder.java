@@ -306,7 +306,6 @@ public class Decoder
 			System.out.println("###NOT AN OPERATION###");
 			break;
 		}
-		printOutput(adressPart, destinationBit);
 	}
 
 	/* ####################START-OF-OPERATIONS#################### */
@@ -842,20 +841,6 @@ public class Decoder
 			f[adress] &= 0xFF;
 		}
 
-	}
-
-	private void printOutput(int adress, int desti)
-	{
-		if (adress != 0 && desti == 1) {
-			absoluteAdress = adress;
-			System.out.println("CHANGED");
-		}
-		System.out.println("#####OUTPUT#####" + "\nW-Register: "
-				+ Integer.toHexString(W) + "h " + "\nf-Register: "
-				+ Integer.toHexString(f[absoluteAdress]) + "h " + "\nC-Flag: "
-				+ getFlag(CFLAG) + "\nDC-Flag: " + getFlag(DCFLAG) + "\nZ-Flag: "
-				+ getFlag(ZFLAG) + "\nTO-Flag: " + getFlag(TOFLAG) + "\nPD-Flag: "
-				+ getFlag(PDFLAG) + "\n################");
 	}
 	/* ####################END-OF-FUNCTIONS#################### */
 }
