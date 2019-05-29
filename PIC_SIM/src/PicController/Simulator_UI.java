@@ -284,7 +284,7 @@ public class Simulator_UI
 		fRegisterModel.fireTableDataChanged();
 		parserModel.fireTableDataChanged();
 		parserTable.getColumnModel().getColumn(1).setCellRenderer(parserCellRenderer = new OwnCellRenderer());
-		parserCellRenderer.getTableCellRendererComponent(parserTable, 20, true, false, 17, 1);
+		parserCellRenderer.getTableCellRendererComponent(parserTable, 20, true, false, 0, 1);
 		allCleared = false;
 	}
 
