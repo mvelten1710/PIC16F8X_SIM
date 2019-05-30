@@ -3,6 +3,7 @@ package PicController;
 import static PicController.Controller.*;
 
 import java.awt.Checkbox;
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -16,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
@@ -63,7 +65,7 @@ public class Simulator_UI
 
 	private static JLabel wRegister, cFlag, dcFlag, zFlag, toFlag, pdFlag;
 	
-	private static OwnCellRenderer parserCellRenderer;
+	private static int selectedRow = -1;
 
 	private void initialize()
 	{
@@ -126,7 +128,7 @@ public class Simulator_UI
 			{
 				// Opens the new Window to import the LST file
 				// TODO Delete Path afterwards
-				JFileChooser fileChooser = new JFileChooser("C:\\Users\\gudda\\OneDrive - stud.hs-offenburg.de\\Hochschule\\SS2019\\Rechnerarchitekturen\\PIC16F8X_SIM\\PIC_SIM\\LST Files");
+				JFileChooser fileChooser = new JFileChooser("C:\\Users\\todus\\git\\PIC16F8X_SIM\\PIC_SIM\\LST Files");
 				int rueckgabewert = fileChooser.showOpenDialog(null);
 				if (rueckgabewert == JFileChooser.APPROVE_OPTION) {
 					if (!allCleared) {
@@ -162,9 +164,30 @@ public class Simulator_UI
 				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		parserScroll
 				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
-		parserTable = new JTable(parserModel = new DefaultTableModel());
 		
+
+		parserTable = new JTable(parserModel = new DefaultTableModel() 
+		{
+			public Class<?> getColumnClass(int columnIndex)
+			{
+				if(columnIndex == 0)
+					return Boolean.class;
+				return String.class;
+			}
+		})
+		{
+			private static final long serialVersionUID = 1L;
+
+			public TableCellRenderer getCellRenderer(int row, int column)
+			{
+				DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+				
+				if(row == selectedRow && column == 1)
+					renderer.setBackground(Color.ORANGE);
+				
+				return renderer;
+			}
+		};
 		parserTable.setFillsViewportHeight(true);
 		parserTable.setRowSelectionAllowed(false);
 		parserTable.setFont(new Font("Monospaced", Font.PLAIN, 12));
@@ -198,7 +221,6 @@ public class Simulator_UI
 		fRegisterTable.setRowSelectionAllowed(false);
 		fRegisterTable.setFont(new Font("Monospaced", Font.PLAIN, 13));
 		scrollPane.setViewportView(fRegisterTable);
-		TableColumnModel fRegisterColumnModel = fRegisterTable.getColumnModel();
 		for (int i = 0; i < 6; i++) {
 			fRegisterModel.addColumn("-");
 		}
@@ -275,16 +297,13 @@ public class Simulator_UI
 				// model.insertRow(i, new Object[] { parser.getContent()[i] });
 				parserModel.setRowCount(i + 1);
 				parserModel.setValueAt(parser.getContent()[i], i, 1);
-				// TODO Add Checkboxes
-				parserModel.setValueAt(new Checkbox(), i, 0);
+				parserModel.setValueAt(false, i, 0);
 			}
 		}
 		
 		updateFRegister();
 		fRegisterModel.fireTableDataChanged();
 		parserModel.fireTableDataChanged();
-		parserTable.getColumnModel().getColumn(1).setCellRenderer(parserCellRenderer = new OwnCellRenderer());
-		parserCellRenderer.getTableCellRendererComponent(parserTable, 20, true, false, 0, 1);
 		allCleared = false;
 	}
 
@@ -317,10 +336,13 @@ public class Simulator_UI
 		pdFlag.setText(Integer.toString(getFlag(PDFLAG)));
 	}
 	
-	//TODO Update Parser selected row of operation and change name of method
-	private static void rofl()
+	
+	private static void updateSelectedRow()
 	{
-		
+		//TODO Find method to update the selectedRow
+		selectedRow = 20;
+		parserTable.getCellRenderer(selectedRow, 1);
+		parserModel.fireTableDataChanged();
 	}
 
 	public static void updateUI()
@@ -329,8 +351,19 @@ public class Simulator_UI
 		updateFRegister();
 		wRegister.setText(Integer.toHexString(W) + "h");
 		updateFlagLabels();
-		rofl();
+		updateSelectedRow();
 		
+	}
+	
+	private int getBreakpointPos() {
+		for (int i = 0; i < parserTable.getRowCount(); i++) {
+			if ((boolean) parserTable.getValueAt(i, 0)) {
+				//Returns the line of the Breakpoint
+				return i;
+			}
+		}
+		//If no Breakpoint is found
+		return 0;
 	}
 	
 	private static void clearUI()
@@ -353,6 +386,7 @@ public class Simulator_UI
 		clockRunning = false;
 		stepping = false;
 		pIndex = 0;
+		selectedRow = -1;
 		btnStart.setEnabled(false);
 		btnStep.setEnabled(false);
 		btnReset.setEnabled(false);

@@ -34,7 +34,7 @@ public class CPUClock extends Thread
 
 	public CPUClock()
 	{
-		threadSpeed = 1000;
+		threadSpeed = 500;
 		start();
 	}
 

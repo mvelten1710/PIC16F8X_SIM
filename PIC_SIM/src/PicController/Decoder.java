@@ -316,9 +316,9 @@ public class Decoder
 		if (desti == 0) {
 			int helper = W >> 4;
 			W = W + f[adress];
-			cutWandF(adress, desti);
 			// Set C-Flag
 			setFlags(CFLAG, W);
+			cutWandF(adress, desti);
 			if (helper == 0 && (W >> 4) != 0) {
 				// Set DC-Flag
 				setFlags(1, W);
@@ -328,9 +328,10 @@ public class Decoder
 		} else {
 			int helper = f[adress] >> 4;
 			f[adress] = W + f[adress];
-			cutWandF(adress, desti);
 			// Set C-Flag
 			setFlags(CFLAG, f[adress]);
+			cutWandF(adress, desti);
+
 			if (helper == 0 && (f[adress] >> 4) != 0) {
 				// Set DC-Flag
 				setFlags(1, f[adress]);
@@ -400,7 +401,7 @@ public class Decoder
 	public void decf(int adress, int desti)
 	{
 		if (desti == 0) {
-			W = --f[adress];
+			W = f[adress] - 1;
 			cutWandF(adress, desti);
 			// Set Z-Flag
 			setFlags(2, W);
@@ -502,7 +503,6 @@ public class Decoder
 		incrementpIndex();
 	}
 
-	// TODO Renew this operation. Its not working as desired!
 	public void rlf(int adress, int desti)
 	{
 		// helper gets the first bit that goes later to C
@@ -520,7 +520,6 @@ public class Decoder
 		incrementpIndex();
 	}
 
-	// TODO Renew this operation. Its not working as desired!
 	public void rrf(int adress, int desti)
 	{
 		int helper = 0;
@@ -639,9 +638,9 @@ public class Decoder
 	{
 		int helper = W >> 4;
 		W = W + data;
-		cutWandF(0, 0);
 		// Set C-Flag
 		setFlags(CFLAG, W);
+		cutWandF(0, 0);
 		// Set DC-Flag
 		if (helper == 0 && (W >> 4) != 0) {
 			setFlags(1, W);
@@ -725,7 +724,6 @@ public class Decoder
 
 	public void sublw(int data)
 	{
-		System.out.println(Integer.toBinaryString(data));
 		W = data + _2complement();
 		cutWandF(0, 0);
 		// Set C-Flag
@@ -761,9 +759,10 @@ public class Decoder
 
 	private int _2complement()
 	{
-		W = ~W;
-		W++;
-		return W;
+		int helper = W;
+		helper = ~helper;
+		helper++;
+		return helper;
 	}
 
 	private void decideCLR(int adress, int desti)
@@ -813,7 +812,6 @@ public class Decoder
 
 		// DC-Flag
 		case 1:
-			System.out.println(Integer.toBinaryString(selector));
 			if ((selector & (1 << 4)) != 0) {
 				dataMemory[STATUS] |= 0b00000010;
 			} else {
