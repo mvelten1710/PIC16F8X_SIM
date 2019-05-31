@@ -1,16 +1,18 @@
 package PicController;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+
+import static PicController.Controller.*;
 
 public class Parser
 {
 
 	private int counter;
-
-	private int instructionRegister[];
 
 	private BufferedReader reader;
 
@@ -20,8 +22,6 @@ public class Parser
 
 	public Parser()
 	{
-		// Gets initialized
-		instructionRegister = new int[1024];
 		counter = 0;
 		reader = null;
 		content = new String[1000];
@@ -29,6 +29,9 @@ public class Parser
 
 	public int[] getCommands(String path) throws IOException
 	{
+		int instructionRegister[] = new int[1024];
+		operationRow = new ArrayList<String>();
+		
 		// New File for the LST files
 		File file = new File(path);
 		// Tries to create the BufferedReader for file
@@ -40,10 +43,27 @@ public class Parser
 
 		String lineContent = "";
 		String commands = "";
-
+		
 		while ((lineContent = reader.readLine()) != null) {
 			setContent(lineContent);
-
+			int stringEndPos = 39;
+			
+			/*Cuts only the line with operations. Only after the operations name*/
+			if (!Character.isWhitespace(lineContent.charAt(0))) {
+				while (true) {
+					if (!Character.isWhitespace(lineContent.charAt(stringEndPos))) {
+						stringEndPos++;
+						if(stringEndPos == 42) {
+							break;
+						}
+					}else{
+						break;
+					}
+				}
+				operationRow.add(lineContent.substring(0, stringEndPos));
+			}
+			
+			
 			// Takes the 6 until 9 char and saves them in
 			// the commands String
 			commands = lineContent.substring(5, 9);

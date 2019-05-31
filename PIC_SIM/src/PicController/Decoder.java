@@ -17,7 +17,6 @@ import static PicController.Controller.pushStack;
 public class Decoder
 {
 	// TODO CLEAR ALL SYSTEM.OUT.PRINTLN!
-	private static int absoluteAdress;
 
 	private int byteOrientedMask = 0b11111100000000;
 

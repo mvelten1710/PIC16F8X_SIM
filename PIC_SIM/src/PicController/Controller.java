@@ -1,6 +1,7 @@
 package PicController;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Controller
 {
@@ -28,7 +29,7 @@ public class Controller
 
 	/* ############################################## */
 
-	/* #################STATUS-FLAGS################# */
+	/* ######################RAM##################### */
 	public static final int STATUS = 3;
 
 	public static final int PCL = 2;
@@ -79,12 +80,15 @@ public class Controller
 
 	public static final int RB7 = 7;
 	/* ############################################## */
-
+	
+	/* #################OWN-VARIABLES################ */
 	protected static boolean clockRunning;
 
 	protected static boolean stepping;
 
 	protected static boolean allCleared;
+	
+	protected static ArrayList<String> operationRow;
 
 	protected static Parser parser;
 
@@ -93,6 +97,7 @@ public class Controller
 	protected static File file;
 
 	protected static CPUClock clock;
+	/* ############################################## */
 
 	public static void main(String[] args) throws IOException
 	{
@@ -137,7 +142,6 @@ public class Controller
 	public static int popStack()
 	{
 		sIndex--;
-		System.out.println(stack[sIndex] + " wurde gepoppt");
 		return stack[sIndex];
 
 	}

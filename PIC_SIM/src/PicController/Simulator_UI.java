@@ -183,7 +183,7 @@ public class Simulator_UI
 				DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
 				
 				if(row == selectedRow && column == 1)
-					renderer.setBackground(Color.ORANGE);
+					renderer.setBackground(Color.CYAN);
 				
 				return renderer;
 			}
@@ -340,6 +340,7 @@ public class Simulator_UI
 	private static void updateSelectedRow()
 	{
 		//TODO Find method to update the selectedRow
+		LineSelector.identifyRow();
 		selectedRow = 20;
 		parserTable.getCellRenderer(selectedRow, 1);
 		parserModel.fireTableDataChanged();
