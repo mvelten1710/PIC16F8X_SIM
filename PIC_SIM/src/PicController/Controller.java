@@ -88,6 +88,12 @@ public class Controller
 
 	protected static boolean allCleared;
 	
+	protected static boolean breakPointReached;
+	
+	protected static int selectedRow;
+	
+	protected static long threadSpeed;
+	
 	protected static ArrayList<String> operationRow;
 
 	protected static Parser parser;
@@ -104,6 +110,9 @@ public class Controller
 	public static void main(String[] args) throws IOException
 	{
 
+		threadSpeed = 1000L;
+		selectedRow = -1;
+		breakPointReached = false;
 		clockRunning = false;
 		allCleared = true;
 		stepping = false;

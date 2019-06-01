@@ -1,13 +1,11 @@
 package PicController;
 
-import static PicController.Controller.clockRunning;
-import static PicController.Controller.file;
-import static PicController.Controller.stepping;
+import static PicController.Controller.*;
 
 public class CPUClock extends Thread
 {
 
-	private long threadSpeed;
+	
 
 	public void run()
 	{
@@ -21,26 +19,23 @@ public class CPUClock extends Thread
 				e.printStackTrace();
 			}
 			// Runs only if the User presses the button RUN
-			if (clockRunning) {
-				file.executeOperation();
-				Simulator_UI.updateUI();
-				if (stepping) {
-					clockRunning = false;
+			if (!Simulator_UI.getBreakpointPos(selectedRow)) {
+				if (clockRunning) {
+					file.executeOperation();
+					Simulator_UI.updateUI();
+					if (stepping) {
+						clockRunning = false;
+					}
 				}
-
+			}else {
+				clockRunning = false;
+				stepping = false;
 			}
 		}
 	}
 
 	public CPUClock()
 	{
-		threadSpeed = 500;
 		start();
-	}
-
-	// Can only be set when no LST File is selected
-	public void setThreadSpeed(long speed)
-	{
-		this.threadSpeed = speed;
 	}
 }
