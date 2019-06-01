@@ -2,28 +2,75 @@ package PicController;
 
 import static PicController.Controller.*;
 
+import java.util.ArrayList;
+
 public class LineSelector {
 	
-					//operationRow		//Holds the Information for the operations
+	private ArrayList<String> fileContent; //Holds the Information for the operations
 	private String operationSelector; //To identify which operation it is (GOTO, CALL, RETURN
-	private static int operationData; //For Call and Goto to identify which row they're calling
-	private static int opBegin, opEnd; //First line of the first operation and last line
-	private static int index = 0;
+	private int operationData; //For CALL and GOTO to identify which row they're calling
+	private int opNext;
+	public int opBegin;
+	private int index = 0, stackIndex = 0;
+	private int returnValues[];
 	
-	private static void setStartAndEnd()
-	{
+	public LineSelector() {
 		//Gets the operation beginning line
-		opBegin = Integer.parseInt((String) operationRow.get(0).subSequence(20, 25));
-		System.out.println(opBegin);
-		opEnd = Integer.parseInt((String) operationRow.get(operationRow.size()-1).subSequence(20, 25));
-		System.out.println(opEnd);
+		returnValues = new int[8];
+		fileContent = new ArrayList<String>(operationRow);
+		opBegin = Integer.parseInt((String) fileContent.get(0).subSequence(20, 25))-1;
 	}
-
-	//Called when one operation gets executed (updateUI?)
-	public static void identifyRow()
+	
+	public int nextRow() 
 	{
-		//36 Chars until operation +3-6 for operation
-		//TODO Finish the rest of this...
+		operationSelector = fileContent.get(index).substring(36, fileContent.get(index).length());
+		//We need to distinguish between these operation because they can alter the operation flow
+		switch (operationSelector) {
+		case "call":
+			operationData = Integer.parseInt((String) fileContent.get(index).subSequence(7, 9));
+			pushStack(index + 1);
+			index = operationData;
+			break;
 
+		case "goto":
+			operationData = Integer.parseInt((String) fileContent.get(index).subSequence(7, 9));
+			index = operationData;
+			break;
+			
+		case "return":
+			index = popStack();
+			break;
+			
+		case "retlw":
+			index = popStack();
+			break;
+			
+		case "retifie":
+			
+			break;
+			
+		default:
+			index++;
+			break;
+		}
+		
+		opNext = Integer.parseInt((String) fileContent.get(index).subSequence(20, 25));
+		return opNext-1;
+		
+	}
+	
+	private void pushStack(int data) 
+	{
+		returnValues[stackIndex] = data;
+		stackIndex++;
+		if (stackIndex == 7) {
+			stackIndex = 0;
+		}
+	}
+	
+	private int popStack() 
+	{
+		stackIndex--;
+		return returnValues[stackIndex];
 	}
 }

@@ -138,7 +138,13 @@ public class Simulator_UI
 						file.readFile(
 								fileChooser.getSelectedFile().getAbsolutePath());
 						setContent();
-
+						//New LineSelector for the File
+						lineSelector = new LineSelector();
+						selectedRow = lineSelector.opBegin;
+						System.out.println("Selected Row: " + selectedRow);
+						parserTable.getCellRenderer(selectedRow, 1);
+						parserModel.fireTableDataChanged();
+						
 						btnStart.setEnabled(true);
 						btnStep.setEnabled(true);
 						btnReset.setEnabled(true);
@@ -168,6 +174,8 @@ public class Simulator_UI
 
 		parserTable = new JTable(parserModel = new DefaultTableModel() 
 		{
+			private static final long serialVersionUID = 1L;
+
 			public Class<?> getColumnClass(int columnIndex)
 			{
 				if(columnIndex == 0)
@@ -339,9 +347,7 @@ public class Simulator_UI
 	
 	private static void updateSelectedRow()
 	{
-		//TODO Find method to update the selectedRow
-		LineSelector.identifyRow();
-		selectedRow = 20;
+		selectedRow = lineSelector.nextRow();
 		parserTable.getCellRenderer(selectedRow, 1);
 		parserModel.fireTableDataChanged();
 	}

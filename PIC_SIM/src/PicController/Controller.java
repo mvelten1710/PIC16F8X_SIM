@@ -97,6 +97,8 @@ public class Controller
 	protected static File file;
 
 	protected static CPUClock clock;
+	
+	protected static LineSelector lineSelector;
 	/* ############################################## */
 
 	public static void main(String[] args) throws IOException
