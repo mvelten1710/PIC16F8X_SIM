@@ -53,7 +53,7 @@ public class Parser
 				while (true) {
 					if (!Character.isWhitespace(lineContent.charAt(stringEndPos))) {
 						stringEndPos++;
-						if(stringEndPos == 42) {
+						if(stringEndPos == lineContent.length()) {
 							break;
 						}
 					}else{

@@ -1,18 +1,6 @@
 package PicController;
 
-import static PicController.Controller.CFLAG;
-import static PicController.Controller.DCFLAG;
-import static PicController.Controller.PDFLAG;
-import static PicController.Controller.STATUS;
-import static PicController.Controller.TOFLAG;
-import static PicController.Controller.W;
-import static PicController.Controller.ZFLAG;
-import static PicController.Controller.dataMemory;
-import static PicController.Controller.f;
-import static PicController.Controller.getFlag;
-import static PicController.Controller.pIndex;
-import static PicController.Controller.popStack;
-import static PicController.Controller.pushStack;
+import static PicController.Controller.*;
 
 public class Decoder
 {
@@ -419,12 +407,16 @@ public class Decoder
 		if (desti == 0) {
 			W = --f[adress];
 			cutWandF(adress, desti);
+			if (W == 0) {
+				nop();
+			}
 		} else {
 			--f[adress];
 			cutWandF(adress, desti);
-		}
-		if (f[adress] == 0) {
-			nop();
+			if (f[adress] == 0) {
+				System.out.println(f[adress]);
+				nop();
+			}
 		}
 
 		incrementpIndex();
@@ -802,7 +794,7 @@ public class Decoder
 			break;
 		// C-Flag
 		case 0:
-			if ((selector & (1 << 8)) != 0) {
+			if ((selector & (1 << 7)) != 0) {
 				dataMemory[STATUS] |= 0b00000001;
 			} else {
 				dataMemory[STATUS] &= ~0b00000001;

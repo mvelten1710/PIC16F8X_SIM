@@ -9,6 +9,7 @@ public class LineSelector {
 	private ArrayList<String> fileContent; //Holds the Information for the operations
 	private String operationSelector; //To identify which operation it is (GOTO, CALL, RETURN
 	private int operationData; //For CALL and GOTO to identify which row they're calling
+	private int bit;
 	private int opNext;
 	public int opBegin;
 	private int index = 0, stackIndex = 0;
@@ -27,14 +28,57 @@ public class LineSelector {
 		//We need to distinguish between these operation because they can alter the operation flow
 		switch (operationSelector) {
 		case "call":
-			operationData = Integer.parseInt((String) fileContent.get(index).subSequence(7, 9));
+			operationData = Integer.parseInt((String) fileContent.get(index).subSequence(7, 9), 16);
 			pushStack(index + 1);
 			index = operationData;
 			break;
 
 		case "goto":
-			operationData = Integer.parseInt((String) fileContent.get(index).subSequence(7, 9));
+			operationData = Integer.parseInt((String) fileContent.get(index).subSequence(7, 9), 16);
 			index = operationData;
+			break;
+			
+		case "decfsz":
+			operationData = Integer.parseInt((String) fileContent.get(index).subSequence(7, 9), 16);
+			operationData = operationData & 0b01111111;
+			System.out.println(f[operationData]);
+			if(f[operationData] == 0) {
+				index += 2;
+			}else {
+				index++;
+			}
+			break;
+			
+		case "incfsz":
+			operationData = Integer.parseInt((String) fileContent.get(index).subSequence(7, 9), 16);
+			operationData = operationData & 0b01111111;
+			if(f[operationData] == 0) {
+				index += 2;
+			}else {
+				index++;
+			}
+			break;
+			
+		case "btfsc":
+			bit = Integer.parseInt((String) fileContent.get(index).subSequence(5, 9), 16);
+			operationData = Integer.parseInt((String) fileContent.get(index).subSequence(7, 9), 16);
+			operationData = operationData & 0b01111111;
+			if ((f[operationData] & (1 << bit)) == 0) {
+				index += 2;
+			}else {
+				index++;
+			}
+			break;
+			
+		case "btfss":
+			bit = Integer.parseInt((String) fileContent.get(index).subSequence(5, 9), 16);
+			operationData = Integer.parseInt((String) fileContent.get(index).subSequence(7, 9), 16);
+			operationData = operationData & 0b01111111;
+			if ((f[operationData] & (1 << bit)) == 1) {
+				index += 2;
+			}else {
+				index++;
+			}
 			break;
 			
 		case "return":

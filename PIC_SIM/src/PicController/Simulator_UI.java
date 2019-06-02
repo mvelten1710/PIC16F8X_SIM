@@ -2,7 +2,6 @@ package PicController;
 
 import static PicController.Controller.*;
 
-import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -23,7 +22,6 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import javax.swing.JTextField;
 import javax.swing.JTabbedPane;
-import javax.swing.JPanel;
 
 public class Simulator_UI
 {
@@ -58,9 +56,7 @@ public class Simulator_UI
 
 	}
 
-	private static DefaultTableModel parserModel;
-
-	private static DefaultTableModel fRegisterModel;
+	private static DefaultTableModel parserModel, fRegisterModel, stackModel;
 
 	private static JTable parserTable, fRegisterTable;
 
@@ -69,6 +65,7 @@ public class Simulator_UI
 	private static JLabel wRegister, cFlag, dcFlag, zFlag, toFlag, pdFlag;
 	
 	private JTextField enteredFrequ;
+	private JTable stackTable;
 
 	private void initialize()
 	{
@@ -78,12 +75,12 @@ public class Simulator_UI
 		frmPicSimulator.setTitle("PIC Simulator");
 		frmPicSimulator.setBounds(100, 100, 980, 580);
 		frmPicSimulator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmPicSimulator.getContentPane().setLayout(null);
 		frmPicSimulator.setResizable(false);
+		frmPicSimulator.getContentPane().setLayout(null);
 
 		btnStart = new JButton("START");
-		btnStart.setEnabled(false);
 		btnStart.setBounds(361, 249, 89, 23);
+		btnStart.setEnabled(false);
 		frmPicSimulator.getContentPane().add(btnStart);
 		btnStart.addActionListener(new ActionListener() {
 			@Override
@@ -102,8 +99,8 @@ public class Simulator_UI
 		});
 
 		btnStep = new JButton("STEP");
-		btnStep.setEnabled(false);
 		btnStep.setBounds(460, 249, 89, 23);
+		btnStep.setEnabled(false);
 		frmPicSimulator.getContentPane().add(btnStep);
 		btnStep.addActionListener(new ActionListener() {
 			@Override
@@ -118,8 +115,8 @@ public class Simulator_UI
 		});
 
 		btnReset = new JButton("RESET");
-		btnReset.setEnabled(false);
 		btnReset.setBounds(559, 249, 89, 23);
+		btnReset.setEnabled(false);
 		frmPicSimulator.getContentPane().add(btnReset);
 		btnReset.addActionListener(new ActionListener() {
 			@Override
@@ -130,6 +127,7 @@ public class Simulator_UI
 		});
 
 		JButton btnNewButton = new JButton("LOAD");
+		btnNewButton.setBounds(262, 249, 89, 23);
 		btnNewButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0)
@@ -165,7 +163,6 @@ public class Simulator_UI
 
 			}
 		});
-		btnNewButton.setBounds(262, 249, 89, 23);
 		frmPicSimulator.getContentPane().add(btnNewButton);
 		
 		/* ####################START-OF-PARSER_TABLE#################### */
@@ -187,6 +184,12 @@ public class Simulator_UI
 					return Boolean.class;
 				return String.class;
 			}
+
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		       //all cells false
+		       return false;
+		    }
 		})
 		{
 			private static final long serialVersionUID = 1L;
@@ -218,9 +221,9 @@ public class Simulator_UI
 		/* ####################START-OF-F_REGISTER#################### */
 		
 		JLabel lblFregister = new JLabel("F-Register");
+		lblFregister.setBounds(10, 12, 208, 23);
 		lblFregister.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblFregister.setHorizontalAlignment(SwingConstants.LEFT);
-		lblFregister.setBounds(10, 12, 208, 23);
 		frmPicSimulator.getContentPane().add(lblFregister);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -229,7 +232,15 @@ public class Simulator_UI
 		scrollPane
 				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-		fRegisterTable = new JTable(fRegisterModel = new DefaultTableModel());
+		fRegisterTable = new JTable(fRegisterModel = new DefaultTableModel(){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		       //all cells false
+		       return false;
+		    }
+		});
 		fRegisterTable.setFillsViewportHeight(true);
 		fRegisterTable.setRowSelectionAllowed(false);
 		fRegisterTable.setFont(new Font("Monospaced", Font.PLAIN, 13));
@@ -241,79 +252,79 @@ public class Simulator_UI
 
 
 		JLabel lblWregister = new JLabel("W-Register");
+		lblWregister.setBounds(10, 248, 74, 23);
 		lblWregister.setHorizontalAlignment(SwingConstants.CENTER);
 		lblWregister.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblWregister.setBounds(10, 248, 74, 23);
 		frmPicSimulator.getContentPane().add(lblWregister);
 
 		wRegister = new JLabel("-");
-		wRegister.setFont(new Font("Tahoma", Font.BOLD, 12));
 		wRegister.setBounds(94, 248, 59, 23);
+		wRegister.setFont(new Font("Tahoma", Font.BOLD, 12));
 		frmPicSimulator.getContentPane().add(wRegister);
 		
 		JLabel lblFlags = new JLabel("Flags");
-		lblFlags.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblFlags.setBounds(10, 452, 74, 23);
+		lblFlags.setFont(new Font("Tahoma", Font.BOLD, 13));
 		frmPicSimulator.getContentPane().add(lblFlags);
 		
 		JLabel lblZflag = new JLabel("Z");
+		lblZflag.setBounds(70, 481, 20, 23);
 		lblZflag.setHorizontalAlignment(SwingConstants.CENTER);
 		lblZflag.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblZflag.setBounds(70, 481, 20, 23);
 		frmPicSimulator.getContentPane().add(lblZflag);
 		
 		JLabel lblCflag = new JLabel("C");
+		lblCflag.setBounds(10, 479, 20, 26);
 		lblCflag.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCflag.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblCflag.setBounds(10, 479, 20, 26);
 		frmPicSimulator.getContentPane().add(lblCflag);
 		
 		JLabel lblDcflag = new JLabel("DC");
+		lblDcflag.setBounds(40, 480, 20, 24);
 		lblDcflag.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDcflag.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblDcflag.setBounds(40, 480, 20, 24);
 		frmPicSimulator.getContentPane().add(lblDcflag);
 		
 		JLabel lblToflag = new JLabel("TO");
+		lblToflag.setBounds(100, 479, 20, 26);
 		lblToflag.setHorizontalAlignment(SwingConstants.CENTER);
 		lblToflag.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblToflag.setBounds(100, 479, 20, 26);
 		frmPicSimulator.getContentPane().add(lblToflag);
 		
 		JLabel lblPdflag = new JLabel("PD");
+		lblPdflag.setBounds(130, 481, 20, 23);
 		lblPdflag.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPdflag.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblPdflag.setBounds(130, 481, 20, 23);
 		frmPicSimulator.getContentPane().add(lblPdflag);
 		
 		cFlag = new JLabel("-");
+		cFlag.setBounds(10, 509, 20, 14);
 		cFlag.setFont(new Font("Tahoma", Font.BOLD, 12));
 		cFlag.setHorizontalAlignment(SwingConstants.CENTER);
-		cFlag.setBounds(10, 509, 20, 14);
 		frmPicSimulator.getContentPane().add(cFlag);
 		
 		dcFlag = new JLabel("-");
+		dcFlag.setBounds(40, 509, 20, 14);
 		dcFlag.setFont(new Font("Tahoma", Font.BOLD, 12));
 		dcFlag.setHorizontalAlignment(SwingConstants.CENTER);
-		dcFlag.setBounds(40, 509, 20, 14);
 		frmPicSimulator.getContentPane().add(dcFlag);
 		
 		zFlag = new JLabel("-");
+		zFlag.setBounds(70, 509, 20, 14);
 		zFlag.setFont(new Font("Tahoma", Font.BOLD, 12));
 		zFlag.setHorizontalAlignment(SwingConstants.CENTER);
-		zFlag.setBounds(70, 509, 20, 14);
 		frmPicSimulator.getContentPane().add(zFlag);
 		
 		toFlag = new JLabel("-");
+		toFlag.setBounds(100, 509, 20, 14);
 		toFlag.setFont(new Font("Tahoma", Font.BOLD, 12));
 		toFlag.setHorizontalAlignment(SwingConstants.CENTER);
-		toFlag.setBounds(100, 509, 20, 14);
 		frmPicSimulator.getContentPane().add(toFlag);
 		
 		pdFlag = new JLabel("-");
+		pdFlag.setBounds(130, 509, 20, 14);
 		pdFlag.setFont(new Font("Tahoma", Font.BOLD, 12));
 		pdFlag.setHorizontalAlignment(SwingConstants.CENTER);
-		pdFlag.setBounds(130, 509, 20, 14);
 		frmPicSimulator.getContentPane().add(pdFlag);
 		
 		enteredFrequ = new JTextField();
@@ -322,14 +333,14 @@ public class Simulator_UI
 		enteredFrequ.setColumns(10);
 		
 		JLabel frequency = new JLabel("1000");
-		frequency.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		frequency.setBounds(224, 270, 28, 14);
+		frequency.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		frmPicSimulator.getContentPane().add(frequency);
 		
 		JLabel uiMessage = new JLabel("");
+		uiMessage.setBounds(658, 253, 306, 14);
 		uiMessage.setFont(new Font("Tahoma", Font.ITALIC, 10));
 		uiMessage.setForeground(Color.RED);
-		uiMessage.setBounds(658, 253, 306, 14);
 		frmPicSimulator.getContentPane().add(uiMessage);
 		
 		JButton acceptFrequ = new JButton("ENTER");
@@ -357,24 +368,41 @@ public class Simulator_UI
 		});
 		
 		JLabel lblNewLabel = new JLabel("Instruction/ms");
+		lblNewLabel.setBounds(173, 235, 77, 14);
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(173, 235, 77, 14);
 		frmPicSimulator.getContentPane().add(lblNewLabel);
 		
 		JLabel lblLabel = new JLabel("Memory");
-		lblLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblLabel.setBounds(260, 16, 74, 14);
+		lblLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
 		frmPicSimulator.getContentPane().add(lblLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Frequency:");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		lblNewLabel_1.setBounds(175, 270, 52, 14);
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		frmPicSimulator.getContentPane().add(lblNewLabel_1);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(262, 36, 702, 197);
 		frmPicSimulator.getContentPane().add(tabbedPane);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		tabbedPane.addTab("Stack", null, scrollPane_1, null);
+		
+		stackTable = new JTable(stackModel = new DefaultTableModel(){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		       //all cells false
+		       return false;
+		    }
+		});
+		stackTable.setRowSelectionAllowed(false);
+		scrollPane_1.setViewportView(stackTable);
+		stackModel.addColumn("###STACK###");
+		
 
 	}
 
@@ -382,19 +410,29 @@ public class Simulator_UI
 
 	private void setContent()
 	{
+		//PARSER CONTENT
 		for (int i = 0; i < parser.getContent().length; i++) {
 			if (parser.getContent()[i] != null) {
-				// model.insertRow(i, new Object[] { parser.getContent()[i] });
 				parserModel.setRowCount(i + 1);
 				parserModel.setValueAt(parser.getContent()[i], i, 1);
 				parserModel.setValueAt(false, i, 0);
 			}
 		}
 		
+		updateStack();
 		updateFRegister();
 		fRegisterModel.fireTableDataChanged();
 		parserModel.fireTableDataChanged();
 		allCleared = false;
+	}
+	
+	private static void updateStack()
+	{
+		//STACK CONTENT
+		for (int i = 0; i < stack.length; i++) {
+			stackModel.setRowCount(i + 1);
+			stackModel.setValueAt(Integer.toHexString(stack[i]) + "h", i, 0);	
+		}
 	}
 
 	private static void updateFRegister()
@@ -404,7 +442,7 @@ public class Simulator_UI
 		int column = 0;
 		for (int i = 0; i < f.length; i++) {
 			fRegisterModel.setRowCount(row + 1);
-			fRegisterModel.setValueAt(Integer.toHexString(f[i])+"h", row, column);
+			fRegisterModel.setValueAt(Integer.toHexString(f[i]) + "h", row, column);
 			if (column == 5) {
 				row++;
 				column = 0;
@@ -437,6 +475,7 @@ public class Simulator_UI
 	public static void updateUI()
 	{
 		//All Updates to the UI should be placed here!
+		updateStack();
 		updateFRegister();
 		wRegister.setText(Integer.toHexString(W) + "h");
 		updateFlagLabels();
@@ -458,6 +497,7 @@ public class Simulator_UI
 	{
 		// Parser Table cleanup
 		parserModel.setRowCount(0);
+		stackModel.setRowCount(0);
 		// F-Register Table cleanup
 		fRegisterModel.setRowCount(0);
 		wRegister.setText("-");

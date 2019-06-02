@@ -153,7 +153,9 @@ public class Controller
 	public static int popStack()
 	{
 		sIndex--;
-		return stack[sIndex];
+		int data = stack[sIndex];
+		stack[sIndex] = 0;
+		return data;
 
 	}
 
