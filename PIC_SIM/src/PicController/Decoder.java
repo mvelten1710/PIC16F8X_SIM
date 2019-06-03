@@ -326,7 +326,7 @@ public class Decoder
 			// Set Z-Flag
 			setFlags(2, f[adress]);
 		}
-
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
@@ -344,7 +344,7 @@ public class Decoder
 			// Set Z-Flag
 			setFlags(2, f[adress]);
 		}
-
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
@@ -354,7 +354,7 @@ public class Decoder
 		f[adress] = 0;
 		// Set Z-Flag
 		setFlags(2, f[adress]);
-
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
@@ -364,7 +364,7 @@ public class Decoder
 		W = 0;
 		// Set Z-Flag
 		setFlags(2, W);
-
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
@@ -381,7 +381,7 @@ public class Decoder
 			// Set Z-Flag
 			setFlags(2, f[adress]);
 		}
-
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
@@ -398,7 +398,7 @@ public class Decoder
 			// Set Z-Flag
 			setFlags(2, f[adress]);
 		}
-
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
@@ -414,11 +414,10 @@ public class Decoder
 			--f[adress];
 			cutWandF(adress, desti);
 			if (f[adress] == 0) {
-				System.out.println(f[adress]);
 				nop();
 			}
 		}
-
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
@@ -435,7 +434,7 @@ public class Decoder
 			// Set Z-Flag
 			setFlags(2, f[adress]);
 		}
-
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
@@ -451,7 +450,7 @@ public class Decoder
 		if (f[adress] == 0) {
 			nop();
 		}
-
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
@@ -468,7 +467,7 @@ public class Decoder
 			// Set Z-Flag
 			setFlags(2, f[adress]);
 		}
-
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
@@ -483,7 +482,7 @@ public class Decoder
 			// Set Z-Flag
 			setFlags(2, f[adress]);
 		}
-
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
@@ -491,6 +490,7 @@ public class Decoder
 	{
 		f[adress] = W;
 		cutWandF(adress, 1);
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
@@ -508,6 +508,7 @@ public class Decoder
 			cutWandF(adress, desti);
 		}
 		setFlags(CFLAG, helper);
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
@@ -525,6 +526,7 @@ public class Decoder
 			cutWandF(adress, desti);
 		}
 		setFlags(-2, helper);
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
@@ -555,6 +557,7 @@ public class Decoder
 			// Set Z-Flag
 			setFlags(2, f[adress]);
 		}
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
@@ -570,7 +573,7 @@ public class Decoder
 			f[adress] = total;
 			cutWandF(adress, desti);
 		}
-
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
@@ -587,7 +590,7 @@ public class Decoder
 			// Set Z-Flag
 			setFlags(2, f[adress]);
 		}
-
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
@@ -595,7 +598,7 @@ public class Decoder
 	{
 		f[adress] = f[adress] & ~(1 << b);
 		cutWandF(adress, 1);
-
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
@@ -603,7 +606,7 @@ public class Decoder
 	{
 		f[adress] = f[adress] | ~(1 << b);
 		cutWandF(adress, 1);
-
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
@@ -612,7 +615,7 @@ public class Decoder
 		if ((f[adress] & (1 << b)) == 0) {
 			nop();
 		}
-
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
@@ -621,7 +624,7 @@ public class Decoder
 		if ((f[adress] & (1 << b)) == 1) {
 			nop();
 		}
-
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
@@ -638,7 +641,7 @@ public class Decoder
 		}
 		// Set Z-Flag
 		setFlags(2, W);
-
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
@@ -648,7 +651,7 @@ public class Decoder
 		cutWandF(0, 0);
 		// Set Z-Flag
 		setFlags(2, W);
-
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
@@ -656,6 +659,7 @@ public class Decoder
 	{
 		pushStack(++pIndex);
 		pIndex = data;
+		incrementRuntime(2);
 	}
 
 	public void clrwdt()
@@ -663,12 +667,13 @@ public class Decoder
 		// TODO FINISH WATCHDOG FOR THIS OPERATION
 		// TO = 0;
 		// PD = 0;
-
+		incrementRuntime(1);
 	}
 
 	public void _goto(int data)
 	{
 		pIndex = data;
+		incrementRuntime(2);
 	}
 
 	public void iorlw(int data)
@@ -677,20 +682,21 @@ public class Decoder
 		cutWandF(0, 0);
 		// Set Z-Flag
 		setFlags(2, W);
-
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
 	public void movlw(int data)
 	{
 		W = data;
-
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
 	public void retfie()
 	{
 		// TODO FINISH
+		incrementRuntime(2);
 
 	}
 
@@ -698,11 +704,13 @@ public class Decoder
 	{
 		W = data;
 		pIndex = popStack();
+		incrementRuntime(2);
 	}
 
 	public void _return()
 	{
 		pIndex = popStack();
+		incrementRuntime(2);
 	}
 
 	public void sleep()
@@ -710,6 +718,7 @@ public class Decoder
 		// TODO FINISH MAYBE?
 		// PD = 1;
 		// TO = 0;
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
@@ -721,6 +730,7 @@ public class Decoder
 		setFlags(-1, W);
 		// Set Z-Flag
 		setFlags(2, W);
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
@@ -730,12 +740,14 @@ public class Decoder
 		cutWandF(0, 0);
 		// Set Z-Flag
 		setFlags(2, W);
+		incrementRuntime(1);
 		incrementpIndex();
 	}
 
 	public void nop()
 	{
 		incrementpIndex();
+		incrementRuntime(1);
 		return;
 	}
 
@@ -768,6 +780,11 @@ public class Decoder
 	private void incrementpIndex()
 	{
 		pIndex++;
+	}
+	
+	private void incrementRuntime(int value) 
+	{
+		runtime += value;
 	}
 
 	private void setFlags(int flagSec, int selector)

@@ -5,12 +5,8 @@ import static PicController.Controller.*;
 public class CPUClock extends Thread
 {
 
-	
-
 	public void run()
 	{
-
-		System.out.println("Operation Thread started...");
 		// Things to run
 		while (true) {
 			try {
@@ -18,8 +14,10 @@ public class CPUClock extends Thread
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			
 			// Runs only if the User presses the button RUN
-			if (!Simulator_UI.getBreakpointPos(selectedRow)) {
+			Simulator_UI.checkBreakpoint(selectedRow);
+			if (!breakPointReached) {
 				if (clockRunning) {
 					file.executeOperation();
 					Simulator_UI.updateUI();
@@ -31,6 +29,7 @@ public class CPUClock extends Thread
 				clockRunning = false;
 				stepping = false;
 			}
+			
 		}
 	}
 

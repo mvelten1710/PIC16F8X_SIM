@@ -28,7 +28,7 @@ public class LineSelector {
 		//We need to distinguish between these operation because they can alter the operation flow
 		switch (operationSelector) {
 		case "call":
-			operationData = Integer.parseInt((String) fileContent.get(index).subSequence(7, 9), 16);
+			operationData = Integer.parseInt((String) fileContent.get(index).subSequence(6, 9), 16) & 0b00011111111111;
 			pushStack(index + 1);
 			index = operationData;
 			break;

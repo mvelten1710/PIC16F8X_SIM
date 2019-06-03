@@ -60,9 +60,15 @@ public class Simulator_UI
 
 	private static JTable parserTable, fRegisterTable;
 
-	private JButton btnStart, btnStep, btnReset;
+	private static JButton btnStart;
 
-	private static JLabel wRegister, cFlag, dcFlag, zFlag, toFlag, pdFlag;
+	private JButton btnStep;
+
+	private JButton btnReset;
+	
+	private JLabel uiMessage;
+
+	private static JLabel wRegister, cFlag, dcFlag, zFlag, toFlag, pdFlag, lZaehler;
 	
 	private JTextField enteredFrequ;
 	private JTable stackTable;
@@ -86,15 +92,19 @@ public class Simulator_UI
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				if (!clockRunning) {
-					clockRunning = true;
-					if (stepping) 
-						stepping = false;
+				if (breakPointReached) {
+					uiMessage.setText("ERROR: REMOVE BREAKPOINT FIRST!");
 				}else {
-					clockRunning = false;
-					stepping = false;
+					if (!clockRunning) {
+						clockRunning = true;
+						if (stepping) 
+							stepping = false;
+					}else {
+						clockRunning = false;
+						stepping = false;
+						btnStart.setText("STOP");
+					}
 				}
-				
 			}
 		});
 
@@ -341,7 +351,7 @@ public class Simulator_UI
 		frequency.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		frmPicSimulator.getContentPane().add(frequency);
 		
-		JLabel uiMessage = new JLabel("");
+		uiMessage = new JLabel("");
 		uiMessage.setBounds(658, 253, 306, 14);
 		uiMessage.setFont(new Font("Tahoma", Font.ITALIC, 10));
 		uiMessage.setForeground(Color.RED);
@@ -407,7 +417,23 @@ public class Simulator_UI
 		scrollPane_1.setViewportView(stackTable);
 		stackModel.addColumn("###STACK###");
 		
-
+		JLabel lblLaufzeitzhler = new JLabel("Laufzeitz\u00E4hler");
+		lblLaufzeitzhler.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		lblLaufzeitzhler.setHorizontalAlignment(SwingConstants.CENTER);
+		lblLaufzeitzhler.setBounds(173, 333, 77, 14);
+		frmPicSimulator.getContentPane().add(lblLaufzeitzhler);
+		
+		lZaehler = new JLabel("0");
+		lZaehler.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lZaehler.setHorizontalAlignment(SwingConstants.RIGHT);
+		lZaehler.setBounds(173, 347, 45, 14);
+		frmPicSimulator.getContentPane().add(lZaehler);
+		
+		JLabel lbls = new JLabel("\u00B5s");
+		lbls.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		lbls.setBounds(222, 347, 28, 14);
+		frmPicSimulator.getContentPane().add(lbls);
+		
 	}
 
 	/* ####################START-OF-FUNCTIONS#################### */
@@ -482,19 +508,23 @@ public class Simulator_UI
 		updateStack();
 		updateFRegister();
 		wRegister.setText(Integer.toHexString(W) + "h");
+		lZaehler.setText(Integer.toString(runtime));
 		updateFlagLabels();
 		updateSelectedRow();
-		
 	}
 	
-	public static boolean getBreakpointPos(int index) {
-		if(clockRunning) {
+	public static void checkBreakpoint(int index) {
+		if (parserModel.getRowCount() != 0) {
 			if ((boolean) parserTable.getValueAt(index, 0)) {
-				return true;
+				btnStart.setText("START");
+				breakPointReached = true;
+				return;
 			}
+			//If no Breakpoint is found
+			breakPointReached = false;
+			return;
 		}
-		//If no Breakpoint is found
-		return false;
+		
 	}
 	
 	private static void clearUI()
@@ -510,6 +540,7 @@ public class Simulator_UI
 		zFlag.setText("-");
 		toFlag.setText("-");
 		pdFlag.setText("-");
+		lZaehler.setText("0");
 	}
 
 	private void cleanUp()
@@ -519,7 +550,8 @@ public class Simulator_UI
 		clockRunning = false;
 		stepping = false;
 		pIndex = 0;
-		selectedRow = -1;
+		selectedRow = 0;
+		runtime = 0;
 		btnStart.setEnabled(false);
 		btnStep.setEnabled(false);
 		btnReset.setEnabled(false);

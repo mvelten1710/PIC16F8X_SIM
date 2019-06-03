@@ -29,11 +29,34 @@ public class Controller
 
 	/* ############################################## */
 
-	/* ######################RAM##################### */
-	public static final int STATUS = 3;
-
+	/* ######################BANK0##################### */
+	public static final int INDF = 0;
+	
+	public static final int TMR0 = 1;
+	
 	public static final int PCL = 2;
+	
+	public static final int STATUS = 3;
+	
+	public static final int FSR = 4;
+	
+	public static final int PORTA = 5;
+	
+	public static final int PORTB = 6;
+	
+	public static final int ZERO = 7;
+	
+	public static final int EEDATA = 8;
+	
+	public static final int EEADDR = 8;
+	
+	public static final int PCLATH = 8;
+	
+	public static final int INTCON = 8;
 
+	/* ############################################## */
+	
+	/* ####################FLAGS#################### */
 	public static final int CFLAG = 0;
 
 	public static final int DCFLAG = 1;
@@ -81,6 +104,24 @@ public class Controller
 	public static final int RB7 = 7;
 	/* ############################################## */
 	
+	/* ####################INTCON#################### */
+	public static final int RBIF = 0;
+
+	public static final int INTF = 1;
+
+	public static final int T0IF = 2;
+
+	public static final int RBIE = 3;
+
+	public static final int INTE = 4;
+
+	public static final int T0IE = 5;
+
+	public static final int EEIE = 6;
+
+	public static final int GIE = 7;
+	/* ############################################## */
+	
 	/* #################OWN-VARIABLES################ */
 	protected static boolean clockRunning;
 
@@ -91,6 +132,8 @@ public class Controller
 	protected static boolean breakPointReached;
 	
 	protected static int selectedRow;
+	
+	protected static int runtime;
 	
 	protected static long threadSpeed;
 	
@@ -111,7 +154,8 @@ public class Controller
 	{
 
 		threadSpeed = 800L;
-		selectedRow = -1;
+		selectedRow = 0;
+		runtime = 0;
 		breakPointReached = false;
 		clockRunning = false;
 		allCleared = true;
