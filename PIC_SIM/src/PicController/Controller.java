@@ -110,7 +110,7 @@ public class Controller
 	public static void main(String[] args) throws IOException
 	{
 
-		threadSpeed = 1000L;
+		threadSpeed = 800L;
 		selectedRow = -1;
 		breakPointReached = false;
 		clockRunning = false;

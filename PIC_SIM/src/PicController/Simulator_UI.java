@@ -188,7 +188,11 @@ public class Simulator_UI
 			@Override
 		    public boolean isCellEditable(int row, int column) {
 		       //all cells false
-		       return false;
+				boolean lol = false;
+				if(column == 0) {
+					lol = true;
+				}
+				return lol;
 		    }
 		})
 		{
@@ -332,7 +336,7 @@ public class Simulator_UI
 		frmPicSimulator.getContentPane().add(enteredFrequ);
 		enteredFrequ.setColumns(10);
 		
-		JLabel frequency = new JLabel("1000");
+		JLabel frequency = new JLabel("800");
 		frequency.setBounds(224, 270, 28, 14);
 		frequency.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		frmPicSimulator.getContentPane().add(frequency);

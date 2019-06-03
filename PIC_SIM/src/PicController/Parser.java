@@ -46,7 +46,7 @@ public class Parser
 		
 		while ((lineContent = reader.readLine()) != null) {
 			setContent(lineContent);
-			int stringEndPos = 39;
+			int stringEndPos = 37;
 			
 			/*Cuts only the line with operations. Only after the operations name*/
 			if (!Character.isWhitespace(lineContent.charAt(0))) {
@@ -60,6 +60,7 @@ public class Parser
 						break;
 					}
 				}
+				
 				operationRow.add(lineContent.substring(0, stringEndPos));
 			}
 			
