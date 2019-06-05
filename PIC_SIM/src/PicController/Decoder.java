@@ -497,65 +497,81 @@ public class Decoder
 	public void rlf(int adress, int desti)
 	{
 		// helper gets the first bit that goes later to C
-		int helper = 0;
+		int helper;
+		if ((f[adress] & (1 << 7)) != 0) {
+			helper = (f[adress] << 1) | (dataMemory[STATUS] & 1);
+			dataMemory[STATUS] |= 0b00000001;
+			
+			System.out.println("1");
+		} else {
+			helper = (f[adress] << 1) | (dataMemory[STATUS] & 1);
+			dataMemory[STATUS] &= ~0b00000001;
+			
+			System.out.println("0");
+		}
+		
 		if (desti == 0) {
-			helper = W;
-			W = (f[adress] << 1);
+			W = helper;
 			cutWandF(adress, desti);
 		} else {
-			helper = f[adress];
-			f[adress] = (f[adress] << 1);
+			f[adress] = helper;
 			cutWandF(adress, desti);
 		}
-		setFlags(CFLAG, helper);
 		incrementRuntime(1);
 		incrementpIndex();
 	}
 
 	public void rrf(int adress, int desti)
 	{
-		int helper = 0;
-		helper = helper >> 7;
+		
+		int helper;
+		int helper2 = Integer.toBinaryString(f[adress] >> 1).length();
+		if(helper2 != 8) {
+			helper2 += (7 - helper2);
+		}
+		if ((f[adress] & 1) != 0) {
+			helper = (f[adress] >> 1) | (dataMemory[STATUS] & 1) << helper2;
+			dataMemory[STATUS] |= 0b00000001;
+		} else {
+			helper = (f[adress] >> 1) | (dataMemory[STATUS] & 1) << helper2;
+			dataMemory[STATUS] &= ~0b00000001;
+		}
 		if (desti == 0) {
-			helper = W;
-			W = (f[adress] >> 1);
+			W = helper;
 			cutWandF(adress, desti);
 		} else {
-			helper = f[adress];
-			f[adress] = (f[adress] >> 1);
+			f[adress] = helper;
 			cutWandF(adress, desti);
 		}
-		setFlags(-2, helper);
+
 		incrementRuntime(1);
 		incrementpIndex();
 	}
 
 	public void subwf(int adress, int desti)
 	{
+		int helper = 0;
 		if (desti == 0) {
-			int helper = W >> 4;
 			W = f[adress] + _2complement();
 			cutWandF(adress, desti);
-			// Set C-Flag
-			setFlags(CFLAG, W);
-			if (helper == 0 && (W >> 4) != 0) {
-				// Set DC-Flag
-				setFlags(1, W);
+			if (W >= f[adress]) {
+				helper = -1;
 			}
+			//C & DC Flag
+			setFlags(-1, helper);
 			// Set Z-Flag
 			setFlags(2, W);
 		} else {
-			int helper = f[adress] >> 4;
+			helper = f[adress];
 			f[adress] = f[adress] + _2complement();
 			cutWandF(adress, desti);
-			// Set C-Flag
-			setFlags(CFLAG, f[adress]);
-			if (helper == 0 && (f[adress] >> 4) != 0) {
-				// Set DC-Flag
-				setFlags(1, f[adress]);
+			if (f[adress] >= helper) {
+				helper = -1;
 			}
+			//C & DC Flag
+			setFlags(-1, helper);
 			// Set Z-Flag
-			setFlags(2, f[adress]);
+			setFlags(2, W);
 		}
 		incrementRuntime(1);
 		incrementpIndex();
@@ -791,14 +807,6 @@ public class Decoder
 	{
 
 		switch (flagSec) {
-		// C-Flag (RRF)
-		case -2:
-			if ((selector & 1) != 0) {
-				dataMemory[STATUS] |= 0b00000001;
-			} else {
-				dataMemory[STATUS] &= ~0b00000001;
-			}
-			break;
 		// C & DC -Flag (SUBLW)
 		case -1:
 			if (selector >= 0) {

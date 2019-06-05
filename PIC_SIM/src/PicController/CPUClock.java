@@ -14,7 +14,6 @@ public class CPUClock extends Thread
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
 			// Runs only if the User presses the button RUN
 			Simulator_UI.checkBreakpoint(selectedRow);
 			if (!breakPointReached) {
