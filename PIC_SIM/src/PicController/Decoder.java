@@ -97,11 +97,11 @@ public class Decoder
 		switch (instructionPart) {
 		case 0x0700:
 			System.out.println("###ADDWF###");
-			addwf(adressPart, destinationBit);
+			addwf(indirectRead(adressPart), destinationBit);
 			break;
 		case 0x0500:
 			System.out.println("###ANDWF###");
-			andwf(adressPart, destinationBit);
+			andwf(indirectRead(adressPart), destinationBit);
 			break;
 		// case 0x0180:
 		// // Destination Bit is 1
@@ -110,40 +110,41 @@ public class Decoder
 		// break;
 		case 0x0100:
 			// Destination Bit is 0
-			decideCLR(adressPart, destinationBit);
+			decideCLR(indirectRead(adressPart), destinationBit);
 			break;
 		case 0x0900:
 			System.out.println("###COMF###");
-			comf(adressPart, destinationBit);
+			
+			comf(indirectRead(adressPart), destinationBit);
 			break;
 		case 0x0300:
 			System.out.println("###DECF###");
-			decf(adressPart, destinationBit);
+			decf(indirectRead(adressPart), destinationBit);
 			break;
 		case 0x0B00:
 			System.out.println("###DECFSZ###");
-			decfsz(adressPart, destinationBit);
+			decfsz(indirectRead(adressPart), destinationBit);
 			break;
 		case 0x0A00:
 			System.out.println("###INCF###");
-			incf(adressPart, destinationBit);
+			incf(indirectRead(adressPart), destinationBit);
 			break;
 		case 0x0F00:
 			System.out.println("###INCFSZ###");
-			incfsz(adressPart, destinationBit);
+			incfsz(indirectRead(adressPart), destinationBit);
 			break;
 		case 0x0400:
 			System.out.println("###IORWF###");
-			iorwf(adressPart, destinationBit);
+			iorwf(indirectRead(adressPart), destinationBit);
 			break;
 		case 0x0800:
 			System.out.println("###MOVF###");
-			movf(adressPart, destinationBit);
+			movf(indirectRead(adressPart), destinationBit);
 			break;
 		case 0x0080:
 			// Destination Bit is 1
 			System.out.println("###MOVWF###");
-			movwf(adressPart);
+			movwf(indirectRead(adressPart));
 			break;
 		case 0x0000:
 			// Destination Bit is 0
@@ -152,88 +153,88 @@ public class Decoder
 			break;
 		case 0x0D00:
 			System.out.println("###RLF###");
-			rlf(adressPart, destinationBit);
+			rlf(indirectRead(adressPart), destinationBit);
 			break;
 		case 0x0C00:
 			System.out.println("###RRF###");
-			rrf(adressPart, destinationBit);
+			rrf(indirectRead(adressPart), destinationBit);
 			break;
 		case 0x0200:
 			System.out.println("###SUBWF###");
-			subwf(adressPart, destinationBit);
+			subwf(indirectRead(adressPart), destinationBit);
 			break;
 		case 0x0E00:
 			System.out.println("###SWAPF###");
-			swapf(adressPart, destinationBit);
+			swapf(indirectRead(adressPart), destinationBit);
 			break;
 		case 0x0600:
 			System.out.println("###XORWF###");
-			xorwf(adressPart, destinationBit);
+			xorwf(indirectRead(adressPart), destinationBit);
 			break;
 
 		case 0x1000:
 			System.out.println("###BCF###");
-			bcf(adressPart, bitPos);
+			bcf(indirectRead(adressPart), bitPos);
 			break;
 		case 0x1100:
 			System.out.println("###BCF###");
-			bcf(adressPart, bitPos);
+			bcf(indirectRead(adressPart), bitPos);
 			break;
 		case 0x1200:
 			System.out.println("###BCF###");
-			bcf(adressPart, bitPos);
+			bcf(indirectRead(adressPart), bitPos);
 			break;
 		case 0x1300:
 			System.out.println("###BCF###");
-			bcf(adressPart, bitPos);
+			bcf(indirectRead(adressPart), bitPos);
 			break;
 		case 0x1400:
 			System.out.println("###BSF###");
-			bsf(adressPart, bitPos);
+			bsf(indirectRead(adressPart), bitPos);
 			break;
 		case 0x1500:
 			System.out.println("###BSF###");
-			bsf(adressPart, bitPos);
+			bsf(indirectRead(adressPart), bitPos);
 			break;
 		case 0x1600:
 			System.out.println("###BSF###");
-			bsf(adressPart, bitPos);
+			bsf(indirectRead(adressPart), bitPos);
 			break;
 		case 0x1700:
 			System.out.println("###BSF###");
-			bsf(adressPart, bitPos);
+			bsf(indirectRead(adressPart), bitPos);
 			break;
 		case 0x1800:
 			System.out.println("###BTFSC###");
-			btfsc(adressPart, bitPos);
+			btfsc(indirectRead(adressPart), bitPos);
 			break;
 		case 0x1900:
 			System.out.println("###BTFSC###");
-			btfsc(adressPart, bitPos);
+			btfsc(indirectRead(adressPart), bitPos);
 			break;
 		case 0x1A00:
 			System.out.println("###BTFSC###");
-			btfsc(adressPart, bitPos);
+			btfsc(indirectRead(adressPart), bitPos);
 			break;
 		case 0x1B00:
 			System.out.println("###BTFSC###");
-			btfsc(adressPart, bitPos);
+			btfsc(indirectRead(adressPart), bitPos);
 			break;
 		case 0x1C00:
 			System.out.println("###BTFSS###");
-			btfss(adressPart, bitPos);
+			btfss(indirectRead(adressPart), bitPos);
 			break;
 		case 0x1D00:
 			System.out.println("###BTFSS###");
-			btfss(adressPart, bitPos);
+			btfss(indirectRead(adressPart), bitPos);
 			break;
 		case 0x1E00:
 			System.out.println("###BTFSS###");
-			btfss(adressPart, bitPos);
+			btfss(indirectRead(adressPart), bitPos);
 			break;
 		case 0x1F00:
 			System.out.println("###BTFSS###");
-			btfss(adressPart, bitPos);
+			btfss(indirectRead(adressPart), bitPos);
 			break;
 
 		case 0x3E00:
@@ -302,7 +303,7 @@ public class Decoder
 		// Adds W with f = data
 		if (desti == 0) {
 			int helper = W >> 4;
-			W = W + f[adress];
+			W = W + dataMemory[adress];
 			// Set C-Flag
 			setFlags(CFLAG, W);
 			cutWandF(adress, desti);
@@ -313,18 +314,18 @@ public class Decoder
 			// Set Z-Flag
 			setFlags(2, W);
 		} else {
-			int helper = f[adress] >> 4;
-			f[adress] = W + f[adress];
+			int helper = dataMemory[adress] >> 4;
+			dataMemory[adress] = W + dataMemory[adress];
 			// Set C-Flag
-			setFlags(CFLAG, f[adress]);
+			setFlags(CFLAG, dataMemory[adress]);
 			cutWandF(adress, desti);
 
-			if (helper == 0 && (f[adress] >> 4) != 0) {
+			if (helper == 0 && (dataMemory[adress] >> 4) != 0) {
 				// Set DC-Flag
-				setFlags(1, f[adress]);
+				setFlags(1, dataMemory[adress]);
 			}
 			// Set Z-Flag
-			setFlags(2, f[adress]);
+			setFlags(2, dataMemory[adress]);
 		}
 		incrementRuntime(1);
 		incrementpIndex();
@@ -334,15 +335,15 @@ public class Decoder
 	{
 		// And W with f = data
 		if (desti == 0) {
-			W = W & f[adress];
+			W = W & dataMemory[adress];
 			cutWandF(adress, desti);
 			// Set Z-Flag
 			setFlags(2, W);
 		} else {
-			f[adress] = W & f[adress];
+			dataMemory[adress] = W & dataMemory[adress];
 			cutWandF(adress, desti);
 			// Set Z-Flag
-			setFlags(2, f[adress]);
+			setFlags(2, dataMemory[adress]);
 		}
 		incrementRuntime(1);
 		incrementpIndex();
@@ -351,9 +352,9 @@ public class Decoder
 	public void clrf(int adress)
 	{
 		System.out.println("CLRF");
-		f[adress] = 0;
+		dataMemory[adress] = 0;
 		// Set Z-Flag
-		setFlags(2, f[adress]);
+		setFlags(2, dataMemory[adress]);
 		incrementRuntime(1);
 		incrementpIndex();
 	}
@@ -371,15 +372,15 @@ public class Decoder
 	public void comf(int adress, int desti)
 	{
 		if (desti == 0) {
-			W = ~f[adress];
+			W = ~dataMemory[adress];
 			cutWandF(adress, desti);
 			// Set Z-Flag
 			setFlags(2, W);
 		} else {
-			f[adress] = ~f[adress];
+			dataMemory[adress] = ~dataMemory[adress];
 			cutWandF(adress, desti);
 			// Set Z-Flag
-			setFlags(2, f[adress]);
+			setFlags(2, dataMemory[adress]);
 		}
 		incrementRuntime(1);
 		incrementpIndex();
@@ -388,15 +389,15 @@ public class Decoder
 	public void decf(int adress, int desti)
 	{
 		if (desti == 0) {
-			W = f[adress] - 1;
+			W = dataMemory[adress] - 1;
 			cutWandF(adress, desti);
 			// Set Z-Flag
 			setFlags(2, W);
 		} else {
-			--f[adress];
+			--dataMemory[adress];
 			cutWandF(adress, desti);
 			// Set Z-Flag
-			setFlags(2, f[adress]);
+			setFlags(2, dataMemory[adress]);
 		}
 		incrementRuntime(1);
 		incrementpIndex();
@@ -405,15 +406,15 @@ public class Decoder
 	public void decfsz(int adress, int desti)
 	{
 		if (desti == 0) {
-			W = --f[adress];
+			W = --dataMemory[adress];
 			cutWandF(adress, desti);
 			if (W == 0) {
 				nop();
 			}
 		} else {
-			--f[adress];
+			--dataMemory[adress];
 			cutWandF(adress, desti);
-			if (f[adress] == 0) {
+			if (dataMemory[adress] == 0) {
 				nop();
 			}
 		}
@@ -424,15 +425,15 @@ public class Decoder
 	public void incf(int adress, int desti)
 	{
 		if (desti == 0) {
-			W = ++f[adress];
+			W = ++dataMemory[adress];
 			cutWandF(adress, desti);
 			// Set Z-Flag
 			setFlags(2, W);
 		} else {
-			++f[adress];
+			++dataMemory[adress];
 			cutWandF(adress, desti);
 			// Set Z-Flag
-			setFlags(2, f[adress]);
+			setFlags(2, dataMemory[adress]);
 		}
 		incrementRuntime(1);
 		incrementpIndex();
@@ -441,13 +442,13 @@ public class Decoder
 	public void incfsz(int adress, int desti)
 	{
 		if (desti == 0) {
-			W = ++f[adress];
+			W = ++dataMemory[adress];
 			cutWandF(adress, desti);
 		} else {
-			++f[adress];
+			++dataMemory[adress];
 			cutWandF(adress, desti);
 		}
-		if (f[adress] == 0) {
+		if (dataMemory[adress] == 0) {
 			nop();
 		}
 		incrementRuntime(1);
@@ -457,15 +458,15 @@ public class Decoder
 	public void iorwf(int adress, int desti)
 	{
 		if (desti == 0) {
-			W = W | f[adress];
+			W = W | dataMemory[adress];
 			cutWandF(adress, desti);
 			// Set Z-Flag
 			setFlags(2, W);
 		} else {
-			f[adress] = W | f[adress];
+			dataMemory[adress] = W | dataMemory[adress];
 			cutWandF(adress, desti);
 			// Set Z-Flag
-			setFlags(2, f[adress]);
+			setFlags(2, dataMemory[adress]);
 		}
 		incrementRuntime(1);
 		incrementpIndex();
@@ -474,13 +475,13 @@ public class Decoder
 	public void movf(int adress, int desti)
 	{
 		if (desti == 0) {
-			W = f[adress];
+			W = dataMemory[adress];
 			cutWandF(adress, desti);
 			// Set Z-Flag
 			setFlags(2, W);
 		} else {
 			// Set Z-Flag
-			setFlags(2, f[adress]);
+			setFlags(2, dataMemory[adress]);
 		}
 		incrementRuntime(1);
 		incrementpIndex();
@@ -488,7 +489,7 @@ public class Decoder
 
 	public void movwf(int adress)
 	{
-		f[adress] = W;
+		dataMemory[adress] = W;
 		cutWandF(adress, 1);
 		incrementRuntime(1);
 		incrementpIndex();
@@ -498,13 +499,13 @@ public class Decoder
 	{
 		// helper gets the first bit that goes later to C
 		int helper;
-		if ((f[adress] & (1 << 7)) != 0) {
-			helper = (f[adress] << 1) | (dataMemory[STATUS] & 1);
+		if ((dataMemory[adress] & (1 << 7)) != 0) {
+			helper = (dataMemory[adress] << 1) | (dataMemory[STATUS] & 1);
 			dataMemory[STATUS] |= 0b00000001;
 			
 			System.out.println("1");
 		} else {
-			helper = (f[adress] << 1) | (dataMemory[STATUS] & 1);
+			helper = (dataMemory[adress] << 1) | (dataMemory[STATUS] & 1);
 			dataMemory[STATUS] &= ~0b00000001;
 			
 			System.out.println("0");
@@ -514,7 +515,7 @@ public class Decoder
 			W = helper;
 			cutWandF(adress, desti);
 		} else {
-			f[adress] = helper;
+			dataMemory[adress] = helper;
 			cutWandF(adress, desti);
 		}
 		incrementRuntime(1);
@@ -525,22 +526,22 @@ public class Decoder
 	{
 		
 		int helper;
-		int helper2 = Integer.toBinaryString(f[adress] >> 1).length();
+		int helper2 = Integer.toBinaryString(dataMemory[adress] >> 1).length();
 		if(helper2 != 8) {
 			helper2 += (7 - helper2);
 		}
-		if ((f[adress] & 1) != 0) {
-			helper = (f[adress] >> 1) | (dataMemory[STATUS] & 1) << helper2;
+		if ((dataMemory[adress] & 1) != 0) {
+			helper = (dataMemory[adress] >> 1) | (dataMemory[STATUS] & 1) << helper2;
 			dataMemory[STATUS] |= 0b00000001;
 		} else {
-			helper = (f[adress] >> 1) | (dataMemory[STATUS] & 1) << helper2;
+			helper = (dataMemory[adress] >> 1) | (dataMemory[STATUS] & 1) << helper2;
 			dataMemory[STATUS] &= ~0b00000001;
 		}
 		if (desti == 0) {
 			W = helper;
 			cutWandF(adress, desti);
 		} else {
-			f[adress] = helper;
+			dataMemory[adress] = helper;
 			cutWandF(adress, desti);
 		}
 
@@ -552,9 +553,9 @@ public class Decoder
 	{
 		int helper = 0;
 		if (desti == 0) {
-			W = f[adress] + _2complement();
+			W = dataMemory[adress] + _2complement();
 			cutWandF(adress, desti);
-			if (W >= f[adress]) {
+			if (W >= dataMemory[adress]) {
 				helper = -1;
 			}
 			//C & DC Flag
@@ -562,10 +563,10 @@ public class Decoder
 			// Set Z-Flag
 			setFlags(2, W);
 		} else {
-			helper = f[adress];
-			f[adress] = f[adress] + _2complement();
+			helper = dataMemory[adress];
+			dataMemory[adress] = dataMemory[adress] + _2complement();
 			cutWandF(adress, desti);
-			if (f[adress] >= helper) {
+			if (dataMemory[adress] >= helper) {
 				helper = -1;
 			}
 			//C & DC Flag
@@ -579,14 +580,14 @@ public class Decoder
 
 	public void swapf(int adress, int desti)
 	{
-		int upperNibble = f[adress] >> 4;
-		int lowerNibble = f[adress] << 4;
+		int upperNibble = dataMemory[adress] >> 4;
+		int lowerNibble = dataMemory[adress] << 4;
 		int total = lowerNibble | upperNibble;
 		if (desti == 0) {
 			W = total;
 			cutWandF(adress, desti);
 		} else {
-			f[adress] = total;
+			dataMemory[adress] = total;
 			cutWandF(adress, desti);
 		}
 		incrementRuntime(1);
@@ -596,15 +597,15 @@ public class Decoder
 	public void xorwf(int adress, int desti)
 	{
 		if (desti == 0) {
-			W = W ^ f[adress];
+			W = W ^ dataMemory[adress];
 			cutWandF(adress, desti);
 			// Set Z-Flag
 			setFlags(2, W);
 		} else {
-			f[adress] = W ^ f[adress];
+			dataMemory[adress] = W ^ dataMemory[adress];
 			cutWandF(adress, desti);
 			// Set Z-Flag
-			setFlags(2, f[adress]);
+			setFlags(2, dataMemory[adress]);
 		}
 		incrementRuntime(1);
 		incrementpIndex();
@@ -612,7 +613,7 @@ public class Decoder
 
 	public void bcf(int adress, int b)
 	{
-		f[adress] = f[adress] & ~(1 << b);
+		dataMemory[adress] = dataMemory[adress] & ~(1 << b);
 		cutWandF(adress, 1);
 		incrementRuntime(1);
 		incrementpIndex();
@@ -620,7 +621,7 @@ public class Decoder
 
 	public void bsf(int adress, int b)
 	{
-		f[adress] = f[adress] | ~(1 << b);
+		dataMemory[adress] = dataMemory[adress] | (1 << b);
 		cutWandF(adress, 1);
 		incrementRuntime(1);
 		incrementpIndex();
@@ -628,7 +629,7 @@ public class Decoder
 
 	public void btfsc(int adress, int b)
 	{
-		if ((f[adress] & (1 << b)) == 0) {
+		if (((dataMemory[adress] & (1 << b)) >> b) == 0) {
 			nop();
 		}
 		incrementRuntime(1);
@@ -637,7 +638,7 @@ public class Decoder
 
 	public void btfss(int adress, int b)
 	{
-		if ((f[adress] & (1 << b)) == 1) {
+		if (((dataMemory[adress] & (1 << b)) >> b) == 1) {
 			nop();
 		}
 		incrementRuntime(1);
@@ -844,15 +845,16 @@ public class Decoder
 			}
 			break;
 		}
-
+		
 	}
+
 
 	private void cutWandF(int adress, int desti)
 	{
 		if (desti == 0) {
 			W &= 0xFF;
 		} else {
-			f[adress] &= 0xFF;
+			dataMemory[adress] &= 0xFF;
 		}
 
 	}

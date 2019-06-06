@@ -9,7 +9,7 @@ public class Controller
 	// Memory
 	public static int programMemory[] = new int[1024];
 
-	// DataMemory are the banks -> (bank0(128) & bank1(128))
+	// DataMemory are the banks -> (bank0(0-127) & bank1(128-256))
 	public static int dataMemory[] = new int[256];
 
 	// Stack
@@ -18,8 +18,8 @@ public class Controller
 	// Working Register
 	public static int W;
 
-	// f Register
-	public static int f[] = new int[128];
+//	//f Register
+//	public static int f[] = new int[128];
 
 	// Stack counter
 	private static int sIndex = 0;
@@ -122,6 +122,11 @@ public class Controller
 	public static final int GIE = 7;
 	/* ############################################## */
 	
+	/* ######################BANK1##################### */
+	//TODO Switch between Banks
+	
+	/* ################################################ */
+	
 	/* #################OWN-VARIABLES################ */
 	protected static boolean clockRunning;
 
@@ -201,6 +206,13 @@ public class Controller
 		stack[sIndex] = 0;
 		return data;
 
+	}
+	
+	public static int indirectRead(int adress) {
+		if (adress == 0) {
+			return dataMemory[FSR];
+		}
+		return adress;
 	}
 
 }

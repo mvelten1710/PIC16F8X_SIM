@@ -41,8 +41,7 @@ public class LineSelector {
 		case "decfsz":
 			operationData = Integer.parseInt((String) fileContent.get(index).subSequence(7, 9), 16);
 			operationData = operationData & 0b01111111;
-			System.out.println(f[operationData]);
-			if(f[operationData] == 0) {
+			if(dataMemory[indirectRead(operationData)] == 0) {
 				index += 2;
 			}else {
 				index++;
@@ -52,7 +51,7 @@ public class LineSelector {
 		case "incfsz":
 			operationData = Integer.parseInt((String) fileContent.get(index).subSequence(7, 9), 16);
 			operationData = operationData & 0b01111111;
-			if(f[operationData] == 0) {
+			if(dataMemory[indirectRead(operationData)] == 0) {
 				index += 2;
 			}else {
 				index++;
@@ -60,10 +59,9 @@ public class LineSelector {
 			break;
 			
 		case "btfsc":
-			bit = Integer.parseInt((String) fileContent.get(index).subSequence(5, 9), 16);
-			operationData = Integer.parseInt((String) fileContent.get(index).subSequence(7, 9), 16);
-			operationData = operationData & 0b01111111;
-			if ((f[operationData] & (1 << bit)) == 0) {
+			bit = (Integer.parseInt((String) fileContent.get(index).subSequence(5, 9), 16) & 0b00001110000000) >> 7;
+			operationData = Integer.parseInt((String) fileContent.get(index).subSequence(5, 9), 16) & 0b00000001111111;
+			if (((dataMemory[indirectRead(operationData)] & (1 << bit)) >> bit) == 0) {
 				index += 2;
 			}else {
 				index++;
@@ -71,10 +69,9 @@ public class LineSelector {
 			break;
 			
 		case "btfss":
-			bit = Integer.parseInt((String) fileContent.get(index).subSequence(5, 9), 16);
-			operationData = Integer.parseInt((String) fileContent.get(index).subSequence(7, 9), 16);
-			operationData = operationData & 0b01111111;
-			if ((f[operationData] & (1 << bit)) == 1) {
+			bit = (Integer.parseInt((String) fileContent.get(index).subSequence(5, 9), 16) & 0b00001110000000) >> 7;
+			operationData = Integer.parseInt((String) fileContent.get(index).subSequence(5, 9), 16) & 0b00000001111111;
+			if (((dataMemory[indirectRead(operationData)] & (1 << bit)) >> bit) == 1) {
 				index += 2;
 			}else {
 				index++;
