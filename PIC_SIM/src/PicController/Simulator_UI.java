@@ -20,9 +20,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
-import javax.swing.JTextField;
-import javax.swing.JTabbedPane;
-import javax.swing.JPanel;
+import javax.swing.JTextField; 
 
 public class Simulator_UI
 {
@@ -33,14 +31,13 @@ public class Simulator_UI
 	/**
 	 * Launch the application.
 	 */
-	public void startWindow()
+	public void startWindow(Simulator_UI newWindow)
 	{
 		EventQueue.invokeLater(new Runnable() {
 			public void run()
 			{
 				try {
-					Simulator_UI window = new Simulator_UI();
-					window.frmPicSimulator.setVisible(true);
+					newWindow.frmPicSimulator.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -54,27 +51,24 @@ public class Simulator_UI
 	public Simulator_UI()
 	{
 		initialize();
-
 	}
 
 	private static DefaultTableModel parserModel, gprRegisterModel, sfrRegisterModel, stackModel;
 
 	private static JTable parserTable, gprRegisterTable;
+	
+	private JTable sfrRegisterTable, stackTable;
 
 	private static JButton btnStart;
 
-	private JButton btnStep;
-
-	private JButton btnReset;
+	private JButton btnStep, btnReset;
 	
-	private static JLabel uiMessage;
-
-	private static JLabel wRegister, lZaehler;
+	private static JLabel uiMessage, wRegister;
 	
 	private JTextField enteredFrequ;
-	private JTable stackTable;
-	private JTable sfrRegisterTable;
-
+	
+	private static JLabel frequency;
+	
 	private void initialize()
 	{
 		frmPicSimulator = new JFrame();
@@ -85,16 +79,15 @@ public class Simulator_UI
 		frmPicSimulator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmPicSimulator.setResizable(false);
 		frmPicSimulator.getContentPane().setLayout(null);
+		frmPicSimulator.addKeyListener(new OwnKeyListener("JFrame Listener erstellt"));
+		frmPicSimulator.setFocusable(true);
 		
 		/* ####################START-OF-PARSER_TABLE#################### */
 
 		JScrollPane parserScroll = new JScrollPane();
 		parserScroll.setBounds(335, 314, 704, 290);
 		frmPicSimulator.getContentPane().add(parserScroll);
-		parserScroll
-				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		
-
 		parserTable = new JTable(parserModel = new DefaultTableModel() 
 		{
 			private static final long serialVersionUID = 1L;
@@ -142,28 +135,31 @@ public class Simulator_UI
 
 
 		JLabel lblWregister = new JLabel("W-Register");
-		lblWregister.setBounds(10, 230, 74, 23);
+		lblWregister.setBounds(965, 173, 74, 23);
 		lblWregister.setHorizontalAlignment(SwingConstants.CENTER);
 		lblWregister.setFont(new Font("Tahoma", Font.BOLD, 13));
 		frmPicSimulator.getContentPane().add(lblWregister);
 
 		wRegister = new JLabel("-");
-		wRegister.setBounds(94, 230, 74, 23);
+		wRegister.setHorizontalAlignment(SwingConstants.CENTER);
+		wRegister.setBounds(965, 202, 74, 23);
 		wRegister.setFont(new Font("Tahoma", Font.BOLD, 12));
 		frmPicSimulator.getContentPane().add(wRegister);
 		
 		enteredFrequ = new JTextField();
-		enteredFrequ.setBounds(460, 232, 79, 20);
+		enteredFrequ.setBounds(752, 283, 79, 20);
 		frmPicSimulator.getContentPane().add(enteredFrequ);
 		enteredFrequ.setColumns(10);
 		
-		JLabel frequency = new JLabel("800");
-		frequency.setBounds(511, 218, 28, 14);
+		frequency = new JLabel("800");
+		frequency.setHorizontalAlignment(SwingConstants.CENTER);
+		frequency.setBounds(752, 270, 79, 14);
 		frequency.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		frmPicSimulator.getContentPane().add(frequency);
 		
 		JButton acceptFrequ = new JButton("ENTER");
-		acceptFrequ.setBounds(549, 231, 79, 23);
+		acceptFrequ.addKeyListener(new OwnKeyListener("AcceptButton Listener erstellt"));
+		acceptFrequ.setBounds(841, 280, 79, 23);
 		frmPicSimulator.getContentPane().add(acceptFrequ);
 		acceptFrequ.addActionListener(new ActionListener() {
 			@Override
@@ -186,22 +182,15 @@ public class Simulator_UI
 			}
 		});
 		
-		JLabel lblLabel = new JLabel("Memory");
-		lblLabel.setBounds(10, 264, 94, 14);
-		lblLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
-		frmPicSimulator.getContentPane().add(lblLabel);
+		uiMessage = new JLabel("");
+		uiMessage.setBounds(724, 218, 315, 23);
+		frmPicSimulator.getContentPane().add(uiMessage);
+		uiMessage.setFont(new Font("Tahoma", Font.ITALIC, 10));
+		uiMessage.setForeground(Color.RED);
 		
-		JLabel lblNewLabel_1 = new JLabel("Frequency:");
-		lblNewLabel_1.setBounds(460, 218, 52, 14);
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		frmPicSimulator.getContentPane().add(lblNewLabel_1);
-		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(10, 289, 315, 315);
-		frmPicSimulator.getContentPane().add(tabbedPane);
-		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		tabbedPane.addTab("Stack", null, scrollPane_1, null);
+		JScrollPane stackScroll = new JScrollPane();
+		stackScroll.setBounds(965, 11, 74, 151);
+		frmPicSimulator.getContentPane().add(stackScroll);
 		
 		stackTable = new JTable(stackModel = new DefaultTableModel(){
 			private static final long serialVersionUID = 1L;
@@ -212,13 +201,14 @@ public class Simulator_UI
 		       return false;
 		    }
 		});
+		stackTable.setFont(new Font("Monospaced", Font.PLAIN, 13));
 		stackTable.setRowSelectionAllowed(false);
-		scrollPane_1.setViewportView(stackTable);
-		stackModel.addColumn("###STACK###");
+		stackScroll.setViewportView(stackTable);
+		stackModel.addColumn("STACK");
 		
-		/* ####################START-OF-RAM#################### */
-		JScrollPane scrollPane_2 = new JScrollPane();
-		tabbedPane.addTab("GPR", null, scrollPane_2, null);
+		JScrollPane gprScroll = new JScrollPane();
+		gprScroll.setBounds(745, 10, 210, 215);
+		frmPicSimulator.getContentPane().add(gprScroll);
 		gprRegisterTable = new JTable(gprRegisterModel = new DefaultTableModel(){
 			private static final long serialVersionUID = 1L;
 	
@@ -228,160 +218,136 @@ public class Simulator_UI
 				return false;
 			}
 		});
-		scrollPane_2.setViewportView(gprRegisterTable);
+		gprScroll.setViewportView(gprRegisterTable);
 		gprRegisterTable.setFillsViewportHeight(true);
 		gprRegisterTable.setRowSelectionAllowed(false);
 		gprRegisterTable.setFont(new Font("Monospaced", Font.PLAIN, 13));
 		for (int i = 0; i < 6; i++) {
 			gprRegisterModel.addColumn("-");
 		}
-		gprRegisterTable.setFont(new Font("Monospaced", Font.PLAIN, 13));
+
+		/* ####################START-OF-RAM#################### */
+			JScrollPane sfrScroll = new JScrollPane();
+			sfrScroll.setBounds(422, 11, 310, 215);
+			frmPicSimulator.getContentPane().add(sfrScroll);
+			
+			sfrRegisterTable = new JTable(sfrRegisterModel = new DefaultTableModel(){
+				private static final long serialVersionUID = 1L;
 	
-
-		
-		JScrollPane scrollPane = new JScrollPane();
-		tabbedPane.addTab("SFR", null, scrollPane, null);
-		
-		sfrRegisterTable = new JTable(sfrRegisterModel = new DefaultTableModel(){
-			private static final long serialVersionUID = 1L;
-	
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				//all cells false
-				return true;
-			}
-		});
-		sfrRegisterModel.addColumn("ADRESS");
-		sfrRegisterModel.addColumn("BANK0");
-		sfrRegisterModel.addColumn("BANK1");
-		sfrRegisterModel.addColumn("ADRESS");
-		scrollPane.setViewportView(sfrRegisterTable);
-		
-		/* ####################END-OF-RAM#################### */
-		
-		JLabel lblLaufzeitzaehler = new JLabel("Laufzeitz\u00E4hler");
-		lblLaufzeitzaehler.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		lblLaufzeitzaehler.setHorizontalAlignment(SwingConstants.LEFT);
-		lblLaufzeitzaehler.setBounds(335, 235, 77, 14);
-		frmPicSimulator.getContentPane().add(lblLaufzeitzaehler);
-		
-		lZaehler = new JLabel("0");
-		lZaehler.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lZaehler.setHorizontalAlignment(SwingConstants.RIGHT);
-		lZaehler.setBounds(376, 235, 40, 14);
-		frmPicSimulator.getContentPane().add(lZaehler);
-		
-		JLabel lbls = new JLabel("\u00B5s");
-		lbls.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		lbls.setBounds(422, 235, 28, 14);
-		frmPicSimulator.getContentPane().add(lbls);
-		
-		JPanel panel = new JPanel();
-		panel.setBounds(335, 255, 388, 59);
-		frmPicSimulator.getContentPane().add(panel);
-		
-				JButton btnNewButton = new JButton("LOAD");
-				btnNewButton.setBounds(0, 32, 89, 23);
-				btnNewButton.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent arg0)
-					{
-						// Opens the new Window to import the LST file
-						// TODO Delete Path afterwards
-						JFileChooser fileChooser = new JFileChooser("C:\\Users\\todus\\git\\PIC16F8X_SIM\\PIC_SIM\\LST Files");
-						int rueckgabewert = fileChooser.showOpenDialog(null);
-						if (rueckgabewert == JFileChooser.APPROVE_OPTION) {
-							if (!allCleared) {
-								cleanUp();
-							}
-							try {
-								file.readFile(
-										fileChooser.getSelectedFile().getAbsolutePath());
-								setContent();
-								//New LineSelector for the File
-								lineSelector = new LineSelector();
-								selectedRow = lineSelector.opBegin;
-								parserTable.getCellRenderer(selectedRow, 1);
-								parserModel.fireTableDataChanged();
-								
-								btnStart.setEnabled(true);
-								btnStep.setEnabled(true);
-								btnReset.setEnabled(true);
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-
-							// textArea.setText(parser.getContent());
-
-						}
-
-					}
-				});
-		
-				btnStart = new JButton("START");
-				btnStart.setBounds(99, 32, 89, 23);
-				btnStart.setEnabled(false);
-				btnStart.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e)
-					{
-						if (breakPointReached) {
-							uiMessage.setText("ERROR: REMOVE BREAKPOINT FIRST!");
-						}else {
-							if (!clockRunning) {
-								clockRunning = true;
-								if (stepping) 
-									stepping = false;
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					//all cells false
+					return true;
+				}
+			});
+			sfrRegisterTable.setFont(new Font("Monospaced", Font.PLAIN, 13));
+			sfrScroll.setViewportView(sfrRegisterTable);
+			
+			JLabel lblLstFile = new JLabel("LST File");
+			lblLstFile.setBounds(335, 257, 386, 14);
+			frmPicSimulator.getContentPane().add(lblLstFile);
+			lblLstFile.setFont(new Font("Tahoma", Font.BOLD, 13));
+			
+			JButton btnNewButton = new JButton("LOAD");
+			btnNewButton.addKeyListener(new OwnKeyListener("LOADButton Listener erstellt"));
+			btnNewButton.setBounds(335, 280, 89, 23);
+			frmPicSimulator.getContentPane().add(btnNewButton);
+			
+					btnStart = new JButton("START");
+					btnStart.addKeyListener(new OwnKeyListener("STARTButton Listener erstellt"));
+					btnStart.setBounds(434, 280, 89, 23);
+					frmPicSimulator.getContentPane().add(btnStart);
+					btnStart.setEnabled(false);
+					
+							btnStep = new JButton("STEP");
+							btnStep.addKeyListener(new OwnKeyListener("STEPButton Listener erstellt"));
+							btnStep.setBounds(533, 280, 89, 23);
+							frmPicSimulator.getContentPane().add(btnStep);
+							btnStep.setEnabled(false);
+							
+									btnReset = new JButton("RESET");
+									btnReset.addKeyListener(new OwnKeyListener("RESETButton Listener erstellt"));
+									btnReset.setBounds(632, 280, 89, 23);
+									frmPicSimulator.getContentPane().add(btnReset);
+									btnReset.setEnabled(false);
+									btnReset.addActionListener(new ActionListener() {
+										@Override
+										public void actionPerformed(ActionEvent e)
+										{
+											cleanUp();
+										}
+									});
+							btnStep.addActionListener(new ActionListener() {
+								@Override
+								public void actionPerformed(ActionEvent e)
+								{
+									// Stops after each Operation and waits for next click
+									clockRunning = true;
+									if (!stepping) {
+										stepping = true;
+									}
+								}
+							});
+					btnStart.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e)
+						{
+							if (breakPointReached) {
+								uiMessage.setText("ERROR: REMOVE BREAKPOINT FIRST!");
 							}else {
-								clockRunning = false;
-								stepping = false;
-								btnStart.setText("STOP");
+								if (!clockRunning) {
+									clockRunning = true;
+									if (stepping) 
+										stepping = false;
+								}else {
+									clockRunning = false;
+									stepping = false;
+								}
 							}
 						}
-					}
-				});
-		
-				btnStep = new JButton("STEP");
-				btnStep.setBounds(198, 32, 89, 23);
-				btnStep.setEnabled(false);
-				btnStep.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e)
-					{
-						// Stops after each Operation and waits for next click
-						clockRunning = true;
-						if (!stepping) {
-							stepping = true;
+					});
+			btnNewButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0)
+				{
+					// Opens the new Window to import the LST file
+					// TODO Delete Path afterwards
+					JFileChooser fileChooser = new JFileChooser("C:\\Users\\todus\\git\\PIC16F8X_SIM\\PIC_SIM\\LST Files");
+					int rueckgabewert = fileChooser.showOpenDialog(null);
+					if (rueckgabewert == JFileChooser.APPROVE_OPTION) {
+						if (!allCleared) {
+							cleanUp();
 						}
+						try {
+							file.readFile(
+							fileChooser.getSelectedFile().getAbsolutePath());
+							setContent();
+							//New LineSelector for the File
+							lineSelector = new LineSelector();
+							selectedRow = lineSelector.opBegin;
+							parserTable.getCellRenderer(selectedRow, 1);
+							parserModel.fireTableDataChanged();
+									
+							btnStart.setEnabled(true);
+							btnStep.setEnabled(true);
+							btnReset.setEnabled(true);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+
+						// textArea.setText(parser.getContent());
+
 					}
-				});
-		
-				btnReset = new JButton("RESET");
-				btnReset.setBounds(297, 32, 89, 23);
-				btnReset.setEnabled(false);
-				btnReset.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e)
-					{
-						cleanUp();
-					}
-				});
-		panel.setLayout(null);
-		panel.add(btnNewButton);
-		panel.add(btnStart);
-		panel.add(btnStep);
-		panel.add(btnReset);
-		
-		JLabel lblLstFile = new JLabel("LST File");
-		lblLstFile.setBounds(0, 11, 386, 14);
-		panel.add(lblLstFile);
-		lblLstFile.setFont(new Font("Tahoma", Font.BOLD, 13));
-		
-		uiMessage = new JLabel("");
-		uiMessage.setBounds(724, 289, 315, 23);
-		frmPicSimulator.getContentPane().add(uiMessage);
-		uiMessage.setFont(new Font("Tahoma", Font.ITALIC, 10));
-		uiMessage.setForeground(Color.RED);
+
+				}
+			});
+
+			sfrRegisterModel.addColumn("ADRESS");
+			sfrRegisterModel.addColumn("BANK0");
+			sfrRegisterModel.addColumn("BANK1");
+			sfrRegisterModel.addColumn("ADRESS");
+			
+			/* ####################END-OF-RAM#################### */
 		
 	}
 
@@ -389,6 +355,8 @@ public class Simulator_UI
 
 	private void setContent()
 	{
+		
+
 		//PARSER CONTENT
 		for (int i = 0; i < parser.getContent().length; i++) {
 			if (parser.getContent()[i] != null) {
@@ -467,15 +435,14 @@ public class Simulator_UI
 		updateStack();
 		updateGPR();
 		updateSFR();
+		frequency.setText(Long.toString(threadSpeed));
 		wRegister.setText(Integer.toHexString(W) + "h");
-		lZaehler.setText(Integer.toString(runtime));
 		updateSelectedRow();
 	}
 	
 	public static void checkBreakpoint(int index) {
 		if (parserModel.getRowCount() != 0) {
 			if ((boolean) parserTable.getValueAt(index, 0)) {
-				btnStart.setText("START");
 				breakPointReached = true;
 				return;
 			}
@@ -495,7 +462,6 @@ public class Simulator_UI
 		sfrRegisterModel.setRowCount(0);
 		uiMessage.setText("");
 		wRegister.setText("-");
-		lZaehler.setText("0");
 	}
 
 	private void cleanUp()

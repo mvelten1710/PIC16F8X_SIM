@@ -1,7 +1,7 @@
 package PicController;
-
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Controller
 {
@@ -17,9 +17,6 @@ public class Controller
 
 	// Working Register
 	public static int W;
-
-//	//f Register
-//	public static int f[] = new int[128];
 
 	// Stack counter
 	private static int sIndex = 0;
@@ -128,6 +125,8 @@ public class Controller
 	/* ################################################ */
 	
 	/* #################OWN-VARIABLES################ */
+	private static ArrayList<Boolean> alreadyMapped = new ArrayList<Boolean>(Arrays.asList(true, false, true, true, true, false, false, true, false, false, true, true));
+	
 	protected static boolean clockRunning;
 
 	protected static boolean stepping;
@@ -153,6 +152,7 @@ public class Controller
 	protected static CPUClock clock;
 	
 	protected static LineSelector lineSelector;
+	
 	/* ############################################## */
 
 	public static void main(String[] args) throws IOException
@@ -180,8 +180,8 @@ public class Controller
 
 		// Starts the UI and combines the Decoder(Commands)
 		// and the Parser(Reads LST Files)
-		Simulator_UI newWindow = new Simulator_UI();
-		newWindow.startWindow();
+		Simulator_UI window = new Simulator_UI();
+		window.startWindow(window);
 
 	}
 
@@ -208,7 +208,17 @@ public class Controller
 
 	}
 	
+	//TODO Test later with File 13
 	public static int indirectRead(int adress) {
+		if (alreadyMapped.size() >= adress) {
+			if (!alreadyMapped.get(adress)) {
+				//Own thing in Bank1 Mapped
+				return adress;
+			}else {
+				//Already Mapped
+				return adress & 0x0F;
+			}
+		}
 		if (adress == 0) {
 			return dataMemory[FSR];
 		}
