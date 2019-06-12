@@ -45,11 +45,11 @@ public class Controller
 	
 	public static final int EEDATA = 8;
 	
-	public static final int EEADDR = 8;
+	public static final int EEADDR = 9;
 	
-	public static final int PCLATH = 8;
+	public static final int PCLATH = 10;
 	
-	public static final int INTCON = 8;
+	public static final int INTCON = 11;
 
 	/* ############################################## */
 	
@@ -120,12 +120,20 @@ public class Controller
 	/* ############################################## */
 	
 	/* ######################BANK1##################### */
-	//TODO Switch between Banks
+	public static final int OPTION_REG = 129;
+	
+	public static final int TRISA = 134;
+	
+	public static final int TRISB = 135;
+	
+	public static final int EECON1 = 137;
+	
+	public static final int EECON2 = 138;
 	
 	/* ################################################ */
 	
 	/* #################OWN-VARIABLES################ */
-	private static ArrayList<Boolean> alreadyMapped = new ArrayList<Boolean>(Arrays.asList(true, false, true, true, true, false, false, true, false, false, true, true));
+	protected static ArrayList<Boolean> alreadyMapped = new ArrayList<Boolean>(Arrays.asList(true, false, true, true, true, false, false, true, false, false, true, true));
 	
 	protected static boolean clockRunning;
 
@@ -210,19 +218,18 @@ public class Controller
 	
 	//TODO Test later with File 13
 	public static int indirectRead(int adress) {
-		if (alreadyMapped.size() >= adress) {
-			if (!alreadyMapped.get(adress)) {
-				//Own thing in Bank1 Mapped
-				return adress;
-			}else {
-				//Already Mapped
-				return adress & 0x0F;
-			}
-		}
+		System.out.println("HELLO" + adress);
 		if (adress == 0) {
+			System.out.println("0");
 			return dataMemory[FSR];
 		}
-		return adress;
+		//Differ between Bank0 & Bank1
+		if (dataMemory[STATUS] >> 5 == 0) {
+			System.out.println("BANK0" + adress);
+			return adress;
+		}else {
+			System.out.println("BANK1" + adress);
+			return (adress | (1 << 7));
+		}
 	}
-
 }
