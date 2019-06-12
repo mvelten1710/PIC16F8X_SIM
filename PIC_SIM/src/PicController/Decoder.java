@@ -507,11 +507,11 @@ public class Decoder
 		if ((dataMemory[adress] & (1 << 7)) != 0) {
 			helper = (dataMemory[adress] << 1) | (dataMemory[STATUS] & 1);
 			dataMemory[STATUS] |= 0b00000001;
-			writeMapped(adress, dataMemory[STATUS]);
+			writeMapped(STATUS, dataMemory[STATUS]);
 		} else {
 			helper = (dataMemory[adress] << 1) | (dataMemory[STATUS] & 1);
 			dataMemory[STATUS] &= ~0b00000001;
-			writeMapped(adress, dataMemory[STATUS]);
+			writeMapped(STATUS, dataMemory[STATUS]);
 		}
 		
 		if (desti == 0) {
@@ -536,11 +536,11 @@ public class Decoder
 		if ((dataMemory[adress] & 1) != 0) {
 			helper = (dataMemory[adress] >> 1) | (dataMemory[STATUS] & 1) << helper2;
 			dataMemory[STATUS] |= 0b00000001;
-			writeMapped(adress, dataMemory[STATUS]);
+			writeMapped(STATUS, dataMemory[STATUS]);
 		} else {
 			helper = (dataMemory[adress] >> 1) | (dataMemory[STATUS] & 1) << helper2;
 			dataMemory[STATUS] &= ~0b00000001;
-			writeMapped(adress, dataMemory[STATUS]);
+			writeMapped(STATUS, dataMemory[STATUS]);
 		}
 		if (desti == 0) {
 			W = helper;
@@ -677,6 +677,10 @@ public class Decoder
 	{
 		pushStack(++pIndex);
 		pIndex = data;
+		if (dataMemory[PCLATH] != 0) {
+			pIndex |= (dataMemory[PCLATH] << 8);
+			dataMemory[PCLATH] = 0;
+		}
 	}
 
 	public void clrwdt()
@@ -689,6 +693,10 @@ public class Decoder
 	public void _goto(int data)
 	{
 		pIndex = data;
+		if (dataMemory[PCLATH] != 0) {
+			pIndex |= (dataMemory[PCLATH] << 8);
+			dataMemory[PCLATH] = 0;
+		}
 	}
 
 	public void iorlw(int data)
@@ -708,7 +716,8 @@ public class Decoder
 
 	public void retfie()
 	{
-		// TODO FINISH
+		dataMemory[INTCON] |= (1 << 7);
+		pIndex = popStack();
 
 	}
 
@@ -725,9 +734,9 @@ public class Decoder
 
 	public void sleep()
 	{
-		// TODO FINISH MAYBE?
-		// PD = 1;
-		// TO = 0;
+		dataMemory[STATUS] &= ~(1 << 3); 
+		dataMemory[STATUS] |= (1 << 4); 
+		clockRunning = false;
 		incrementpIndex();
 	}
 
@@ -795,8 +804,10 @@ public class Decoder
 		}
 		if (alreadyMapped.get(adress & 0x0F)) {
 			if (adress < 0x0C) {
+				System.out.println("BANK1");
 				dataMemory[(adress | (1 << 7))] = value;
 			}else {
+				System.out.println("BANK0");
 				dataMemory[(adress & 0x0F)] = value;
 			}
 		}
@@ -811,17 +822,23 @@ public class Decoder
 			if (selector >= 0) {
 				dataMemory[STATUS] |= 0b00000001; // C-Flag
 				dataMemory[STATUS] |= 0b00000010; // DC-Flag
+				dataMemory[STATUSB] |= 0b00000001; // C-Flag
+				dataMemory[STATUSB] |= 0b00000010; // DC-Flag
 			} else {
 				dataMemory[STATUS] &= ~0b00000001; // C-Flag
 				dataMemory[STATUS] &= ~0b00000010; // DC-Flag
+				dataMemory[STATUSB] &= ~0b00000001; // C-Flag
+				dataMemory[STATUSB] &= ~0b00000010; // DC-Flag
 			}
 			break;
 		// C-Flag
 		case 0:
 			if ((selector & (1 << 7)) != 0) {
 				dataMemory[STATUS] |= 0b00000001;
+				dataMemory[STATUSB] |= 0b00000001;
 			} else {
 				dataMemory[STATUS] &= ~0b00000001;
+				dataMemory[STATUSB] &= ~0b00000001;
 			}
 			break;
 
@@ -829,8 +846,10 @@ public class Decoder
 		case 1:
 			if ((selector & (1 << 4)) != 0) {
 				dataMemory[STATUS] |= 0b00000010;
+				dataMemory[STATUSB] |= 0b00000010;
 			} else {
 				dataMemory[STATUS] &= ~0b00000010;
+				dataMemory[STATUSB] &= ~0b00000010;
 			}
 			break;
 
@@ -838,8 +857,10 @@ public class Decoder
 		case 2:
 			if (selector == 0) {
 				dataMemory[STATUS] |= 0b00000100;
+				dataMemory[STATUSB] |= 0b00000100;
 			} else {
 				dataMemory[STATUS] &= ~0b00000100;
+				dataMemory[STATUSB] &= ~0b00000100;
 			}
 			break;
 		}

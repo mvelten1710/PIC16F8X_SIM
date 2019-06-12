@@ -16,6 +16,7 @@ public class CPUClock extends Thread
 			}
 			// Runs only if the User presses the button RUN
 			Simulator_UI.checkBreakpoint(selectedRow);
+			Simulator_UI.updatePorts();
 			if (!breakPointReached) {
 				if (clockRunning) {
 					file.executeOperation();

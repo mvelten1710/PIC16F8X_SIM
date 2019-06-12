@@ -23,8 +23,6 @@ public class OwnKeyListener implements KeyListener {
 		System.out.println(e.getKeyCode());
 		switch (e.getKeyCode()) {
 		case 521:
-			//TODO Set Border at 50ms for theadSpeed
-			System.out.println("+50ms");
 			if (threadSpeed >= 50) {
 				frequency.setText(Long.toString(threadSpeed += 50));
 			}
@@ -32,7 +30,6 @@ public class OwnKeyListener implements KeyListener {
 			break;
 
 		case 45:
-			System.out.println("-50ms");
 			if (threadSpeed > 50) {
 				frequency.setText(Long.toString(threadSpeed -= 50));
 			}

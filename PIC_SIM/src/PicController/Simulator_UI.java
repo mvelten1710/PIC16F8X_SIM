@@ -72,6 +72,8 @@ public class Simulator_UI
 	
 	private static JRadioButton rdbtnRa, rdbtnRa_1, rdbtnRa_2, rdbtnRa_3, rdbtnRa_4, rdbtnRb, rdbtnRb_1, rdbtnRb_2, rdbtnRb_3, rdbtnRb_4, rdbtnRb_5, rdbtnRb_6, rdbtnRb_7;
 	
+	private static JRadioButton rdbtnPortChangesToggle, rdbtnActivatePorts;
+	
 	private void initialize()
 	{
 		frmPicSimulator = new JFrame();
@@ -233,18 +235,7 @@ public class Simulator_UI
 			sfrScroll.setBounds(265, 11, 310, 215);
 			frmPicSimulator.getContentPane().add(sfrScroll);
 			
-			sfrRegisterTable = new JTable(sfrRegisterModel = new DefaultTableModel(){
-				private static final long serialVersionUID = 1L;
-	
-				@Override
-				public boolean isCellEditable(int row, int column) {
-					//all cells false
-					if (column == 1 || column == 2) {
-						return true;
-					}
-					return false;
-				}
-			});
+			sfrRegisterTable = new JTable(sfrRegisterModel = new DefaultTableModel());
 			sfrRegisterTable.setFont(new Font("Monospaced", Font.PLAIN, 13));
 			sfrScroll.setViewportView(sfrRegisterTable);
 			
@@ -357,6 +348,18 @@ public class Simulator_UI
 									rdbtnRb_7.addKeyListener(new OwnKeyListener());
 									frmPicSimulator.getContentPane().add(rdbtnRb_7);
 									
+									rdbtnPortChangesToggle = new JRadioButton("Port (A)");
+									rdbtnPortChangesToggle.setFont(new Font("Tahoma", Font.BOLD, 11));
+									rdbtnPortChangesToggle.setBounds(10, 188, 144, 23);
+									rdbtnPortChangesToggle.addKeyListener(new OwnKeyListener());
+									frmPicSimulator.getContentPane().add(rdbtnPortChangesToggle);
+									
+									rdbtnActivatePorts = new JRadioButton("Activate Ports");
+									rdbtnActivatePorts.setFont(new Font("Tahoma", Font.BOLD, 11));
+									rdbtnActivatePorts.setBounds(10, 218, 144, 23);
+									rdbtnActivatePorts.addKeyListener(new OwnKeyListener());
+									frmPicSimulator.getContentPane().add(rdbtnActivatePorts);
+									
 									btnReset.addActionListener(new ActionListener() {
 										@Override
 										public void actionPerformed(ActionEvent e)
@@ -433,6 +436,20 @@ public class Simulator_UI
 			sfrRegisterModel.addColumn("BANK0");
 			sfrRegisterModel.addColumn("BANK1");
 			sfrRegisterModel.addColumn("ADRESS");
+			rdbtnRa.setEnabled(false);
+			rdbtnRa_1.setEnabled(false);
+			rdbtnRa_2.setEnabled(false);
+			rdbtnRa_3.setEnabled(false);
+			rdbtnRa_4.setEnabled(false);
+			rdbtnRb.setEnabled(false);
+			rdbtnRb_1.setEnabled(false);
+			rdbtnRb_2.setEnabled(false);
+			rdbtnRb_3.setEnabled(false);
+			rdbtnRb_4.setEnabled(false);
+			rdbtnRb_5.setEnabled(false);
+			rdbtnRb_6.setEnabled(false);
+			rdbtnRb_7.setEnabled(false);
+			rdbtnPortChangesToggle.setEnabled(false);
 			
 			/* ####################END-OF-RAM#################### */
 		
@@ -492,7 +509,7 @@ public class Simulator_UI
 	
 	private static boolean firstTime = true;
 	private static void updateSFR()
-	{
+	{	
 		sfrRegisterModel.setRowCount(0x0C);
 		if (firstTime) {
 			for (int i = 0x00; i < 0x0C; i++) {
@@ -519,74 +536,114 @@ public class Simulator_UI
 		parserModel.fireTableDataChanged();
 	}
 
-	private static void updatePorts() {
-		/*######PORT A*/
-		if (rdbtnRa.isSelected()) {
-			dataMemory[PORTA] |= 1;
+	private static boolean canPortChange = false;
+	protected static void updatePorts() {
+		if (rdbtnActivatePorts.isSelected()) {
+			rdbtnRa.setEnabled(true);
+			rdbtnRa_1.setEnabled(true);
+			rdbtnRa_2.setEnabled(true);
+			rdbtnRa_3.setEnabled(true);
+			rdbtnRa_4.setEnabled(true);
+			rdbtnRb.setEnabled(true);
+			rdbtnRb_1.setEnabled(true);
+			rdbtnRb_2.setEnabled(true);
+			rdbtnRb_3.setEnabled(true);
+			rdbtnRb_4.setEnabled(true);
+			rdbtnRb_5.setEnabled(true);
+			rdbtnRb_6.setEnabled(true);
+			rdbtnRb_7.setEnabled(true);
+			rdbtnPortChangesToggle.setEnabled(true);
+			canPortChange = true;
 		}else {
-			dataMemory[PORTA] &= ~1;
+			rdbtnRa.setEnabled(false);
+			rdbtnRa_1.setEnabled(false);
+			rdbtnRa_2.setEnabled(false);
+			rdbtnRa_3.setEnabled(false);
+			rdbtnRa_4.setEnabled(false);
+			rdbtnRb.setEnabled(false);
+			rdbtnRb_1.setEnabled(false);
+			rdbtnRb_2.setEnabled(false);
+			rdbtnRb_3.setEnabled(false);
+			rdbtnRb_4.setEnabled(false);
+			rdbtnRb_5.setEnabled(false);
+			rdbtnRb_6.setEnabled(false);
+			rdbtnRb_7.setEnabled(false);
+			rdbtnPortChangesToggle.setEnabled(false);
+			canPortChange = false;
 		}
-		if (rdbtnRa_1.isSelected()) {
-			dataMemory[PORTA] |= (1 << 1);
-		}else {
-			dataMemory[PORTA] &= ~(1 << 1);
-		}
-		if (rdbtnRa_2.isSelected()) {
-			dataMemory[PORTA] |= (1 << 2);
-		}else {
-			dataMemory[PORTA] &= ~(1 << 2);
-		}
-		if (rdbtnRa_3.isSelected()) {
-			dataMemory[PORTA] |= (1 << 3);
-		}else {
-			dataMemory[PORTA] &= ~(1 << 3);
-		}
-		if (rdbtnRa_4.isSelected()) {
-			dataMemory[PORTA] |= (1 << 4);
-		}else {
-			dataMemory[PORTA] &= ~(1 << 4);
-		}
-		
-		/*PORTB*/
-		if (rdbtnRb.isSelected()) {
-			dataMemory[PORTB] |= 1;
-		}else {
-			dataMemory[PORTB] &= ~1;
-		}
-		if (rdbtnRb_1.isSelected()) {
-			dataMemory[PORTB] |= (1 << 1);
-		}else {
-			dataMemory[PORTB] &= ~(1 << 1);
-		}
-		if (rdbtnRb_2.isSelected()) {
-			dataMemory[PORTB] |= (1 << 2);
-		}else {
-			dataMemory[PORTB] &= ~(1 << 2);
-		}
-		if (rdbtnRb_3.isSelected()) {
-			dataMemory[PORTB] |= (1 << 3);
-		}else {
-			dataMemory[PORTB] &= ~(1 << 3);
-		}
-		if (rdbtnRb_4.isSelected()) {
-			dataMemory[PORTB] |= (1 << 4);
-		}else {
-			dataMemory[PORTB] &= ~(1 << 4);
-		}
-		if (rdbtnRb_5.isSelected()) {
-			dataMemory[PORTB] |= (1 << 5);
-		}else {
-			dataMemory[PORTB] &= ~(1 << 5);
-		}
-		if (rdbtnRb_6.isSelected()) {
-			dataMemory[PORTB] |= (1 << 6);
-		}else {
-			dataMemory[PORTB] &= ~(1 << 6);
-		}
-		if (rdbtnRb_7.isSelected()) {
-			dataMemory[PORTB] |= (1 << 7);
-		}else {
-			dataMemory[PORTB] &= ~(1 << 7);
+		if (canPortChange) {
+			if(!rdbtnPortChangesToggle.isSelected()) {
+				rdbtnPortChangesToggle.setText("Port (A)");
+				/*######PORT A*/
+				if (rdbtnRa.isSelected()) {
+					dataMemory[PORTA] |= 1;
+				}else {
+					dataMemory[PORTA] &= ~1;
+				}
+				if (rdbtnRa_1.isSelected()) {
+					dataMemory[PORTA] |= (1 << 1);
+				}else {
+					dataMemory[PORTA] &= ~(1 << 1);
+				}
+				if (rdbtnRa_2.isSelected()) {
+					dataMemory[PORTA] |= (1 << 2);
+				}else {
+					dataMemory[PORTA] &= ~(1 << 2);
+				}
+				if (rdbtnRa_3.isSelected()) {
+					dataMemory[PORTA] |= (1 << 3);
+				}else {
+					dataMemory[PORTA] &= ~(1 << 3);
+				}
+				if (rdbtnRa_4.isSelected()) {
+					dataMemory[PORTA] |= (1 << 4);
+				}else {
+					dataMemory[PORTA] &= ~(1 << 4);
+				}
+			}else {
+				/*PORTB*/
+				rdbtnPortChangesToggle.setText("Port (B)");
+				if (rdbtnRb.isSelected()) {
+					dataMemory[PORTB] |= 1;
+				}else {
+					dataMemory[PORTB] &= ~1;
+				}
+				if (rdbtnRb_1.isSelected()) {
+					dataMemory[PORTB] |= (1 << 1);
+				}else {
+					dataMemory[PORTB] &= ~(1 << 1);
+				}
+				if (rdbtnRb_2.isSelected()) {
+					dataMemory[PORTB] |= (1 << 2);
+				}else {
+					dataMemory[PORTB] &= ~(1 << 2);
+				}
+				if (rdbtnRb_3.isSelected()) {
+					dataMemory[PORTB] |= (1 << 3);
+				}else {
+					dataMemory[PORTB] &= ~(1 << 3);
+				}
+				if (rdbtnRb_4.isSelected()) {
+					dataMemory[PORTB] |= (1 << 4);
+				}else {
+					dataMemory[PORTB] &= ~(1 << 4);
+				}
+				if (rdbtnRb_5.isSelected()) {
+					dataMemory[PORTB] |= (1 << 5);
+				}else {
+					dataMemory[PORTB] &= ~(1 << 5);
+				}
+				if (rdbtnRb_6.isSelected()) {
+					dataMemory[PORTB] |= (1 << 6);
+				}else {
+					dataMemory[PORTB] &= ~(1 << 6);
+				}
+				if (rdbtnRb_7.isSelected()) {
+					dataMemory[PORTB] |= (1 << 7);
+				}else {
+					dataMemory[PORTB] &= ~(1 << 7);
+				}
+			}
 		}
 	}
 	

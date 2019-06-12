@@ -122,13 +122,15 @@ public class Controller
 	/* ######################BANK1##################### */
 	public static final int OPTION_REG = 129;
 	
-	public static final int TRISA = 134;
+	public static final int STATUSB = 131;
 	
-	public static final int TRISB = 135;
+	public static final int TRISA = 133;
 	
-	public static final int EECON1 = 137;
+	public static final int TRISB = 134;
 	
-	public static final int EECON2 = 138;
+	public static final int EECON1 = 136;
+	
+	public static final int EECON2 = 137;
 	
 	/* ################################################ */
 	
@@ -218,17 +220,14 @@ public class Controller
 	
 	//TODO Test later with File 13
 	public static int indirectRead(int adress) {
-		System.out.println("HELLO" + adress);
 		if (adress == 0) {
 			System.out.println("0");
 			return dataMemory[FSR];
 		}
 		//Differ between Bank0 & Bank1
 		if (dataMemory[STATUS] >> 5 == 0) {
-			System.out.println("BANK0" + adress);
 			return adress;
 		}else {
-			System.out.println("BANK1" + adress);
 			return (adress | (1 << 7));
 		}
 	}
