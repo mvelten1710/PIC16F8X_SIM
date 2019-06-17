@@ -410,14 +410,18 @@ public class Decoder
 			W = --dataMemory[adress];
 			writeMapped(adress, W);
 			cutWandF(adress, desti);
+			cycles++;
 			if (W == 0) {
+				cycles++;
 				nop();
 			}
 		} else {
 			--dataMemory[adress];
 			writeMapped(adress, dataMemory[adress]);
 			cutWandF(adress, desti);
+			cycles++;
 			if (dataMemory[adress] == 0) {
+				cycles++;
 				nop();
 			}
 		}
@@ -449,12 +453,15 @@ public class Decoder
 			W = ++dataMemory[adress];
 			writeMapped(adress, W);
 			cutWandF(adress, desti);
+			cycles++;
 		} else {
 			++dataMemory[adress];
 			writeMapped(adress, dataMemory[adress]);
 			cutWandF(adress, desti);
+			cycles++;
 		}
 		if (dataMemory[adress] == 0) {
+			cycles++;
 			nop();
 		}
 		incrementpIndex();
@@ -634,7 +641,9 @@ public class Decoder
 
 	public void btfsc(int adress, int b)
 	{
+		cycles++;
 		if (((dataMemory[adress] & (1 << b)) >> b) == 0) {
+			cycles++;
 			nop();
 		}
 		incrementpIndex();
@@ -642,7 +651,9 @@ public class Decoder
 
 	public void btfss(int adress, int b)
 	{
+		cycles++;
 		if (((dataMemory[adress] & (1 << b)) >> b) == 1) {
+			cycles++;
 			nop();
 		}
 		incrementpIndex();
@@ -681,6 +692,7 @@ public class Decoder
 			pIndex |= (dataMemory[PCLATH] << 8);
 			dataMemory[PCLATH] = 0;
 		}
+		cycles = 2;
 	}
 
 	public void clrwdt()
@@ -697,6 +709,7 @@ public class Decoder
 			pIndex |= (dataMemory[PCLATH] << 8);
 			dataMemory[PCLATH] = 0;
 		}
+		cycles = 2;
 	}
 
 	public void iorlw(int data)
@@ -718,18 +731,20 @@ public class Decoder
 	{
 		dataMemory[INTCON] |= (1 << 7);
 		pIndex = popStack();
-
+		cycles = 2;
 	}
 
 	public void retlw(int data)
 	{
 		W = data;
 		pIndex = popStack();
+		cycles = 2;
 	}
 
 	public void _return()
 	{
 		pIndex = popStack();
+		cycles = 2;
 	}
 
 	public void sleep()

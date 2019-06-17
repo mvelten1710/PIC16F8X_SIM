@@ -20,6 +20,8 @@ public class CPUClock extends Thread
 			if (!breakPointReached) {
 				if (clockRunning) {
 					file.executeOperation();
+					timer.incTimer();
+					setCycles();
 					Simulator_UI.updateUI();
 					if (stepping) {
 						clockRunning = false;

@@ -218,7 +218,7 @@ public class Simulator_UI
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				//all cells false
-				return true;
+				return false;
 			}
 		});
 		
@@ -235,7 +235,16 @@ public class Simulator_UI
 			sfrScroll.setBounds(265, 11, 310, 215);
 			frmPicSimulator.getContentPane().add(sfrScroll);
 			
-			sfrRegisterTable = new JTable(sfrRegisterModel = new DefaultTableModel());
+			sfrRegisterTable = new JTable(sfrRegisterModel = new DefaultTableModel(){
+				private static final long serialVersionUID = 1L;
+				
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					//all cells false
+					return false;
+				}
+			});
+			
 			sfrRegisterTable.setFont(new Font("Monospaced", Font.PLAIN, 13));
 			sfrScroll.setViewportView(sfrRegisterTable);
 			
@@ -692,6 +701,7 @@ public class Simulator_UI
 		pIndex = 0;
 		selectedRow = 0;
 		runtime = 0;
+		timer.resetTimer();
 		btnStart.setEnabled(false);
 		btnStep.setEnabled(false);
 		btnReset.setEnabled(false);

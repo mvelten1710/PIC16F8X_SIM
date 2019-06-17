@@ -134,6 +134,24 @@ public class Controller
 	
 	/* ################################################ */
 	
+	/* ######################OPTION##################### */
+	
+	public static final int PS0 = 0;
+	
+	public static final int PS1 = 1;
+	
+	public static final int PS2 = 2;
+	
+	public static final int PSA = 3;
+	
+	public static final int T0SE = 4;
+	
+	public static final int T0CS = 5;
+	
+	public static final int INTEDG = 6;
+	
+	public static final int RBPU = 7;
+	
 	/* #################OWN-VARIABLES################ */
 	protected static ArrayList<Boolean> alreadyMapped = new ArrayList<Boolean>(Arrays.asList(true, false, true, true, true, false, false, true, false, false, true, true));
 	
@@ -144,6 +162,8 @@ public class Controller
 	protected static boolean allCleared;
 	
 	protected static boolean breakPointReached;
+	
+	protected static int cycles;
 	
 	protected static int selectedRow;
 	
@@ -161,6 +181,8 @@ public class Controller
 
 	protected static CPUClock clock;
 	
+	protected static Timer timer;
+	
 	protected static LineSelector lineSelector;
 	
 	/* ############################################## */
@@ -175,6 +197,7 @@ public class Controller
 		clockRunning = false;
 		allCleared = true;
 		stepping = false;
+		setCycles();
 
 		// New Parser Object
 		parser = new Parser();
@@ -187,6 +210,8 @@ public class Controller
 
 		// New Clock Object
 		clock = new CPUClock();
+		
+		timer = new Timer();
 
 		// Starts the UI and combines the Decoder(Commands)
 		// and the Parser(Reads LST Files)
@@ -221,7 +246,6 @@ public class Controller
 	//TODO Test later with File 13
 	public static int indirectRead(int adress) {
 		if (adress == 0) {
-			System.out.println("0");
 			return dataMemory[FSR];
 		}
 		//Differ between Bank0 & Bank1
@@ -230,5 +254,9 @@ public class Controller
 		}else {
 			return (adress | (1 << 7));
 		}
+	}
+	
+	public static void setCycles() {
+		cycles = 1;
 	}
 }
