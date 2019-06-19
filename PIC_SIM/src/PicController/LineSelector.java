@@ -11,8 +11,8 @@ public class LineSelector {
 	private int operationData; //For CALL and GOTO to identify which row they're calling
 	private int bit;
 	private int opNext;
-	public int opBegin;
-	private int index = 0, stackIndex = 0;
+	public int opBegin, index = 0;
+	private int stackIndex = 0;
 	private int returnValues[];
 	
 	public LineSelector() {
@@ -24,6 +24,7 @@ public class LineSelector {
 	
 	public int nextRow() 
 	{
+
 		operationSelector = fileContent.get(index).substring(36, fileContent.get(index).length());
 		//We need to distinguish between these operation because they can alter the operation flow
 		switch (operationSelector) {
@@ -86,8 +87,9 @@ public class LineSelector {
 			index = popStack();
 			break;
 			
-		case "retifie":
-			
+		case "retfie":
+			index = popStack();
+			System.out.println("RETIFIE LINE SELECTOR");
 			break;
 			
 		default:
@@ -95,12 +97,17 @@ public class LineSelector {
 			break;
 		}
 		
+		if (interruptReached) {
+			index = 4;
+			interruptReached = false;
+		}
+		System.out.println(index);
 		opNext = Integer.parseInt((String) fileContent.get(index).subSequence(20, 25));
 		return opNext-1;
 		
 	}
 	
-	private void pushStack(int data) 
+	protected void pushStack(int data) 
 	{
 		returnValues[stackIndex] = data;
 		stackIndex++;
@@ -113,5 +120,15 @@ public class LineSelector {
 	{
 		stackIndex--;
 		return returnValues[stackIndex];
+	}
+	
+	public void cleanUp() 
+	{
+		fileContent.clear();
+		operationSelector = "";
+		operationData = 0;
+		for (int i = 0; i < returnValues.length; i++) {
+			returnValues[i] = 0;
+		}
 	}
 }

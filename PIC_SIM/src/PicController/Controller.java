@@ -163,6 +163,12 @@ public class Controller
 	
 	protected static boolean breakPointReached;
 	
+	protected static boolean interruptReached;
+	
+	protected static boolean firstTime;
+	
+	protected static boolean firstTimeInterrupt;
+	
 	protected static int cycles;
 	
 	protected static int selectedRow;
@@ -195,6 +201,9 @@ public class Controller
 		threadSpeed = 800L;
 		selectedRow = 0;
 		runtime = 0;
+		firstTime = true;
+		firstTimeInterrupt = true;
+		interruptReached = false;
 		breakPointReached = false;
 		clockRunning = false;
 		allCleared = true;

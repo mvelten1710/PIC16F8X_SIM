@@ -80,7 +80,7 @@ public class Simulator_UI
 		frmPicSimulator.getContentPane()
 				.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		frmPicSimulator.setTitle("PIC Simulator");
-		frmPicSimulator.setBounds(100, 100, 1055, 645);
+		frmPicSimulator.setBounds(100, 100, 900, 644);
 		frmPicSimulator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmPicSimulator.setResizable(false);
 		frmPicSimulator.getContentPane().setLayout(null);
@@ -90,7 +90,7 @@ public class Simulator_UI
 		/* ####################START-OF-PARSER_TABLE#################### */
 
 		JScrollPane parserScroll = new JScrollPane();
-		parserScroll.setBounds(10, 315, 704, 290);
+		parserScroll.setBounds(10, 315, 869, 290);
 		frmPicSimulator.getContentPane().add(parserScroll);
 		
 		parserTable = new JTable(parserModel = new DefaultTableModel() 
@@ -134,8 +134,8 @@ public class Simulator_UI
 		TableColumnModel parserColumnModel = parserTable.getColumnModel();
 		parserModel.addColumn("BP");
 		parserModel.addColumn("LST FILE");
-		parserColumnModel.getColumn(0).setPreferredWidth(45);
-		parserColumnModel.getColumn(1).setPreferredWidth(659);
+		parserColumnModel.getColumn(0).setPreferredWidth(40);
+		parserColumnModel.getColumn(1).setPreferredWidth(860);
 
 		JLabel lblWregister = new JLabel("W-Register");
 		lblWregister.setBounds(805, 173, 74, 23);
@@ -157,7 +157,7 @@ public class Simulator_UI
 		frequency = new JLabel("800");
 		frequency.setHorizontalAlignment(SwingConstants.CENTER);
 		frequency.setBounds(410, 269, 79, 14);
-		frequency.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		frequency.setFont(new Font("Tahoma", Font.BOLD, 9));
 		frmPicSimulator.getContentPane().add(frequency);
 		
 		JButton acceptFrequ = new JButton("ENTER");
@@ -186,9 +186,9 @@ public class Simulator_UI
 		});
 		
 		uiMessage = new JLabel("");
-		uiMessage.setBounds(724, 218, 315, 23);
+		uiMessage.setBounds(588, 281, 296, 23);
 		frmPicSimulator.getContentPane().add(uiMessage);
-		uiMessage.setFont(new Font("Tahoma", Font.ITALIC, 10));
+		uiMessage.setFont(new Font("Tahoma", Font.ITALIC, 9));
 		uiMessage.setForeground(Color.RED);
 		
 		JScrollPane stackScroll = new JScrollPane();
@@ -460,6 +460,12 @@ public class Simulator_UI
 			rdbtnRb_7.setEnabled(false);
 			rdbtnPortChangesToggle.setEnabled(false);
 			
+			JLabel lblFrequency = new JLabel("Frequency");
+			lblFrequency.setFont(new Font("Tahoma", Font.PLAIN, 10));
+			lblFrequency.setHorizontalAlignment(SwingConstants.CENTER);
+			lblFrequency.setBounds(410, 256, 79, 14);
+			frmPicSimulator.getContentPane().add(lblFrequency);
+			
 			/* ####################END-OF-RAM#################### */
 		
 	}
@@ -516,7 +522,7 @@ public class Simulator_UI
 		/* ######################################## */
 	}
 	
-	private static boolean firstTime = true;
+
 	private static void updateSFR()
 	{	
 		sfrRegisterModel.setRowCount(0x0C);
@@ -695,12 +701,15 @@ public class Simulator_UI
 	{
 		// Clears everything (Stack, ProgramMemory, TableContent etc.)
 		firstTime = true;
+		firstTimeInterrupt = true;
 		breakPointReached = false;
+		interruptReached = false;
 		clockRunning = false;
 		stepping = false;
 		pIndex = 0;
 		selectedRow = 0;
 		runtime = 0;
+		cycles = 0;
 		timer.resetTimer();
 		btnStart.setEnabled(false);
 		btnStep.setEnabled(false);
@@ -725,7 +734,7 @@ public class Simulator_UI
 		
 		W = 0;
 		
-
+		lineSelector.cleanUp();
 		parser.clearContent();
 
 		clearUI();
