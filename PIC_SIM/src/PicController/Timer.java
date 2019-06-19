@@ -28,8 +28,10 @@ public class Timer {
 				dataMemory[TMR0] = timerCounter;
 			}
 		}
-		if(dataMemory[TMR0] < helper)
+		if(dataMemory[TMR0] < helper) {
 			dataMemory[INTCON] |= (1 << 2);
+			dataMemory[139] |= (1 << 2);
+		}
 	}
 
 	public void resetTimer() {

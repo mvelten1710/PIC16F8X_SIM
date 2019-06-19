@@ -1,7 +1,10 @@
 package PicController;
 
+import static PicController.Controller.INTCON;
 import static PicController.Controller.clockRunning;
+import static PicController.Controller.dataMemory;
 import static PicController.Controller.decoder;
+import static PicController.Controller.interrupt;
 import static PicController.Controller.pIndex;
 import static PicController.Controller.parser;
 import static PicController.Controller.programMemory;
@@ -15,16 +18,6 @@ public class File
 	{
 	}
 
-//	// Later with a clock that calls one operation at a time
-//	public void saveOperationsIntoMemory() throws IOException
-//	{
-//		for (; pIndex < programMemory.length; pIndex++) {
-//			if (programMemory[pIndex] != 0) {
-//				decoder.decode(programMemory[pIndex]);
-//			}
-//		}
-//	}
-
 	public void readFile(String filePath) throws IOException
 	{
 		programMemory = parser.getCommands(filePath);
@@ -33,7 +26,14 @@ public class File
 	public void executeOperation()
 	{
 		if (pIndex < programMemory.length) {
-			decoder.decode(programMemory[pIndex]);
+			if(!((dataMemory[INTCON] & (1 << 5)) == 0) && !((dataMemory[INTCON] & (1 << 7)) == 0) 
+					&& !((dataMemory[INTCON] & (1 << 2)) == 0)) {
+				System.out.println("INTERRUPT BEFEHL");
+				interrupt.run();
+			}else {
+				System.out.println("NORMAL BEFEHL");
+				decoder.decode(programMemory[pIndex]);
+			}
 		} else {
 			clockRunning = false;
 		}

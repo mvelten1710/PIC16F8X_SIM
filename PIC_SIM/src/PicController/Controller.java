@@ -183,6 +183,8 @@ public class Controller
 	
 	protected static Timer timer;
 	
+	protected static Interrupt interrupt;
+	
 	protected static LineSelector lineSelector;
 	
 	/* ############################################## */
@@ -212,7 +214,9 @@ public class Controller
 		clock = new CPUClock();
 		
 		timer = new Timer();
-
+		
+		interrupt = new Interrupt();
+		
 		// Starts the UI and combines the Decoder(Commands)
 		// and the Parser(Reads LST Files)
 		Simulator_UI window = new Simulator_UI();
