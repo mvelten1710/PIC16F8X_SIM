@@ -153,7 +153,9 @@ public class Controller
 	public static final int RBPU = 7;
 	
 	/* #################OWN-VARIABLES################ */
-	protected static ArrayList<Boolean> alreadyMapped = new ArrayList<Boolean>(Arrays.asList(true, false, true, true, true, false, false, true, false, false, true, true));
+	//I Know Boolean is better.
+	protected static ArrayList<Integer> alreadyMapped = new ArrayList<Integer>
+					(Arrays.asList(1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1));
 	
 	protected static boolean clockRunning;
 
@@ -256,7 +258,6 @@ public class Controller
 
 	}
 	
-	//TODO Test later with File 13
 	public static int indirectRead(int adress) {
 		if (adress == 0) {
 			return dataMemory[FSR];

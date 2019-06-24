@@ -89,7 +89,6 @@ public class LineSelector {
 			
 		case "retfie":
 			index = popStack();
-			System.out.println("RETIFIE LINE SELECTOR");
 			break;
 			
 		default:
@@ -101,7 +100,6 @@ public class LineSelector {
 			index = 4;
 			interruptReached = false;
 		}
-		System.out.println(index);
 		opNext = Integer.parseInt((String) fileContent.get(index).subSequence(20, 25));
 		return opNext-1;
 		

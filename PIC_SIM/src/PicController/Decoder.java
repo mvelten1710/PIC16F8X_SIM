@@ -689,15 +689,13 @@ public class Decoder
 		pushStack(++pIndex);
 		pIndex = data;
 		if (dataMemory[PCLATH] != 0) {
-			pIndex |= (dataMemory[PCLATH] << 8);
-			dataMemory[PCLATH] = 0;
+			pIndex |= ((dataMemory[PCLATH] & 0b00011000) << 7);
 		}
 		cycles = 2;
 	}
 
 	public void clrwdt()
 	{
-		// TODO FINISH WATCHDOG FOR THIS OPERATION
 		// TO = 0;
 		// PD = 0;
 	}
@@ -706,8 +704,7 @@ public class Decoder
 	{
 		pIndex = data;
 		if (dataMemory[PCLATH] != 0) {
-			pIndex |= (dataMemory[PCLATH] << 8);
-			dataMemory[PCLATH] = 0;
+			pIndex |= ((dataMemory[PCLATH] & 0b00011000) << 7);
 		}
 		cycles = 2;
 	}
@@ -810,22 +807,26 @@ public class Decoder
 	private void incrementpIndex()
 	{
 		pIndex++;
+		dataMemory[PCL] = pIndex;
+		dataMemory[130] = pIndex;
 	}
 	
 	private void writeMapped(int adress, int value) 
 	{
+
 		if (adress > 0x0B && adress < 0x80) {
 			return;
 		}
-		if (alreadyMapped.get(adress & 0x0F)) {
+		if (alreadyMapped.get(adress & 0x0F) == 1) {
 			if (adress < 0x0C) {
-				System.out.println("BANK1");
 				dataMemory[(adress | (1 << 7))] = value;
 			}else {
-				System.out.println("BANK0");
 				dataMemory[(adress & 0x0F)] = value;
 			}
 		}
+//		if (adress == 2) {
+//			pIndex |= (dataMemory[PCL] & 0b11111111);
+//		}
 	}
 
 	private void setFlags(int flagSec, int selector)

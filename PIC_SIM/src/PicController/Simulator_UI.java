@@ -235,6 +235,7 @@ public class Simulator_UI
 			sfrScroll.setBounds(265, 11, 310, 215);
 			frmPicSimulator.getContentPane().add(sfrScroll);
 			
+			
 			sfrRegisterTable = new JTable(sfrRegisterModel = new DefaultTableModel(){
 				private static final long serialVersionUID = 1L;
 				
@@ -244,9 +245,9 @@ public class Simulator_UI
 					return false;
 				}
 			});
-			
 			sfrRegisterTable.setFont(new Font("Monospaced", Font.PLAIN, 13));
 			sfrScroll.setViewportView(sfrRegisterTable);
+			TableColumnModel sfrColumnModel = sfrRegisterTable.getColumnModel();
 			
 			JLabel lblLstFile = new JLabel("LST File");
 			lblLstFile.setBounds(10, 256, 114, 14);
@@ -441,10 +442,15 @@ public class Simulator_UI
 				}
 			});
 
-			sfrRegisterModel.addColumn("ADRESS");
+			
+			sfrRegisterModel.addColumn("-");
 			sfrRegisterModel.addColumn("BANK0");
 			sfrRegisterModel.addColumn("BANK1");
-			sfrRegisterModel.addColumn("ADRESS");
+			sfrRegisterModel.addColumn("-");
+			sfrColumnModel.getColumn(0).setPreferredWidth(30);
+			sfrColumnModel.getColumn(1).setPreferredWidth(125);
+			sfrColumnModel.getColumn(2).setPreferredWidth(125);
+			sfrColumnModel.getColumn(3).setPreferredWidth(30);
 			rdbtnRa.setEnabled(false);
 			rdbtnRa_1.setEnabled(false);
 			rdbtnRa_2.setEnabled(false);
