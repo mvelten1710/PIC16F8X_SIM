@@ -17,13 +17,13 @@ public class Timer {
 		int helper = dataMemory[TMR0];
 		if((dataMemory[OPTION_REG] & (1 << 5)) == 0) {
 			clockCounter++;
-			if(clockCounter % 4 == 0) {
+			if(clockCounter % checkPrescale() == 0) {
 				if(cycles == 2) {
-					dataMemory[TMR0] = timerCounter++;
+					dataMemory[TMR0] = ++timerCounter;
 				}
-				dataMemory[TMR0] = timerCounter++;
+				dataMemory[TMR0] = ++timerCounter;
 			}
-			if(dataMemory[TMR0] >= 256) {
+			if(timerCounter >= 256) {
 				resetTimer();
 				dataMemory[TMR0] = timerCounter;
 			}
@@ -38,4 +38,31 @@ public class Timer {
 		timerCounter = 0;
 		clockCounter = 0;
 	}
+	
+	
+	private int checkPrescale() {
+		if (((dataMemory[OPTION_REG] & (1 << 5)) != 0)) {
+			return 4;
+		}
+		switch (dataMemory[OPTION_REG]) {
+		case 0:
+			return 2;
+		case 1:
+			return 4;
+		case 2:
+			return 8;
+		case 3:
+			return 18;
+		case 4:
+			return 32;
+		case 5:
+			return 64;
+		case 6:
+			return 128;
+		case 7:
+			return 256;
+		}
+		return 2;
+	}
+	
 }

@@ -24,7 +24,7 @@ public class LineSelector {
 	
 	public int nextRow() 
 	{
-
+		
 		operationSelector = fileContent.get(index).substring(36, fileContent.get(index).length());
 		//We need to distinguish between these operation because they can alter the operation flow
 		switch (operationSelector) {

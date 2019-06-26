@@ -328,7 +328,7 @@ public class Decoder
 			// Set Z-Flag
 			setFlags(2, dataMemory[adress]);
 		}
-		incrementpIndex();
+		incrementpIndex(1);
 	}
 
 	public void andwf(int adress, int desti)
@@ -346,7 +346,7 @@ public class Decoder
 			// Set Z-Flag
 			setFlags(2, dataMemory[adress]);
 		}
-		incrementpIndex();
+		incrementpIndex(1);
 	}
 
 	public void clrf(int adress)
@@ -356,7 +356,7 @@ public class Decoder
 		writeMapped(adress, dataMemory[adress]);
 		// Set Z-Flag
 		setFlags(2, dataMemory[adress]);
-		incrementpIndex();
+		incrementpIndex(1);
 	}
 
 	public void clrw()
@@ -365,7 +365,7 @@ public class Decoder
 		W = 0;
 		// Set Z-Flag
 		setFlags(2, W);
-		incrementpIndex();
+		incrementpIndex(1);
 	}
 
 	public void comf(int adress, int desti)
@@ -383,7 +383,7 @@ public class Decoder
 			// Set Z-Flag
 			setFlags(2, dataMemory[adress]);
 		}
-		incrementpIndex();
+		incrementpIndex(1);
 	}
 
 	public void decf(int adress, int desti)
@@ -401,17 +401,20 @@ public class Decoder
 			// Set Z-Flag
 			setFlags(2, dataMemory[adress]);
 		}
-		incrementpIndex();
+		incrementpIndex(1);
 	}
 
 	public void decfsz(int adress, int desti)
 	{
+		int helper = 0;
 		if (desti == 0) {
 			W = --dataMemory[adress];
 			writeMapped(adress, W);
 			cutWandF(adress, desti);
+			helper++;
 			cycles++;
 			if (W == 0) {
+				helper++;
 				cycles++;
 				nop();
 			}
@@ -419,13 +422,15 @@ public class Decoder
 			--dataMemory[adress];
 			writeMapped(adress, dataMemory[adress]);
 			cutWandF(adress, desti);
+			helper++;
 			cycles++;
 			if (dataMemory[adress] == 0) {
+				helper++;
 				cycles++;
 				nop();
 			}
 		}
-		incrementpIndex();
+		incrementpIndex(helper);
 	}
 
 	public void incf(int adress, int desti)
@@ -444,27 +449,31 @@ public class Decoder
 			// Set Z-Flag
 			setFlags(2, dataMemory[adress]);
 		}
-		incrementpIndex();
+		incrementpIndex(1);
 	}
 
 	public void incfsz(int adress, int desti)
 	{
+		int helper = 0;
 		if (desti == 0) {
 			W = ++dataMemory[adress];
 			writeMapped(adress, W);
 			cutWandF(adress, desti);
+			helper++;
 			cycles++;
 		} else {
 			++dataMemory[adress];
 			writeMapped(adress, dataMemory[adress]);
 			cutWandF(adress, desti);
+			helper++;
 			cycles++;
 		}
 		if (dataMemory[adress] == 0) {
+			helper++;
 			cycles++;
 			nop();
 		}
-		incrementpIndex();
+		incrementpIndex(helper);
 	}
 
 	public void iorwf(int adress, int desti)
@@ -481,7 +490,7 @@ public class Decoder
 			// Set Z-Flag
 			setFlags(2, dataMemory[adress]);
 		}
-		incrementpIndex();
+		incrementpIndex(1);
 	}
 
 	public void movf(int adress, int desti)
@@ -496,7 +505,7 @@ public class Decoder
 			// Set Z-Flag
 			setFlags(2, dataMemory[adress]);
 		}
-		incrementpIndex();
+		incrementpIndex(1);
 	}
 
 	public void movwf(int adress)
@@ -504,7 +513,7 @@ public class Decoder
 		dataMemory[adress] = W;
 		writeMapped(adress, dataMemory[adress]);
 		cutWandF(adress, 1);
-		incrementpIndex();
+		incrementpIndex(1);
 	}
 
 	public void rlf(int adress, int desti)
@@ -529,7 +538,7 @@ public class Decoder
 			writeMapped(adress, dataMemory[adress]);
 			cutWandF(adress, desti);
 		}
-		incrementpIndex();
+		incrementpIndex(1);
 	}
 
 	public void rrf(int adress, int desti)
@@ -558,7 +567,7 @@ public class Decoder
 			cutWandF(adress, desti);
 		}
 
-		incrementpIndex();
+		incrementpIndex(1);
 	}
 
 	public void subwf(int adress, int desti)
@@ -587,7 +596,7 @@ public class Decoder
 			// Set Z-Flag
 			setFlags(2, W);
 		}
-		incrementpIndex();
+		incrementpIndex(1);
 	}
 
 	public void swapf(int adress, int desti)
@@ -603,7 +612,7 @@ public class Decoder
 			writeMapped(adress, dataMemory[adress]);
 			cutWandF(adress, desti);
 		}
-		incrementpIndex();
+		incrementpIndex(1);
 	}
 
 	public void xorwf(int adress, int desti)
@@ -620,7 +629,7 @@ public class Decoder
 			// Set Z-Flag
 			setFlags(2, dataMemory[adress]);
 		}
-		incrementpIndex();
+		incrementpIndex(1);
 	}
 
 	public void bcf(int adress, int b)
@@ -628,7 +637,7 @@ public class Decoder
 		dataMemory[adress] = dataMemory[adress] & ~(1 << b);
 		writeMapped(adress, dataMemory[adress]);
 		cutWandF(adress, 1);
-		incrementpIndex();
+		incrementpIndex(1);
 	}
 
 	public void bsf(int adress, int b)
@@ -636,27 +645,30 @@ public class Decoder
 		dataMemory[adress] = dataMemory[adress] | (1 << b);
 		writeMapped(adress, dataMemory[adress]);
 		cutWandF(adress, 1);
-		incrementpIndex();
+		incrementpIndex(1);
 	}
 
 	public void btfsc(int adress, int b)
 	{
+		int helper = 1;
 		cycles++;
 		if (((dataMemory[adress] & (1 << b)) >> b) == 0) {
+			helper++;
 			cycles++;
 			nop();
 		}
-		incrementpIndex();
+		incrementpIndex(helper);
 	}
 
 	public void btfss(int adress, int b)
 	{
+		int helper = 1;
 		cycles++;
 		if (((dataMemory[adress] & (1 << b)) >> b) == 1) {
 			cycles++;
 			nop();
 		}
-		incrementpIndex();
+		incrementpIndex(helper);
 	}
 
 	public void addlw(int data)
@@ -672,7 +684,7 @@ public class Decoder
 		}
 		// Set Z-Flag
 		setFlags(2, W);
-		incrementpIndex();
+		incrementpIndex(1);
 	}
 
 	public void andlw(int data)
@@ -681,7 +693,7 @@ public class Decoder
 		cutWandF(0, 0);
 		// Set Z-Flag
 		setFlags(2, W);
-		incrementpIndex();
+		incrementpIndex(1);
 	}
 
 	public void call(int data)
@@ -692,6 +704,7 @@ public class Decoder
 			pIndex |= ((dataMemory[PCLATH] & 0b00011000) << 7);
 		}
 		cycles = 2;
+		runtime += 2;
 	}
 
 	public void clrwdt()
@@ -707,6 +720,7 @@ public class Decoder
 			pIndex |= ((dataMemory[PCLATH] & 0b00011000) << 7);
 		}
 		cycles = 2;
+		runtime += 2;
 	}
 
 	public void iorlw(int data)
@@ -715,20 +729,22 @@ public class Decoder
 		cutWandF(0, 0);
 		// Set Z-Flag
 		setFlags(2, W);
-		incrementpIndex();
+		incrementpIndex(1);
 	}
 
 	public void movlw(int data)
 	{
 		W = data;
-		incrementpIndex();
+		incrementpIndex(1);
 	}
 
 	public void retfie()
 	{
+		firstTimeInterrupt = true;
 		dataMemory[INTCON] |= (1 << 7);
 		pIndex = popStack();
 		cycles = 2;
+		runtime += 2;
 	}
 
 	public void retlw(int data)
@@ -736,12 +752,14 @@ public class Decoder
 		W = data;
 		pIndex = popStack();
 		cycles = 2;
+		runtime += 2;
 	}
 
 	public void _return()
 	{
 		pIndex = popStack();
 		cycles = 2;
+		runtime += 2;
 	}
 
 	public void sleep()
@@ -749,7 +767,7 @@ public class Decoder
 		dataMemory[STATUS] &= ~(1 << 3); 
 		dataMemory[STATUS] |= (1 << 4); 
 		clockRunning = false;
-		incrementpIndex();
+		incrementpIndex(1);
 	}
 
 	public void sublw(int data)
@@ -760,7 +778,7 @@ public class Decoder
 		setFlags(-1, W);
 		// Set Z-Flag
 		setFlags(2, W);
-		incrementpIndex();
+		incrementpIndex(1);
 	}
 
 	public void xorlw(int data)
@@ -769,12 +787,12 @@ public class Decoder
 		cutWandF(0, 0);
 		// Set Z-Flag
 		setFlags(2, W);
-		incrementpIndex();
+		incrementpIndex(1);
 	}
 
 	public void nop()
 	{
-		incrementpIndex();
+		incrementpIndex(1);
 		return;
 	}
 
@@ -804,11 +822,12 @@ public class Decoder
 		}
 	}
 
-	private void incrementpIndex()
+	private void incrementpIndex(int additionalRuntime)
 	{
-		pIndex++;
+		++pIndex;
 		dataMemory[PCL] = pIndex;
 		dataMemory[130] = pIndex;
+		runtime += additionalRuntime;
 	}
 	
 	private void writeMapped(int adress, int value) 

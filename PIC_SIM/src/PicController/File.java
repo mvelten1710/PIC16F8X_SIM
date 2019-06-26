@@ -19,8 +19,11 @@ public class File
 	public void executeOperation()
 	{
 		if (pIndex < programMemory.length) {
-			if(!((dataMemory[INTCON] & (1 << 5)) == 0) && !((dataMemory[INTCON] & (1 << 7)) == 0) 
-					&& !((dataMemory[INTCON] & (1 << 2)) == 0) && firstTimeInterrupt) {
+			if(((dataMemory[INTCON] & (1 << 7)) != 0) && 												// Global Interrupt Enable Bit
+					(((dataMemory[INTCON] & (1 << 5)) != 0 && (dataMemory[INTCON] & (1 << 2)) != 0)		// Timer Interrupt
+					|| ((dataMemory[INTCON] & (1 << 4)) != 0 && (dataMemory[INTCON] & (1 << 1)) != 0)	// RBO Interrupt
+					|| ((dataMemory[INTCON] & (1 << 3)) != 0 && (dataMemory[INTCON] & (1 << 0)) != 0))	// RB4-RB7 Interrupt
+					&& firstTimeInterrupt) {
 				Interrupt.init();
 			}else {
 				decoder.decode(programMemory[pIndex]);

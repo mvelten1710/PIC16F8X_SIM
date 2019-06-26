@@ -22,6 +22,7 @@ public class CPUClock extends Thread
 					file.executeOperation();
 					timer.incTimer();
 					setCycles();
+					ports.checkPorts();
 					Simulator_UI.updateUI();
 					if (stepping) {
 						clockRunning = false;

@@ -195,12 +195,14 @@ public class Controller
 	
 	protected static LineSelector lineSelector;
 	
+	protected static Ports ports;
+	
 	/* ############################################## */
 
 	public static void main(String[] args) throws IOException
 	{
 
-		threadSpeed = 800L;
+		threadSpeed = 500L;
 		selectedRow = 0;
 		runtime = 0;
 		firstTime = true;
@@ -228,6 +230,8 @@ public class Controller
 		
 		interrupt = new Interrupt();
 		
+		ports = new Ports();
+		
 		// Starts the UI and combines the Decoder(Commands)
 		// and the Parser(Reads LST Files)
 		Simulator_UI window = new Simulator_UI();
@@ -244,7 +248,7 @@ public class Controller
 	{
 		stack[sIndex] = data;
 		sIndex++;
-		if (sIndex == 7) {
+		if (sIndex == stack.length) {
 			sIndex = 0;
 		}
 	}

@@ -68,11 +68,13 @@ public class Simulator_UI
 	
 	private JTextField enteredFrequ;
 	
-	protected static JLabel frequency;
+	protected static JLabel frequency, label;
 	
 	private static JRadioButton rdbtnRa, rdbtnRa_1, rdbtnRa_2, rdbtnRa_3, rdbtnRa_4, rdbtnRb, rdbtnRb_1, rdbtnRb_2, rdbtnRb_3, rdbtnRb_4, rdbtnRb_5, rdbtnRb_6, rdbtnRb_7;
 	
-	private static JRadioButton rdbtnPortChangesToggle, rdbtnActivatePorts;
+	private static JRadioButton rdbtnPortChangesToggle, rdbtnActivatePorts, rdbtnIntrb;
+	
+	private static JRadioButton ra0IO, ra1IO, ra2IO, ra3IO, ra4IO, rb0IO, rb1IO, rb2IO, rb3IO, rb4IO, rb5IO, rb6IO, rb7IO;
 	
 	private void initialize()
 	{
@@ -154,7 +156,7 @@ public class Simulator_UI
 		frmPicSimulator.getContentPane().add(enteredFrequ);
 		enteredFrequ.setColumns(10);
 		
-		frequency = new JLabel("800");
+		frequency = new JLabel("500");
 		frequency.setHorizontalAlignment(SwingConstants.CENTER);
 		frequency.setBounds(410, 269, 79, 14);
 		frequency.setFont(new Font("Tahoma", Font.BOLD, 9));
@@ -289,27 +291,27 @@ public class Simulator_UI
 									frmPicSimulator.getContentPane().add(lblPortA);
 									
 									rdbtnRa = new JRadioButton("RA0");
-									rdbtnRa.setBounds(10, 58, 109, 23);
+									rdbtnRa.setBounds(10, 58, 74, 23);
 									rdbtnRa.addKeyListener(new OwnKeyListener());
 									frmPicSimulator.getContentPane().add(rdbtnRa);
 									
 									rdbtnRa_1 = new JRadioButton("RA1");
-									rdbtnRa_1.setBounds(10, 84, 109, 23);
+									rdbtnRa_1.setBounds(10, 84, 74, 23);
 									rdbtnRa_1.addKeyListener(new OwnKeyListener());
 									frmPicSimulator.getContentPane().add(rdbtnRa_1);
 									
 									rdbtnRa_2 = new JRadioButton("RA2");
-									rdbtnRa_2.setBounds(10, 110, 109, 23);
+									rdbtnRa_2.setBounds(10, 110, 74, 23);
 									rdbtnRa_2.addKeyListener(new OwnKeyListener());
 									frmPicSimulator.getContentPane().add(rdbtnRa_2);
 									
 									rdbtnRa_3 = new JRadioButton("RA3");
-									rdbtnRa_3.setBounds(10, 136, 109, 23);
+									rdbtnRa_3.setBounds(10, 136, 74, 23);
 									rdbtnRa_3.addKeyListener(new OwnKeyListener());
 									frmPicSimulator.getContentPane().add(rdbtnRa_3);
 									
 									rdbtnRa_4 = new JRadioButton("RA4");
-									rdbtnRa_4.setBounds(10, 162, 109, 23);
+									rdbtnRa_4.setBounds(10, 162, 74, 23);
 									rdbtnRa_4.addKeyListener(new OwnKeyListener());
 									frmPicSimulator.getContentPane().add(rdbtnRa_4);
 									
@@ -319,42 +321,42 @@ public class Simulator_UI
 									frmPicSimulator.getContentPane().add(lblPortB);
 									
 									rdbtnRb = new JRadioButton("RB0");
-									rdbtnRb.setBounds(156, 58, 109, 23);
+									rdbtnRb.setBounds(156, 58, 68, 23);
 									rdbtnRb.addKeyListener(new OwnKeyListener());
 									frmPicSimulator.getContentPane().add(rdbtnRb);
 									
 									rdbtnRb_1 = new JRadioButton("RB1");
-									rdbtnRb_1.setBounds(156, 84, 109, 23);
+									rdbtnRb_1.setBounds(156, 84, 68, 23);
 									rdbtnRb_1.addKeyListener(new OwnKeyListener());
 									frmPicSimulator.getContentPane().add(rdbtnRb_1);
 									
 									rdbtnRb_2 = new JRadioButton("RB2");
-									rdbtnRb_2.setBounds(156, 110, 109, 23);
+									rdbtnRb_2.setBounds(156, 110, 68, 23);
 									rdbtnRb_2.addKeyListener(new OwnKeyListener());
 									frmPicSimulator.getContentPane().add(rdbtnRb_2);
 									
 									rdbtnRb_3 = new JRadioButton("RB3");
-									rdbtnRb_3.setBounds(156, 136, 109, 23);
+									rdbtnRb_3.setBounds(156, 136, 68, 23);
 									rdbtnRb_3.addKeyListener(new OwnKeyListener());
 									frmPicSimulator.getContentPane().add(rdbtnRb_3);
 									
 									rdbtnRb_4 = new JRadioButton("RB4");
-									rdbtnRb_4.setBounds(156, 162, 109, 23);
+									rdbtnRb_4.setBounds(156, 162, 68, 23);
 									rdbtnRb_4.addKeyListener(new OwnKeyListener());
 									frmPicSimulator.getContentPane().add(rdbtnRb_4);
 									
 									rdbtnRb_5 = new JRadioButton("RB5");
-									rdbtnRb_5.setBounds(156, 188, 109, 23);
+									rdbtnRb_5.setBounds(156, 188, 68, 23);
 									rdbtnRb_5.addKeyListener(new OwnKeyListener());
 									frmPicSimulator.getContentPane().add(rdbtnRb_5);
 									
 									rdbtnRb_6 = new JRadioButton("RB6");
-									rdbtnRb_6.setBounds(156, 218, 109, 23);
+									rdbtnRb_6.setBounds(156, 218, 68, 23);
 									rdbtnRb_6.addKeyListener(new OwnKeyListener());
 									frmPicSimulator.getContentPane().add(rdbtnRb_6);
 									
 									rdbtnRb_7 = new JRadioButton("RB7");
-									rdbtnRb_7.setBounds(156, 244, 109, 23);
+									rdbtnRb_7.setBounds(156, 244, 68, 23);
 									rdbtnRb_7.addKeyListener(new OwnKeyListener());
 									frmPicSimulator.getContentPane().add(rdbtnRb_7);
 									
@@ -412,7 +414,7 @@ public class Simulator_UI
 				{
 					// Opens the new Window to import the LST file
 					// TODO Delete Path afterwards
-					JFileChooser fileChooser = new JFileChooser("C:\\Users\\todus\\git\\PIC16F8X_SIM\\PIC_SIM\\LST Files");
+					JFileChooser fileChooser = new JFileChooser();
 					int rueckgabewert = fileChooser.showOpenDialog(null);
 					if (rueckgabewert == JFileChooser.APPROVE_OPTION) {
 						if (!allCleared) {
@@ -472,6 +474,88 @@ public class Simulator_UI
 			lblFrequency.setBounds(410, 256, 79, 14);
 			frmPicSimulator.getContentPane().add(lblFrequency);
 			
+			JLabel lblLaufzeit = new JLabel("Laufzeit: ");
+			lblLaufzeit.setHorizontalAlignment(SwingConstants.CENTER);
+			lblLaufzeit.setFont(new Font("Tahoma", Font.PLAIN, 10));
+			lblLaufzeit.setBounds(499, 257, 79, 14);
+			frmPicSimulator.getContentPane().add(lblLaufzeit);
+			
+			label = new JLabel("0");
+			label.setFont(new Font("Tahoma", Font.BOLD, 9));
+			label.setHorizontalAlignment(SwingConstants.CENTER);
+			label.setBounds(499, 269, 79, 14);
+			frmPicSimulator.getContentPane().add(label);
+			
+			rdbtnIntrb = new JRadioButton("INT(RB0) Rising");
+			rdbtnIntrb.setFont(new Font("Tahoma", Font.PLAIN, 10));
+			rdbtnIntrb.setBounds(265, 233, 109, 23);
+			frmPicSimulator.getContentPane().add(rdbtnIntrb);
+			
+			ra0IO = new JRadioButton("");
+			ra0IO.setHorizontalAlignment(SwingConstants.CENTER);
+			ra0IO.setBounds(86, 58, 38, 23);
+			frmPicSimulator.getContentPane().add(ra0IO);
+			
+			ra1IO = new JRadioButton("");
+			ra1IO.setHorizontalAlignment(SwingConstants.CENTER);
+			ra1IO.setBounds(86, 84, 38, 23);
+			frmPicSimulator.getContentPane().add(ra1IO);
+			
+			ra2IO = new JRadioButton("");
+			ra2IO.setHorizontalAlignment(SwingConstants.CENTER);
+			ra2IO.setBounds(86, 110, 38, 23);
+			frmPicSimulator.getContentPane().add(ra2IO);
+			
+			ra3IO = new JRadioButton("");
+			ra3IO.setHorizontalAlignment(SwingConstants.CENTER);
+			ra3IO.setBounds(86, 136, 38, 23);
+			frmPicSimulator.getContentPane().add(ra3IO);
+			
+			ra4IO = new JRadioButton("");
+			ra4IO.setHorizontalAlignment(SwingConstants.CENTER);
+			ra4IO.setBounds(86, 162, 38, 23);
+			frmPicSimulator.getContentPane().add(ra4IO);
+			
+			rb0IO = new JRadioButton("");
+			rb0IO.setHorizontalAlignment(SwingConstants.CENTER);
+			rb0IO.setBounds(226, 58, 33, 23);
+			frmPicSimulator.getContentPane().add(rb0IO);
+			
+			rb1IO = new JRadioButton("");
+			rb1IO.setHorizontalAlignment(SwingConstants.CENTER);
+			rb1IO.setBounds(226, 84, 33, 23);
+			frmPicSimulator.getContentPane().add(rb1IO);
+			
+			rb2IO = new JRadioButton("");
+			rb2IO.setHorizontalAlignment(SwingConstants.CENTER);
+			rb2IO.setBounds(226, 110, 33, 23);
+			frmPicSimulator.getContentPane().add(rb2IO);
+			
+			rb3IO = new JRadioButton("");
+			rb3IO.setHorizontalAlignment(SwingConstants.CENTER);
+			rb3IO.setBounds(226, 136, 33, 23);
+			frmPicSimulator.getContentPane().add(rb3IO);
+			
+			rb4IO = new JRadioButton("");
+			rb4IO.setHorizontalAlignment(SwingConstants.CENTER);
+			rb4IO.setBounds(226, 162, 33, 23);
+			frmPicSimulator.getContentPane().add(rb4IO);
+			
+			rb5IO = new JRadioButton("");
+			rb5IO.setHorizontalAlignment(SwingConstants.CENTER);
+			rb5IO.setBounds(226, 188, 33, 23);
+			frmPicSimulator.getContentPane().add(rb5IO);
+			
+			rb6IO = new JRadioButton("");
+			rb6IO.setHorizontalAlignment(SwingConstants.CENTER);
+			rb6IO.setBounds(226, 218, 33, 23);
+			frmPicSimulator.getContentPane().add(rb6IO);
+			
+			rb7IO = new JRadioButton("");
+			rb7IO.setHorizontalAlignment(SwingConstants.CENTER);
+			rb7IO.setBounds(226, 244, 33, 23);
+			frmPicSimulator.getContentPane().add(rb7IO);
+			
 			/* ####################END-OF-RAM#################### */
 		
 	}
@@ -480,8 +564,7 @@ public class Simulator_UI
 
 	private void setContent()
 	{
-		
-
+	
 		//PARSER CONTENT
 		for (int i = 0; i < parser.getContent().length; i++) {
 			if (parser.getContent()[i] != null) {
@@ -558,38 +641,142 @@ public class Simulator_UI
 	}
 
 	private static boolean canPortChange = false;
+
+
 	protected static void updatePorts() {
+		//Selector if RB0 should activate interrupt on
+		//falling or rising flank
+		if (!rdbtnIntrb.isSelected()) {
+			rdbtnIntrb.setText("INT(RB0) Rising"); 
+			ports.setrb0Rising(true);
+		}else {
+			rdbtnIntrb.setText("INT(RB0) Falling");
+			ports.setrb0Rising(false);
+		}
+		
+		//Activates/Deactivates all Ports
 		if (rdbtnActivatePorts.isSelected()) {
-			rdbtnRa.setEnabled(true);
-			rdbtnRa_1.setEnabled(true);
-			rdbtnRa_2.setEnabled(true);
-			rdbtnRa_3.setEnabled(true);
-			rdbtnRa_4.setEnabled(true);
-			rdbtnRb.setEnabled(true);
-			rdbtnRb_1.setEnabled(true);
-			rdbtnRb_2.setEnabled(true);
-			rdbtnRb_3.setEnabled(true);
-			rdbtnRb_4.setEnabled(true);
-			rdbtnRb_5.setEnabled(true);
-			rdbtnRb_6.setEnabled(true);
-			rdbtnRb_7.setEnabled(true);
+			
+			if (!rdbtnPortChangesToggle.isSelected()) {
+				//Activates/Deactivates PORTA
+				rdbtnRa.setEnabled(true);
+				ra0IO.setEnabled(true);
+				rdbtnRa_1.setEnabled(true);
+				ra1IO.setEnabled(true);
+				rdbtnRa_2.setEnabled(true);
+				ra2IO.setEnabled(true);
+				rdbtnRa_3.setEnabled(true);
+				ra3IO.setEnabled(true);
+				rdbtnRa_4.setEnabled(true);
+				ra4IO.setEnabled(true);
+			}else {
+				rdbtnRa.setEnabled(false);
+				ra0IO.setEnabled(false);
+				rdbtnRa_1.setEnabled(false);
+				ra1IO.setEnabled(false);
+				rdbtnRa_2.setEnabled(false);
+				ra2IO.setEnabled(false);
+				rdbtnRa_3.setEnabled(false);
+				ra3IO.setEnabled(false);
+				rdbtnRa_4.setEnabled(false);
+				ra4IO.setEnabled(false);
+			}
+			
+			if (rdbtnPortChangesToggle.isSelected()) {
+				//Activates/Deactivates PORTB
+				rdbtnRb.setEnabled(true);
+				rb0IO.setEnabled(true);
+				rdbtnRb_1.setEnabled(true);
+				rb1IO.setEnabled(true);
+				rdbtnRb_2.setEnabled(true);
+				rb2IO.setEnabled(true);
+				rdbtnRb_3.setEnabled(true);
+				rb3IO.setEnabled(true);
+				rdbtnRb_4.setEnabled(true);
+				rb4IO.setEnabled(true);
+				rdbtnRb_5.setEnabled(true);
+				rb5IO.setEnabled(true);
+				rdbtnRb_6.setEnabled(true);
+				rb6IO.setEnabled(true);
+				rdbtnRb_7.setEnabled(true);
+				rb7IO.setEnabled(true);
+			}else {
+				rdbtnRb.setEnabled(false);
+				rb0IO.setEnabled(false);
+				rdbtnRb_1.setEnabled(false);
+				rb1IO.setEnabled(false);
+				rdbtnRb_2.setEnabled(false);
+				rb2IO.setEnabled(false);
+				rdbtnRb_3.setEnabled(false);
+				rb3IO.setEnabled(false);
+				rdbtnRb_4.setEnabled(false);
+				rb4IO.setEnabled(false);
+				rdbtnRb_5.setEnabled(false);
+				rb5IO.setEnabled(false);
+				rdbtnRb_6.setEnabled(false);
+				rb6IO.setEnabled(false);
+				rdbtnRb_7.setEnabled(false);
+				rb7IO.setEnabled(false);
+			}
+			
 			rdbtnPortChangesToggle.setEnabled(true);
 			canPortChange = true;
 		}else {
 			rdbtnRa.setEnabled(false);
+			ra0IO.setEnabled(false);
 			rdbtnRa_1.setEnabled(false);
+			ra1IO.setEnabled(false);
 			rdbtnRa_2.setEnabled(false);
+			ra2IO.setEnabled(false);
 			rdbtnRa_3.setEnabled(false);
+			ra3IO.setEnabled(false);
 			rdbtnRa_4.setEnabled(false);
+			ra4IO.setEnabled(false);
 			rdbtnRb.setEnabled(false);
+			rb0IO.setEnabled(false);
 			rdbtnRb_1.setEnabled(false);
+			rb1IO.setEnabled(false);
 			rdbtnRb_2.setEnabled(false);
+			rb2IO.setEnabled(false);
 			rdbtnRb_3.setEnabled(false);
+			rb3IO.setEnabled(false);
 			rdbtnRb_4.setEnabled(false);
+			rb4IO.setEnabled(false);
 			rdbtnRb_5.setEnabled(false);
+			rb5IO.setEnabled(false);
 			rdbtnRb_6.setEnabled(false);
+			rb6IO.setEnabled(false);
 			rdbtnRb_7.setEnabled(false);
+			rb7IO.setEnabled(false);
+			
+			rdbtnRa.setSelected(false);
+			ra0IO.setSelected(false);
+			rdbtnRa_1.setSelected(false);
+			ra1IO.setSelected(false);
+			rdbtnRa_2.setSelected(false);
+			ra2IO.setSelected(false);
+			rdbtnRa_3.setSelected(false);
+			ra3IO.setSelected(false);
+			rdbtnRa_4.setSelected(false);
+			ra4IO.setSelected(false);
+			rdbtnRb.setSelected(false);
+			rb0IO.setSelected(false);
+			rdbtnRb_1.setSelected(false);
+			rb1IO.setSelected(false);
+			rdbtnRb_2.setSelected(false);
+			rb2IO.setSelected(false);
+			rdbtnRb_3.setSelected(false);
+			rb3IO.setSelected(false);
+			rdbtnRb_4.setSelected(false);
+			rb4IO.setSelected(false);
+			rdbtnRb_5.setSelected(false);
+			rb5IO.setSelected(false);
+			rdbtnRb_6.setSelected(false);
+			rb6IO.setSelected(false);
+			rdbtnRb_7.setSelected(false);
+			rb7IO.setSelected(false);
 			rdbtnPortChangesToggle.setEnabled(false);
+			rdbtnPortChangesToggle.setSelected(false);
 			canPortChange = false;
 		}
 		if (canPortChange) {
@@ -664,8 +851,79 @@ public class Simulator_UI
 				}else {
 					dataMemory[PORTB] &= ~(1 << 7);
 				}
+
 			}
 		}
+		//##############TRISA##############
+		if (ra0IO.isSelected()) {
+			dataMemory[TRISA] |= 1;
+		}else {
+			dataMemory[TRISA] &= ~1;
+		}
+		if (ra1IO.isSelected()) {
+			dataMemory[TRISA] |= (1 << 1);
+		}else {
+			dataMemory[TRISA] &= ~(1 << 1);
+		}
+		if (ra2IO.isSelected()) {
+			dataMemory[TRISA] |= (1 << 2);
+		}else {
+			dataMemory[TRISA] &= ~(1 << 2);
+		}
+		if (ra3IO.isSelected()) {
+			dataMemory[TRISA] |= (1 << 3);
+		}else {
+			dataMemory[TRISA] &= ~(1 << 3);
+		}
+		if (ra4IO.isSelected()) {
+			dataMemory[TRISA] |= (1 << 4);
+		}else {
+			dataMemory[TRISA] &= ~(1 << 4);
+		}
+		//#################################
+		
+		//##############TRISB##############
+		if (rb0IO.isSelected()) {
+			dataMemory[TRISB] |= 1;
+		}else {
+			dataMemory[TRISB] &= ~1;
+		}
+		if (rb1IO.isSelected()) {
+			dataMemory[TRISB] |= (1 << 1);
+		}else {
+			dataMemory[TRISB] &= ~(1 << 1);
+		}
+		if (rb2IO.isSelected()) {
+			dataMemory[TRISB] |= (1 << 2);
+		}else {
+			dataMemory[TRISB] &= ~(1 << 2);
+		}
+		if (rb3IO.isSelected()) {
+			dataMemory[TRISB] |= (1 << 3);
+		}else {
+			dataMemory[TRISB] &= ~(1 << 3);
+		}
+		if (rb4IO.isSelected()) {
+			dataMemory[TRISB] |= (1 << 4);
+		}else {
+			dataMemory[TRISB] &= ~(1 << 4);
+		}
+		if (rb5IO.isSelected()) {
+			dataMemory[TRISB] |= (1 << 5);
+		}else {
+			dataMemory[TRISB] &= ~(1 << 5);
+		}
+		if (rb6IO.isSelected()) {
+			dataMemory[TRISB] |= (1 << 6);
+		}else {
+			dataMemory[TRISB] &= ~(1 << 6);
+		}
+		if (rb7IO.isSelected()) {
+			dataMemory[TRISB] |= (1 << 7);
+		}else {
+			dataMemory[TRISB] &= ~(1 << 7);
+		}
+		//#################################
 	}
 	
 	public static void updateUI()
@@ -675,6 +933,7 @@ public class Simulator_UI
 		updateGPR();
 		updateSFR();
 		updatePorts();
+		label.setText(Integer.toString(runtime) + " Cycles");
 		wRegister.setText(Integer.toHexString(W) + "h");
 		updateSelectedRow();
 	}
